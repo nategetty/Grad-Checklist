@@ -9,7 +9,7 @@ CREATE TABLE Subject (
 CREATE TABLE CourseSuffix (
     suffix VARCHAR(255) PRIMARY KEY,
     credit DECIMAL(5, 2) NOT NULL,
-    is_essay bool NOT NULL
+    is_essay BOOL NOT NULL
 );
 
 INSERT INTO CourseSuffix
@@ -39,8 +39,9 @@ CREATE TABLE Course (
     number INT NOT NULL,
     suffix VARCHAR(255) NOT NULL,
     category CHAR NOT NULL,
-    category_2 CHAR DEFAULT NULL,
+    category_2 CHAR,
     description TEXT,
+    extra_information TEXT,
     UNIQUE (subject_code, number),
     FOREIGN KEY (subject_code) REFERENCES Subject(code),
     FOREIGN KEY (suffix) REFERENCES CourseSuffix(suffix),
