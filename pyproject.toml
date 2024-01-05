@@ -1,5 +1,5 @@
 [project]
-name = "Graduation Checklist"
+name = "gradchecklist"
 dependencies = [
     "flask"
 ]
