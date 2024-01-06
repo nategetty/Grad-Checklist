@@ -1,9 +1,10 @@
 [project]
 name = "gradchecklist"
+description = "Graduation checklist flask application."
+version = "0.0.0"
 dependencies = [
     "flask"
 ]
-dynamic = ["version", "description"]
 
 [build-system]
 requires = ["flit_core<4"]
