@@ -1,9 +1,23 @@
 CREATE DATABASE Courses;
 USE Courses;
 
+CREATE TABLE CourseCategory (
+    category CHAR PRIMARY KEY
+);
+
+INSERT INTO CourseCategory
+VALUES
+    ('A'),
+    ('B'),
+    ('C');
+
 CREATE TABLE Subject (
     code VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
+    name VARCHAR(255) NOT NULL UNIQUE,
+    category CHAR NOT NULL,
+    category_2 CHAR,
+    FOREIGN KEY (category) REFERENCES CourseCategory(category),
+    FOREIGN KEY (category_2) REFERENCES CourseCategory(category)
 );
 
 CREATE TABLE CourseSuffix (
@@ -18,35 +32,23 @@ VALUES
     ('A', 0.5, 0),
     ('B', 0.5, 0),
     ('A/B', 0.5, 0),
+    ('A/B/Y', 0.5, 0),
     ('E', 1, 1),
     ('F', 0.5, 1),
     ('G', 0.5, 1),
     ('F/G', 0.5, 1);
-
-CREATE TABLE CourseCategory (
-    category CHAR PRIMARY KEY
-);
-
-INSERT INTO CourseCategory
-VALUES
-    ('A'),
-    ('B'),
-    ('C');
 
 CREATE TABLE Course (
     id INT PRIMARY KEY AUTO_INCREMENT,
     subject_code VARCHAR(255) NOT NULL,
     number INT NOT NULL,
     suffix VARCHAR(255) NOT NULL,
-    category CHAR NOT NULL,
-    category_2 CHAR,
+    name VARCHAR(255) NOT NULL,
     description TEXT,
     extra_information TEXT,
     UNIQUE (subject_code, number),
     FOREIGN KEY (subject_code) REFERENCES Subject(code),
-    FOREIGN KEY (suffix) REFERENCES CourseSuffix(suffix),
-    FOREIGN KEY (category) REFERENCES CourseCategory(category),
-    FOREIGN KEY (category_2) REFERENCES CourseCategory(category)
+    FOREIGN KEY (suffix) REFERENCES CourseSuffix(suffix)
 );
 
 CREATE TABLE Module (
@@ -82,12 +84,18 @@ CREATE TABLE RequirementCourse (
     id INT PRIMARY KEY AUTO_INCREMENT,
     requirement_id INT NOT NULL,
     course_id INT,
-    minimum_level INT,
-    CHECK (course_id IS NOT NULL OR minimum_level IS NOT NULL),
     UNIQUE (requirement_id, course_id),
-    UNIQUE (requirement_id, minimum_level),
     FOREIGN KEY (requirement_id) REFERENCES Requirement(id),
     FOREIGN KEY (course_id) REFERENCES Course(id)
+);
+
+CREATE TABLE RequirementCourseLevel (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    requirement_id INT NOT NULL,
+    subject_code VARCHAR(255) NOT NULL,
+    minimum_level INT NOT NULL,
+    FOREIGN KEY (requirement_id) REFERENCES Requirement(id),
+    FOREIGN KEY (subject_code) REFERENCES Subject(code)
 );
 
 CREATE TABLE Antirequisite (
