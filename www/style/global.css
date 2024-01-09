@@ -1,0 +1,65 @@
+:root {
+    --color-primary: #333333;
+    --bg-color-primary: #f2f2f2;
+    --bg-color-primary-alt: #e8e8e8;
+    --border-color-primary: #c4c4c4;
+
+    --color-secondary: #f2f2f2;
+    --bg-color-secondary: #4A287E;
+}
+
+.primary {
+    color: var(--color-primary);
+    background-color: var(--bg-color-primary);
+}
+
+.primary-border {
+    border: 0.1em solid var(--border-color-primary);
+}
+
+.primary-alt {
+    background-color: var(--bg-color-primary-alt);
+}
+
+.primary input::placeholder {
+    color: var(--color-primary-placeholder);
+    opacity: 1;
+}
+
+.secondary {
+    color: var(--color-secondary);
+    background-color: var(--bg-color-secondary);
+}
+
+body {
+    all: unset;
+    font-family: Helvetica, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    all: unset;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h2 {
+    all: unset;
+    font-size: 1.4em;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.header {
+    height: 5em;
+    padding: 0em 2em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+

@@ -1,6 +1,12 @@
-from gradchecklist import app
+#
+# views.py
+# View functions.
+#
 
+from flask import Blueprint
 
-@app.route("/")
-def index():
+bp = Blueprint("views", __name__)
+
+@bp.route("/foo")
+def foo():
     return "Hello world!"
