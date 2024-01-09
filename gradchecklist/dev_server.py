@@ -15,12 +15,8 @@ def create_app():
     app.register_blueprint(views.bp)
     
     @app.route("/")
-    def index():
-        return current_app.send_static_file("html/index.html")
-    
-    @app.route("/script/jquery-3.7.1.min.js")
-    def jquery():
-        return current_app.send_static_file("script/jquery-3.7.1.js")
+    def upload():
+        return current_app.send_static_file("html/upload.html")
     
     return app
 

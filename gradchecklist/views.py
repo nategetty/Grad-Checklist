@@ -7,6 +7,6 @@ from flask import Blueprint
 
 bp = Blueprint("views", __name__)
 
-@bp.route("/foo")
-def foo():
+@bp.post("/upload-transcript")
+def upload_transcript():
     return "Hello world!"

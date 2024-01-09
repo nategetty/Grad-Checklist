@@ -1,11 +1,12 @@
 :root {
     --color-primary: #333333;
-    --bg-color-primary: #f2f2f2;
-    --bg-color-primary-alt: #e8e8e8;
+    --color-primary-light: #888888;
+    --bg-color-primary: #ffffff;
+    --bg-color-primary-alt: #f2f2f2;
     --border-color-primary: #c4c4c4;
 
     --color-secondary: #f2f2f2;
-    --bg-color-secondary: #4A287E;
+    --bg-color-secondary: #4f2683;
 }
 
 .primary {
@@ -15,6 +16,10 @@
 
 .primary-border {
     border: 0.1em solid var(--border-color-primary);
+}
+
+.primary-light {
+    color: var(--color-primary-light);
 }
 
 .primary-alt {
@@ -48,18 +53,68 @@ h1 {
 h2 {
     all: unset;
     font-size: 1.4em;
+    font-weight: bold;
+}
+
+form {
+    all: unset;
 }
 
 input[type="file"] {
     display: none;
 }
 
+.align-center {
+    align-self: center;
+}
+
 .header {
-    height: 5em;
+    height: 6em;
     padding: 0em 2em;
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 1em;
 }
 
+.body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
+.footer {
+    height: 2em;
+    padding: 0em 2em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3em;
+}
+
+.footer a {
+    color: inherit;
+    text-decoration: none;
+    font-size: small;
+}
+
+.box {
+    padding: 2em;
+    border-radius: 1em;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    border: 0.1em solid var(--border-color-primary);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--border-color-primary);
+}

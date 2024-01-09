@@ -1,11 +1,11 @@
 [project]
 name = "gradchecklist"
-description = "Graduation checklist flask application."
-version = "0.0.0"
+description = "Module checker Flask application."
+dynamic = ["version"]
 dependencies = [
     "flask"
 ]
 
 [build-system]
-requires = ["flit_core<4"]
+requires = ["flit_core >=3.2"]
 build-backend = "flit_core.buildapi"
