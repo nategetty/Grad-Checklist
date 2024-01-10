@@ -64,23 +64,16 @@ input[type="file"] {
     display: none;
 }
 
-.align-center {
-    align-self: center;
+.no-wrap {
+    white-space: nowrap;
 }
 
 .header {
-    height: 6em;
-    padding: 0em 2em;
+    padding: 1em 2em;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1em;
-}
-
-.body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
 .footer {
@@ -98,10 +91,21 @@ input[type="file"] {
     font-size: small;
 }
 
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.box-center-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .box {
     padding: 2em;
     border-radius: 1em;
-    margin: auto;
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -109,7 +113,8 @@ input[type="file"] {
 
 .button {
     display: inline-block;
-    padding: 0.5em 1em;
+    line-height: 2em;
+    padding: 0em 1em;
     border-radius: 0.5em;
     border: 0.1em solid var(--border-color-primary);
     cursor: pointer;

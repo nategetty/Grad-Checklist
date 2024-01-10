@@ -2,18 +2,26 @@
 <html>
     <head>
         <title>Upload Transcript</title>
-        <link rel="stylesheet" href="style/global.css">
+        <link rel="stylesheet" href="style/global.css" />
         <style>
             .uwo-logo {
                 height: 4em;
+            }
+
+            .box {
+                flex: 0 1 40em;
             }
 
             .upload-icon {
                 width: 4em;
             }
 
-            .upload-wrapper {
-                width: 40em;
+            .upload-form {
+                text-align: center;
+                line-height: 2em;
+            }
+
+            .drop-zone {
                 height: 16em;
                 border-style: dashed;
                 display: flex;
@@ -22,6 +30,10 @@
                 align-items: center;
                 gap: 1em;
             }
+
+            .drag-over {
+                border-color: var(--color-primary);
+            }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
@@ -29,8 +41,32 @@
                 $("#upload-form").submit();
             }
 
+            function onDrop(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                $("#drop-zone").removeClass("drag-over");
+
+                $("#upload-input")[0].files = ev.originalEvent.dataTransfer.files;
+                $("#upload-form").submit();
+            }
+
+            function onDragOver(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                $("#drop-zone").addClass("drag-over");
+            }
+
+            function onDragLeave(ev) {
+                $("#drop-zone").removeClass("drag-over");
+            }
+
             $(() => {
                 $("#upload-input").change(onUploadInputChange);
+                $("#drop-zone").on("drop", onDrop);
+                $("#drop-zone").on("dragover", onDragOver);
+                $("#drop-zone").on("dragleave", onDragLeave);
             });
         </script>
     </head>
@@ -39,21 +75,18 @@
             <img class="uwo-logo" alt="Faculty of Science" src="https://www.uwo.ca/img/homepage/2017/logo-western-crest-ftr.svg" />
             <h1>Western Science Module Checker</h1>
         </div>
-        <div class="box primary-alt">
-            <h2>Upload transcript</h2>
-            <div class="upload-wrapper primary-border">
-                <div>
-                    <img class="upload-icon" src="images/upload.svg" />
-                </div>
-                <div>
-                    <form class="upload-form" id="upload-form" action="/upload-transcript" method="post">
-                        <label class="button">
-                            <input type="file" id="upload-input" name="file" accept=".pdf" multiple />
-                            Choose files
-                        </label>
-                    </form>
-                    <strong>or</strong>
-                    drag and drop here
+        <div class="box-center-wrapper">
+            <div class="box primary-alt">
+                <h2>Upload transcript</h2>
+                <div class="drop-zone primary-border" id="drop-zone">
+                    <img class="upload-icon" alt="Upload" src="images/upload.svg" />
+                        <form class="upload-form" id="upload-form" action="/upload-transcript" method="post">
+                            <label class="button primary">
+                                <input type="file" id="upload-input" name="file" accept=".pdf" multiple />
+                                Choose files
+                            </label>
+                            <span class="no-wrap"><strong>or</strong> drag and drop here</span>
+                        </form>
                 </div>
             </div>
         </div>
