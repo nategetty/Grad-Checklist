@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Enter Grades Manually</title>
+        <link rel="stylesheet" href="style/global.css" />
+        <style>
+            .box {
+                flex: 0 1 45em;
+            }
+
+            .year-label-container {
+                height: 1.5em;
+                overflow-y: hidden;
+            }
+
+            .year-input-container {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+                gap: 0.5em 2em;
+            }
+
+            .grade-input-wrapper {
+                display: flex;
+                flex-direction: row;
+                flex: 0 1 19em;
+            }
+
+            .course-label {
+                display: inline-block;
+                flex: 1;
+            }
+
+            .course-txt {
+                width: 100%;
+                flex: 1;
+            }
+
+            .grade-label {
+                display: inline-block;
+                width: 5em;
+            }
+            
+            .grade-txt {
+                width: 2em;
+                margin-left: 0.5em;
+                margin-right: 2em;
+                text-align: end;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="script/global.js"></script>
+        <script>
+            function appendCourseRow(container) {
+                container.prepend(`
+                    <div class="grade-input-wrapper">
+                        <input type="text" class="course-txt primary primary-border" pattern="" /><input type="text" class="grade-txt primary primary-border" />
+                    </div>
+                `);
+            }
+
+            function appendCourseRows(container, count) {
+                for (let i = 0; i < count; ++i) {
+                    appendCourseRow(container);
+                }
+            }
+
+            function appendYear(year) {
+                const container = $("#grades-box")
+                    .append(`
+                        <fieldset class="primary-border">
+                            <legend><h3>Year ${year}</h3></legend>
+                            <div class="year-input-container year-label-container">
+                                <div class="grade-input-wrapper">
+                                    <span class="course-label invisible-border">Course</span>
+                                    <span class="grade-label invisible-border">Grade (%)</span>
+                                </div>
+                                <div class="grade-input-wrapper">
+                                    <span class="course-label invisible-border">Course</span>
+                                    <span class="grade-label invisible-border">Grade (%)</span>
+                                </div>
+                            </div>
+                            <div class="year-input-container">
+                                <button type="button" class="button icon-button primary">
+                                    <svg viewBox="0 0 100 100">
+                                        <g stroke="currentColor" stroke-width="20">
+                                        <line x1="0" y1="50" x2="100" y2="50" />
+                                        <line x1="50" y1="0" x2="50" y2="100" />
+                                        </g>
+                                    </svg>
+                                    <span>More rows</span>
+                                </button>
+                            </div>
+                        </fieldset>
+                    `)
+                    .find(".year-input-container").last();
+                container.find("button").click(() => { appendCourseRows(container, 2) });
+                appendCourseRows(container, 10);
+            }
+
+            let year = 1;
+
+            $(() => {
+                includeHtml();
+
+                for (; year <= 4; ++year) {
+                    appendYear(year);
+                }
+            })
+        </script>
+    </head>
+    <body class="primary">
+        <div data-include="header"></div>
+        <main class="body box-center-wrapper">
+            <div class="box primary-alt" id="grades-box">
+                <h2>Enter grades manually</h2>
+                <div><a href="/" class="primary-light">Upload a transcript instead...</a></div>
+            </div>
+        </main>
+        <div data-include="footer"></div>
+    </body>
+</html>

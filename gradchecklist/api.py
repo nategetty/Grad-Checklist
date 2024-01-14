@@ -1,11 +1,12 @@
 #
-# views.py
-# View functions.
+# api.py
+# API functions.
 #
 
 from flask import Blueprint
+from flask import request
 
-bp = Blueprint("views", __name__)
+bp = Blueprint("api", __name__)
 
 @bp.post("/upload-transcript")
 def upload_transcript():

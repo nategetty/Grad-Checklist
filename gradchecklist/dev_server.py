@@ -4,7 +4,7 @@
 #
 
 from flask import Flask, current_app
-import views
+import api
 
 
 # Creates the development server application.
@@ -13,11 +13,19 @@ def create_app():
                 static_url_path="",
                 static_folder="../www")
     
-    app.register_blueprint(views.bp)
+    app.register_blueprint(api.bp, url_prefix="/api")
     
     @app.route("/")
-    def upload():
-        return current_app.send_static_file("html/upload.html")
+    def index():
+        return app.send_static_file("html/pages/upload.html")
+    
+    @app.route("/<path>")
+    def html_page(path):
+        return app.send_static_file(f"html/pages/{path}.html")
+    
+    @app.route("/include/<path>")
+    def html_include(path):
+        return app.send_static_file(f"html/include/{path}.html")
     
     return app
 

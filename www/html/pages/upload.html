@@ -4,10 +4,6 @@
         <title>Upload Transcript</title>
         <link rel="stylesheet" href="style/global.css" />
         <style>
-            .uwo-logo {
-                height: 4em;
-            }
-
             .box {
                 flex: 0 1 40em;
             }
@@ -36,9 +32,22 @@
             }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="script/global.js"></script>
         <script>
-            function onUploadInputChange(ev) {
-                $("#upload-form").submit();
+            function upload() {
+                $.ajax({
+                    type: "POST",
+                    url: "api/upload-transcript",
+                    data: new FormData($("#upload-form")[0]),
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        console.log(data);
+                    },
+                    error: () => {
+                        alert("An error occured.");
+                    }
+                });
             }
 
             function onDrop(ev) {
@@ -48,7 +57,7 @@
                 $("#drop-zone").removeClass("drag-over");
 
                 $("#upload-input")[0].files = ev.originalEvent.dataTransfer.files;
-                $("#upload-form").submit();
+                upload();
             }
 
             function onDragOver(ev) {
@@ -63,7 +72,8 @@
             }
 
             $(() => {
-                $("#upload-input").change(onUploadInputChange);
+                includeHtml();
+                $("#upload-input").change(upload);
                 $("#drop-zone").on("drop", onDrop);
                 $("#drop-zone").on("dragover", onDragOver);
                 $("#drop-zone").on("dragleave", onDragLeave);
@@ -71,28 +81,23 @@
         </script>
     </head>
     <body class="primary">
-        <div class="header secondary">
-            <img class="uwo-logo" alt="Faculty of Science" src="https://www.uwo.ca/img/homepage/2017/logo-western-crest-ftr.svg" />
-            <h1>Western Science Module Checker</h1>
-        </div>
-        <div class="box-center-wrapper">
+        <div data-include="header"></div>
+        <main class="body box-center-wrapper">
             <div class="box primary-alt">
                 <h2>Upload transcript</h2>
                 <div class="drop-zone primary-border" id="drop-zone">
-                    <img class="upload-icon" alt="Upload" src="images/upload.svg" />
-                        <form class="upload-form" id="upload-form" action="/upload-transcript" method="post">
-                            <label class="button primary">
-                                <input type="file" id="upload-input" name="file" accept=".pdf" multiple />
-                                Choose files
-                            </label>
-                            <span class="no-wrap"><strong>or</strong> drag and drop here</span>
-                        </form>
+                    <svg class="upload-icon" viewBox="0 0 374.116 374.116">
+                        <use href="images/upload.svg#upload" width="100%" height="100%"></use>
+                    </svg>
+                    <form class="upload-form" id="upload-form" method="post" enctype="multipart/form-data">
+                        <label for="upload-input" class="button primary">Choose files</label>
+                        <input type="file" id="upload-input" name="file" accept=".pdf" multiple />
+                        <span class="no-wrap"><strong>or</strong> drag and drop here</span>
+                    </form>
                 </div>
+                <div><a href="manual" class="primary-light">Enter grades manually instead...</a></div>
             </div>
-        </div>
-        <div class="footer primary-alt primary-light">
-            <a href="about">About</a>
-            <a href="privacy">Privacy</a>
-        </div>
+        </main>
+        <div data-include="footer"></div>
     </body>
 </html>

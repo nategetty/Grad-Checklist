@@ -1,12 +1,87 @@
 :root {
     --color-primary: #333333;
-    --color-primary-light: #888888;
+    --color-primary-light: #777777;
     --bg-color-primary: #ffffff;
     --bg-color-primary-alt: #f2f2f2;
     --border-color-primary: #c4c4c4;
 
     --color-secondary: #f2f2f2;
     --bg-color-secondary: #4f2683;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: #f2f2f2;
+        --color-primary-light: #c8c8c8;
+        --bg-color-primary: #222222;
+        --bg-color-primary-alt: #2f2f2f;
+        --border-color-primary: #555555;
+    }
+}
+
+body {
+    all: unset;
+    font-family: Helvetica, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    all: unset;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h2 {
+    all: unset;
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+h3 {
+    all: unset;
+    display: block;
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+form {
+    all: unset;
+}
+
+input {
+    all: unset;
+    display: inline-block;
+}
+
+button {
+    all: unset;
+}
+
+[type="file"] {
+    display: none;
+}
+
+[type="text"] {
+    padding: 0.5em;
+}
+
+fieldset {
+    all: unset;
+    display: block;
+    padding: 0.5em;
+}
+
+legend {
+    all: unset;
 }
 
 .primary {
@@ -36,32 +111,8 @@
     background-color: var(--bg-color-secondary);
 }
 
-body {
-    all: unset;
-    font-family: Helvetica, sans-serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-h1 {
-    all: unset;
-    font-size: 2em;
-    font-weight: bold;
-}
-
-h2 {
-    all: unset;
-    font-size: 1.4em;
-    font-weight: bold;
-}
-
-form {
-    all: unset;
-}
-
-input[type="file"] {
-    display: none;
+.invisible-border {
+    border: 0.1em solid transparent;
 }
 
 .no-wrap {
@@ -76,6 +127,15 @@ input[type="file"] {
     gap: 1em;
 }
 
+.uwo-logo {
+    width: 3em;
+    min-width: 3em;
+}
+
+.body {
+    flex: 1;
+}
+
 .footer {
     height: 2em;
     padding: 0em 2em;
@@ -83,20 +143,10 @@ input[type="file"] {
     flex-direction: row;
     align-items: center;
     gap: 3em;
-}
-
-.footer a {
-    color: inherit;
-    text-decoration: none;
     font-size: small;
 }
 
-.footer a:hover {
-    text-decoration: underline;
-}
-
 .box-center-wrapper {
-    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -105,14 +155,20 @@ input[type="file"] {
 
 .box {
     padding: 2em;
+    margin: 1em 0em;
     border-radius: 1em;
     display: flex;
     flex-direction: column;
     gap: 1em;
 }
 
+.box > div {
+    align-self: stretch;
+}
+
 .button {
     display: inline-block;
+    font-size: medium;
     line-height: 2em;
     padding: 0em 1em;
     border-radius: 0.5em;
@@ -122,4 +178,16 @@ input[type="file"] {
 
 .button:hover {
     background-color: var(--border-color-primary);
+}
+
+.icon-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0em 1em 0em 0.8em;
+}
+
+.icon-button > :first-child {
+    width: 0.8em;
+    margin-right: 0.6em;
 }
