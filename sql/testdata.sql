@@ -42,64 +42,74 @@ VALUES
     (0, 'DATASCI', 3000, 'A/B', 'INTRODUCTION TO MACHINE LEARNING', 'Description', 'Extra info'),
     (0, 'SCIENCE', 3377, 'A/B', 'PROJECT MANAGEMENT FOR THE SCIENCES', 'Description', 'Extra info'),
     (0, 'MATH', 2156, 'A/B', 'MATHEMATICAL STRUCTURES II', 'Description', 'Extra info'),
-    (0, 'MATH', 3159, 'A/B', 'INTRODUCTION TO CRYPTOGRAPHY', 'Description', 'Extra info');
+    (0, 'MATH', 3159, 'A/B', 'INTRODUCTION TO CRYPTOGRAPHY', 'Description', 'Extra info'),
+    (0, 'COMPSCI', 3331, 'A/B', 'FOUNDATIONS OF COMPUTER SCIENCE I', 'Description', 'Extra info'),
+    (0, 'COMPSCI', 3340, 'A/B', 'ANALYSIS OF ALGORITHMS I', 'Description', 'Extra info');
 
 INSERT INTO Module
 VALUES
     (0, 'MAJOR IN COMPUTER SCIENCE');
 
 -- id, total_credit, min_grade, req_avg
-INSERT INTO Requirement
-VALUES
-    (0, 0.5, 65, NULL),
-    (0, 0.5, 65, NULL),
-    (0, 1.0, 60, NULL),
-    (0, 3.5, 50, NULL),
-    (0, 0.5, 50, NULL),
-    (0, 2.0, 50, NULL);
-
--- module_id, req_id, is_admission
 INSERT INTO ModuleRequirement
 VALUES
-    (1, 1, 1),
-    (1, 2, 1),
-    (1, 3, 1),
-    (1, 4, 0),
-    (1, 5, 0),
-    (1, 6, 0);
+    (0, 1, 0.5, 65, NULL, 1),
+    (0, 1, 0.5, 65, NULL, 1),
+    (0, 1, 1.0, 60, NULL, 1),
+    (0, 1, 3.5, 50, NULL, 0),
+    (0, 1, 0.5, 50, NULL, 0),
+    (0, 1, 2.0, 50, NULL, 0);
 
 -- id, req_id, course_id, min_level
-INSERT INTO RequirementCourse
+INSERT INTO ModuleRequirementCourse
 VALUES
-    (0, 1, 1),
-    (0, 1, 2),
-    (0, 1, 3),
-    (0, 1, 4),
-    (0, 2, 5),
-    (0, 2, 6),
-    (0, 3, 7),
-    (0, 3, 8),
-    (0, 3, 9),
-    (0, 3, 10),
-    (0, 3, 11),
-    (0, 3, 12),
-    (0, 3, 13),
-    (0, 3, 14),
-    (0, 3, 15),
-    (0, 4, 16),
-    (0, 4, 17),
-    (0, 4, 18),
-    (0, 4, 19),
-    (0, 4, 20),
-    (0, 4, 21),
-    (0, 4, 22),
-    (0, 5, 23),
-    (0, 5, 24),
-    (0, 6, 25),
-    (0, 6, 26),
-    (0, 6, 27),
-    (0, 6, 28);
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (2, 5),
+    (2, 6),
+    (3, 7),
+    (3, 8),
+    (3, 9),
+    (3, 10),
+    (3, 11),
+    (3, 12),
+    (3, 13),
+    (3, 14),
+    (3, 15),
+    (4, 16),
+    (4, 17),
+    (4, 18),
+    (4, 19),
+    (4, 20),
+    (4, 21),
+    (4, 22),
+    (5, 23),
+    (5, 24),
+    (6, 25),
+    (6, 26),
+    (6, 27),
+    (6, 28);
 
-INSERT INTO RequirementCourseLevel
+INSERT INTO ModuleRequirementSubject
 VALUES
     (0, 6, 'COMPSCI', 3000);
+
+INSERT INTO Prerequisite
+VALUES
+    (0, 20, 1.0, 50),
+    (0, 29, 0.5, 50),
+    (0, 30, 1.0, 50),
+    (0, 30, 0.5, 50);
+
+INSERT INTO PrerequisiteCourse
+VALUES
+    (1, 18),
+    (1, 19),
+    (2, 23),
+    (2, 24),
+    (3, 18),
+    (3, 19),
+    (4, 23),
+    (4, 24);

@@ -14,7 +14,7 @@ VALUES
 CREATE TABLE Subject (
     code VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
-    category CHAR NOT NULL,
+    category CHAR,
     category_2 CHAR,
     FOREIGN KEY (category) REFERENCES CourseCategory(category),
     FOREIGN KEY (category_2) REFERENCES CourseCategory(category)
@@ -53,49 +53,53 @@ CREATE TABLE Course (
 
 CREATE TABLE Module (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
-
-CREATE TABLE Requirement (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    total_credit DECIMAL(5, 2) NOT NULL,
-    minimum_grade INT,
-    required_average INT
+    name VARCHAR(255) NOT NULL
+    -- maybe add date for grandfathering rules
 );
 
 CREATE TABLE ModuleRequirement (
-    module_id INT NOT NULL,
-    requirement_id INT NOT NULL,
-    is_admission bool NOT NULL,
-    PRIMARY KEY (module_id, requirement_id),
-    FOREIGN KEY (module_id) REFERENCES Module(id),
-    FOREIGN KEY (requirement_id) REFERENCES Requirement(id)
-);
-
-CREATE TABLE Prerequisite (
-    course_id INT NOT NULL,
-    requirement_id INT NOT NULL,
-    PRIMARY KEY (course_id, requirement_id),
-    FOREIGN KEY (course_id) REFERENCES Course(id),
-    FOREIGN KEY (requirement_id) REFERENCES Requirement(id)
-);
-
-CREATE TABLE RequirementCourse (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    requirement_id INT NOT NULL,
+    module_id INT NOT NULL,
+    total_credit DECIMAL(5, 2) NOT NULL,
+    minimum_grade INT,
+    required_average INT,
+    is_admission BIT NOT NULL,
+    FOREIGN KEY (module_id) REFERENCES Module(id)
+);
+
+CREATE TABLE ModuleRequirementCourse (
+    requirement_id INT,
     course_id INT,
-    UNIQUE (requirement_id, course_id),
-    FOREIGN KEY (requirement_id) REFERENCES Requirement(id),
+    PRIMARY KEY (requirement_id, course_id),
+    FOREIGN KEY (requirement_id) REFERENCES ModuleRequirement(id),
     FOREIGN KEY (course_id) REFERENCES Course(id)
 );
 
-CREATE TABLE RequirementCourseLevel (
+-- Example from academic calendar:
+-- 0.5 course from: Computer Science courses at the 3000 level or above
+CREATE TABLE ModuleRequirementSubject (
     id INT PRIMARY KEY AUTO_INCREMENT,
     requirement_id INT NOT NULL,
     subject_code VARCHAR(255) NOT NULL,
     minimum_level INT NOT NULL,
-    FOREIGN KEY (requirement_id) REFERENCES Requirement(id),
+    FOREIGN KEY (requirement_id) REFERENCES ModuleRequirement(id),
     FOREIGN KEY (subject_code) REFERENCES Subject(code)
+);
+
+CREATE TABLE Prerequisite (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    course_id INT NOT NULL,
+    total_credit DECIMAL(5, 2) NOT NULL,
+    minimum_grade INT,
+    FOREIGN KEY (course_id) REFERENCES Course(id)
+);
+
+CREATE TABLE PrerequisiteCourse (
+    prerequisite_id INT,
+    required_course_id INT,
+    PRIMARY KEY (prerequisite_id, required_course_id),
+    FOREIGN KEY (prerequisite_id) REFERENCES Prerequisite(id),
+    FOREIGN KEY (required_course_id) REFERENCES Course(id)
 );
 
 CREATE TABLE Antirequisite (
@@ -105,3 +109,11 @@ CREATE TABLE Antirequisite (
     FOREIGN KEY (course_id) REFERENCES Course(id),
     FOREIGN KEY (antirequisite_course_id) REFERENCES Course(id)
 );
+
+-- Views
+
+
+
+-- Indices
+
+

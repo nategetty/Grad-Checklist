@@ -3,8 +3,8 @@
 # Entry point for starting the development server.
 #
 
-from flask import Flask, current_app
-import api
+from flask import Flask
+from gradchecklist import api
 
 
 # Creates the development server application.
