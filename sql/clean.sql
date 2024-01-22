@@ -1,1 +1,1 @@
-DROP DATABASE Courses;
+DROP DATABASE gradchecklist;

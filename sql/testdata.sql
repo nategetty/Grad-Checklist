@@ -1,6 +1,6 @@
 -- Test data for the module MAJOR IN COMPUTER SCIENCE.
 
-USE Courses;
+USE gradchecklist;
 
 INSERT INTO Subject
 VALUES

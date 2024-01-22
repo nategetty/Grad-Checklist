@@ -1,5 +1,5 @@
-CREATE DATABASE Courses;
-USE Courses;
+CREATE DATABASE gradchecklist;
+USE gradchecklist;
 
 CREATE TABLE CourseCategory (
     category CHAR PRIMARY KEY
