@@ -112,8 +112,19 @@ CREATE TABLE Antirequisite (
 
 -- Views
 
-
+CREATE VIEW VCourseInfo AS
+SELECT Course.id, Course.subject_code, Subject.name AS subject_name, Course.number,
+    Course.suffix, CourseSuffix.credit, CourseSuffix.is_essay,
+    Subject.category, Subject.category_2,
+    Course.name, Course.description, Course.extra_information
+FROM Course
+LEFT JOIN Subject ON Subject.code=Course.subject_code
+LEFT JOIN CourseSuffix ON CourseSuffix.suffix=Course.suffix;
 
 -- Indices
 
+CREATE UNIQUE INDEX IdxCourseNumber
+ON Course (subject_code, number);
 
+CREATE UNIQUE INDEX IdxModuleName
+ON Module (name);

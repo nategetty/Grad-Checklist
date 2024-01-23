@@ -5,20 +5,20 @@
 
 from flask import current_app, g
 import MySQLdb
-import MySQLdb.cursors
+import MySQLdb.converters
 
 
 # Returns a database cursor.
 def get_db():
     if "db" not in g:
+        MySQLdb.converters.conversions[MySQLdb.FIELD_TYPE.BIT] = lambda val: val == b"\x01"
         g.db = MySQLdb.connect(
             host=current_app.config["DB_HOST"],
             user=current_app.config["DB_USER"],
             password=current_app.config["DB_PASSWORD"],
-            database=current_app.config["DB_DATABASE"],
-            cursorclass=MySQLdb.cursors.DictCursor
+            database=current_app.config["DB_DATABASE"]
         )
-    return g.db.cursor()
+    return g.db
 
 
 # Closes the database connection.

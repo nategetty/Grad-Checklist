@@ -1,7 +1,5 @@
 #
 # __init__.py
-# Package initializer for the production server.
-# Don't use this for development!
 #
 
 import os
@@ -47,7 +45,7 @@ def create_dev_app():
 
 # Application factory.
 def create_app():
-    if os.environ.get("ENV") == "prod":
+    if os.environ.get("ENV") == "production":
         app = create_production_app()
     else:
         app = create_dev_app()
