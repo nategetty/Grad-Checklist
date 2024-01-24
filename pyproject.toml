@@ -3,7 +3,8 @@ name = "gradchecklist"
 description = "Module checker Flask application."
 dynamic = ["version"]
 dependencies = [
-    "flask"
+    "flask",
+    "mysqlclient"
 ]
 
 [build-system]

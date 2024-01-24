@@ -6,9 +6,22 @@
 from flask import current_app, g
 import MySQLdb
 import MySQLdb.converters
+from .config import DefaultConfig
 
 
-# Returns a database cursor.
+# Returns a new database connection.
+# Use get_db() instead when in the context of a request.
+def create_db_connection():
+    MySQLdb.converters.conversions[MySQLdb.FIELD_TYPE.BIT] = lambda val: val == b"\x01"
+    return MySQLdb.connect(
+        host=DefaultConfig.DB_HOST,
+        user=DefaultConfig.DB_USER,
+        password=DefaultConfig.DB_PASSWORD,
+        database=DefaultConfig.DB_DATABASE
+    )
+
+
+# Returns database connection for the current request.
 def get_db():
     if "db" not in g:
         MySQLdb.converters.conversions[MySQLdb.FIELD_TYPE.BIT] = lambda val: val == b"\x01"

@@ -50,13 +50,15 @@ def insert_module(db, module: Module):
     try:
         with db.cursor() as c:
             c.execute("INSERT INTO Module VALUES (%s,%s)",
-                      vars(module))
+                      (module.id, module.name))
+            module_id = c.lastrowid
             for req in module.requirements:
                 c.execute("INSERT INTO ModuleRequirement VALUES (%s,%s,%s,%s,%s,%s)",
-                          vars(req))
+                          (req.id, module_id, req.total_credit, req.minimum_grade, req.required_average, req.is_admission))
+                req_id = c.lastrowid
                 for course in req.courses:
                     c.execute("INSERT INTO ModuleRequirementCourse VALUES (%s,%s)",
-                              (req.id, course.id))
+                              (req_id, course.id))
         db.commit()
     except:
         db.rollback()
