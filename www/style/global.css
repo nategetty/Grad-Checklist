@@ -48,9 +48,20 @@ h3 {
     font-weight: bold;
 }
 
+h4 {
+    all: unset;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+}
+
 a {
     color: inherit;
     text-decoration: underline;
+}
+
+a.no-underline {
+    text-decoration: none;
 }
 
 form {
@@ -119,6 +130,10 @@ legend {
     white-space: nowrap;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .header {
     padding: 1em 2em;
     display: flex;
@@ -146,24 +161,38 @@ legend {
     font-size: small;
 }
 
-.box-center-wrapper {
+.center-content {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding: 1em 0em;
 }
 
 .box {
-    padding: 2em;
-    margin: 1em 0em;
+    padding: 1.5em 2em;
     border-radius: 1em;
     display: flex;
     flex-direction: column;
     gap: 1em;
 }
 
-.box > div {
-    align-self: stretch;
+.table {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.table-row.table-row-indent {
+    margin-left: 2em;
+}
+
+.table-data {
+    flex: 1;
 }
 
 .button {

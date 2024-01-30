@@ -23,7 +23,7 @@ CREATE TABLE Subject (
 CREATE TABLE CourseSuffix (
     suffix VARCHAR(255) PRIMARY KEY,
     credit DECIMAL(5, 2) NOT NULL,
-    is_essay BOOL NOT NULL
+    is_essay BIT NOT NULL
 );
 
 INSERT INTO CourseSuffix
@@ -91,7 +91,9 @@ CREATE TABLE Prerequisite (
     course_id INT NOT NULL,
     total_credit DECIMAL(5, 2) NOT NULL,
     minimum_grade INT,
-    FOREIGN KEY (course_id) REFERENCES Course(id)
+    alternative_to INT,
+    FOREIGN KEY (course_id) REFERENCES Course(id),
+    FOREIGN KEY (alt_to) REFERENCES Prerequisite(id)
 );
 
 CREATE TABLE PrerequisiteCourse (

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Results</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style/global.css" />
+        <style>
+            .results {
+                flex: 0 1 80em;
+                display: flex;
+                flex-flow: row wrap;
+                gap: 1em;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            .results > h2 {
+                flex-basis: 100%;
+                padding-left: 1rem;
+            }
+
+            .results-column {
+                flex: 1 1 20em;
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+                max-width: 24em;
+            }
+
+            .results-column-wide {
+                flex: 1 1 30em;
+                max-width: 30em;
+            }
+
+            .summary-result {
+                padding: 1em 1.5em;
+                border-radius: 1em;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .requirement-table {
+                line-height: 1em;
+            }
+
+            .requirement-table .table-data {
+                padding: 0.5em 0em;
+            }
+
+            .requirement-table .table-data:first-child {
+                flex: 0 0 1.6em;
+            }
+
+            .requirement-table .table-data:first-child svg {
+                vertical-align: top;
+            }
+
+            .requirement-table .table-data:nth-child(3) {
+                flex: 0;
+                white-space: nowrap;
+                font-weight: bold;
+                padding-left: 1em;
+            }
+
+            .requirement-table > hr {
+                width: 100%;
+            }
+
+            .complete {
+                color: #00bb00;
+            }
+
+            .in-progress {
+                color: #fe8a05;
+            }
+
+            .incomplete {
+                color: #ee0000
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="script/global.js"></script>
+        <script>
+            $(() => {
+                includeHtml();
+
+            });
+        </script>
+    </head>
+    <body class="primary">
+        <div data-include="header"></div>
+        <main class="body center-content">
+            <div class="results">
+                <h2>Results</h2>
+                <div class="results-column">
+                    <div class="box primary-alt">
+                        <h3>Summary</h3>
+                        <div class="box summary-result" style="background-color: #fe8a05;">
+                            <svg viewBox="0 0 500 500" width="1em">
+                                <g fill="none" stroke="currentColor" stroke-width="60">
+                                    <circle cx="250" cy="250" r="215" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                </g>
+                            </svg>
+                            <div>
+                                <strong>Elligible to graduate</strong>
+                                <br />
+                                <span>(Final grades pending)</span>
+                            </div>
+                        </div>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data in-progress">
+                                    <svg viewBox="0 0 500 500" width="1em">
+                                        <g fill="none" stroke="currentColor" stroke-width="60">
+                                            <circle cx="250" cy="250" r="215" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="table-data">Total courses</div>
+                                <div class="table-data">20.0 / 20.0</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Completed</div>
+                                <div class="table-data">15.0</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Final grade pending</div>
+                                <div class="table-data">5.0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box primary-alt">
+                        <h3>First year requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">First year courses</div>
+                                <div class="table-data">5.0 / 5.0</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">At least 4 different subjects</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">No more than 2.0 in one subject</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box primary-alt">
+                        <h3>Senior course requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Senior courses</div>
+                                <div class="table-data">13.0 / 13.0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="results-column">
+                    <div class="box primary-alt">
+                        <h3>Average requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Cumulative average</div>
+                                <div class="table-data">78% (min: 65%)</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Lowest grade</div>
+                                <div class="table-data">58% (min: 50%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box primary-alt">
+                        <h3>Breadth requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Category A</div>
+                                <div class="table-data">1.0 / 1.0</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data incomplete">✖&#xFE0E;</div>
+                                <div class="table-data">Category B</div>
+                                <div class="table-data">0.5 / 1.0</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Category C</div>
+                                <div class="table-data">1.0 / 1.0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box primary-alt">
+                        <h3>Essay requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Total essay courses</div>
+                                <div class="table-data">2.0 / 2.0</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Senior essay courses</div>
+                                <div class="table-data">1.0 / 1.0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="results-column results-column-wide">
+                    <div class="box primary-alt">
+                        <h3>Admission requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data"><h4>0.5 course from:</h4></div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Computer Science 1025A/B</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data"><strong>Computer Science 1026A/B</strong></div>
+                                <div class="table-data">75%</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Data Science 1200A/B</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Engineering Science 1036A/B</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Lowest grade</div>
+                                <div class="table-data">75% (min: 65%)</div>
+                            </div>
+                            <hr />
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data"><h4>0.5 course from:</h4></div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data"><strong>Computer Science 1027A/B</strong></div>
+                                <div class="table-data">72%</div>
+                            </div>
+                            <div class="table-row table-row-indent">
+                                <div class="table-data"></div>
+                                <div class="table-data">Computer Science 1037A/B</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data complete">✔&#xFE0E;</div>
+                                <div class="table-data">Lowest grade</div>
+                                <div class="table-data">75% (min: 65%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box primary-alt">
+                        <h3>Module requirements</h3>
+                        <div class="table requirement-table">
+                            <div class="table-row">
+                                <div class="table-data">Module average</div>
+                                <div class="table-data">74% (min: 70%)</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-data">Lowest module grade</div>
+                                <div class="table-data">58% (min: 60%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div data-include="footer"></div>
+    </body>
+</html>
