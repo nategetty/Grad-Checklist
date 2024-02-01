@@ -4,6 +4,7 @@
 
 from dataclasses import dataclass
 from decimal import Decimal
+from typing import Optional
 
 
 @dataclass
@@ -13,8 +14,8 @@ class Course:
     number: int = 0
     suffix: str = ""
     name: str = ""
-    description: str | None = ""
-    extra_information: str | None = ""
+    description: Optional[str] = ""
+    extra_information: Optional[str] = ""
 
 
 @dataclass
@@ -26,15 +27,15 @@ class VCourse:
     suffix: str
     credit: Decimal
     is_essay: bool
-    category: str | None
-    category_2: str | None
+    category: Optional[str]
+    category_2: Optional[str]
     name: str
-    description: str | None
-    extra_information: str | None
+    description: Optional[str]
+    extra_information: Optional[str]
 
 
 # Finds and returns the course with the given subject code and number. Returns None if no matching course is found.
-def get_v_course(db, subject_code: str, number: int) -> VCourse | None:
+def get_v_course(db, subject_code: str, number: int) -> Optional[VCourse]:
     with db.cursor() as c:
         c.execute("SELECT * FROM VCourse WHERE subject_code=%s AND number=%s",
                 (subject_code, number))

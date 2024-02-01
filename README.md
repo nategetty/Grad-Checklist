@@ -13,6 +13,7 @@ Developing an automated system for Western University to streamline the graduate
 2. Create a new virtual environment: `python3 -m venv .venv`
 3. Activate the venv (Linux / Mac): `. .venv/bin/activate`
 4. Activate the venv (Windows): `venv\Scripts\activate.bat` (cmd) or `venv\Scripts\Activate.ps1` (PowerShell)
+5. Update pip: `pip install --upgrade pip`
 
 ### Install MySQL (Mac)
 1. Install MySQL: `brew install mysql`

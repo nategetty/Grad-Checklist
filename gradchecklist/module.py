@@ -16,8 +16,8 @@ class ModuleRequirement:
     id: int = 0
     module_id: int = 0
     total_credit: Decimal = Decimal(0)
-    minimum_grade: int | None = None
-    required_average: int | None = None
+    minimum_grade: Optional[int] = None
+    required_average: Optional[int] = None
     is_admission: bool = False
     courses: list[VCourse] = field(default_factory=list)
 
@@ -31,7 +31,7 @@ class Module:
 
 
 # Finds and returns the module with the given name. Returns None if no module was found.
-def get_module(db, name: str) -> Module | None:
+def get_module(db, name: str) -> Optional[Module]:
     with db.cursor() as c:
         c.execute("SELECT * FROM Module WHERE name=%s", (name,))
         module = c.fetchone()
