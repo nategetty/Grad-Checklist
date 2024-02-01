@@ -95,6 +95,44 @@ legend {
     all: unset;
 }
 
+table {
+    all: unset;
+}
+
+thead {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+}
+
+tbody {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+}
+
+th {
+    all: unset;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+}
+
+tr {
+    all: unset;
+    display: flex;
+    flex-direction: row;
+}
+
+tr.tr-indent {
+    margin-left: 2em;
+}
+
+td {
+    all: unset;
+    flex: 1;
+}
+
 .primary {
     color: var(--color-primary);
     background-color: var(--bg-color-primary);
@@ -177,22 +215,8 @@ legend {
     gap: 1em;
 }
 
-.table {
-    display: flex;
-    flex-direction: column;
-}
-
-.table-row {
-    display: flex;
-    flex-direction: row;
-}
-
-.table-row.table-row-indent {
-    margin-left: 2em;
-}
-
-.table-data {
-    flex: 1;
+.box-a {
+    align-self: flex-start;
 }
 
 .button {

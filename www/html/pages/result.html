@@ -28,8 +28,8 @@
             }
 
             .results-column-wide {
-                flex: 1 1 30em;
-                max-width: 30em;
+                flex: 1 1 32em;
+                max-width: 32em;
             }
 
             .summary-result {
@@ -44,27 +44,38 @@
                 line-height: 1em;
             }
 
-            .requirement-table .table-data {
+            .requirement-table td,
+            .requirement-table th {
                 padding: 0.5em 0em;
             }
 
-            .requirement-table .table-data:first-child {
+            .requirement-table td:first-child {
                 flex: 0 0 1.6em;
             }
 
-            .requirement-table .table-data:first-child svg {
+            .requirement-table td:first-child svg {
                 vertical-align: top;
             }
 
-            .requirement-table .table-data:nth-child(3) {
+            .requirement-table td:nth-child(2),
+            .requirement-table th:nth-child(2) {
+                padding-right: 2em;
+            }
+
+            .requirement-table td:nth-child(3) {
                 flex: 0;
                 white-space: nowrap;
                 font-weight: bold;
-                padding-left: 1em;
             }
 
             .requirement-table > hr {
                 width: 100%;
+            }
+
+            .requirement-table tbody:not(:first-child) {
+                margin-top: 1em;
+                border-top: 0.1em solid;
+                padding-top: 1em;
             }
 
             .complete {
@@ -89,12 +100,12 @@
         </script>
     </head>
     <body class="primary">
-        <div data-include="header"></div>
+        <header data-include="header"></header>
         <main class="body center-content">
             <div class="results">
                 <h2>Results</h2>
                 <div class="results-column">
-                    <div class="box primary-alt">
+                    <section class="box primary-alt">
                         <h3>Summary</h3>
                         <div class="box summary-result" style="background-color: #fe8a05;">
                             <svg viewBox="0 0 500 500" width="1em">
@@ -109,179 +120,438 @@
                                 <span>(Final grades pending)</span>
                             </div>
                         </div>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data in-progress">
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="in-progress">
                                     <svg viewBox="0 0 500 500" width="1em">
                                         <g fill="none" stroke="currentColor" stroke-width="60">
                                             <circle cx="250" cy="250" r="215" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
                                         </g>
                                     </svg>
-                                </div>
-                                <div class="table-data">Total courses</div>
-                                <div class="table-data">20.0 / 20.0</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Completed</div>
-                                <div class="table-data">15.0</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Final grade pending</div>
-                                <div class="table-data">5.0</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box primary-alt">
+                                </td>
+                                <td>Total courses</td>
+                                <td>20.0 / 20.0</td>
+                            </tr>
+                            <tr class="tr-indent">
+                                <td></td>
+                                <td>Completed</td>
+                                <td>15.0</td>
+                            </tr>
+                            <tr class="tr-indent">
+                                <td></td>
+                                <td>Final grade pending</td>
+                                <td>5.0</td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="box primary-alt">
                         <h3>First year requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">First year courses</div>
-                                <div class="table-data">5.0 / 5.0</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">At least 4 different subjects</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">No more than 2.0 in one subject</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box primary-alt">
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>First year courses</td>
+                                <td>5.0 / 5.0</td>
+                            </tr>
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>At least 4 different subjects</td>
+                            </tr>
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>No more than 2.0 in one subject</td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="box primary-alt">
                         <h3>Senior course requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Senior courses</div>
-                                <div class="table-data">13.0 / 13.0</div>
-                            </div>
-                        </div>
-                    </div>
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Senior courses</td>
+                                <td>13.0 / 13.0</td>
+                            </tr>
+                        </table>
+                    </section>
                 </div>
                 <div class="results-column">
-                    <div class="box primary-alt">
+                    <section class="box primary-alt">
                         <h3>Average requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Cumulative average</div>
-                                <div class="table-data">78% (min: 65%)</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Lowest grade</div>
-                                <div class="table-data">58% (min: 50%)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box primary-alt">
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Cumulative average</td>
+                                <td>78% (min: 65%)</td>
+                            </tr>
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Lowest grade</td>
+                                <td>58% (min: 50%)</td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="box primary-alt">
                         <h3>Breadth requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Category A</div>
-                                <div class="table-data">1.0 / 1.0</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data incomplete">✖&#xFE0E;</div>
-                                <div class="table-data">Category B</div>
-                                <div class="table-data">0.5 / 1.0</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Category C</div>
-                                <div class="table-data">1.0 / 1.0</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box primary-alt">
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Category A</td>
+                                <td>1.0 / 1.0</td>
+                            </tr>
+                            <tr>
+                                <td class="incomplete">✖&#xFE0E;</td>
+                                <td>Category B</td>
+                                <td>0.5 / 1.0</td>
+                            </tr>
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Category C</td>
+                                <td>1.0 / 1.0</td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="box primary-alt">
                         <h3>Essay requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Total essay courses</div>
-                                <div class="table-data">2.0 / 2.0</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Senior essay courses</div>
-                                <div class="table-data">1.0 / 1.0</div>
-                            </div>
-                        </div>
-                    </div>
+                        <table class="requirement-table">
+                            <tr>
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Total essay courses</td>
+                                <td>2.0 / 2.0</td>
+                            </tr>
+                            <tr class="tr-indent">
+                                <td class="complete">✔&#xFE0E;</td>
+                                <td>Senior essay courses</td>
+                                <td>1.0 / 1.0</td>
+                            </tr>
+                        </table>
+                    </section>
                 </div>
                 <div class="results-column results-column-wide">
-                    <div class="box primary-alt">
+                    <section class="box primary-alt">
                         <h3>Admission requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data"><h4>0.5 course from:</h4></div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Computer Science 1025A/B</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data"><strong>Computer Science 1026A/B</strong></div>
-                                <div class="table-data">75%</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Data Science 1200A/B</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Engineering Science 1036A/B</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Lowest grade</div>
-                                <div class="table-data">75% (min: 65%)</div>
-                            </div>
-                            <hr />
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data"><h4>0.5 course from:</h4></div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data"><strong>Computer Science 1027A/B</strong></div>
-                                <div class="table-data">72%</div>
-                            </div>
-                            <div class="table-row table-row-indent">
-                                <div class="table-data"></div>
-                                <div class="table-data">Computer Science 1037A/B</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data complete">✔&#xFE0E;</div>
-                                <div class="table-data">Lowest grade</div>
-                                <div class="table-data">75% (min: 65%)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box primary-alt">
+                        <table class="requirement-table">
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Computer Science 1025A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Computer Science 1026A/B</strong></td>
+                                    <td>75%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Data Science 1200A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Engineering Science 1036A/B</td>
+                                </tr>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Lowest grade</td>
+                                    <td>75% (min: 65%)</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Computer Science 1027A/B</strong></td>
+                                    <td>72%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Computer Science 1037A/B</td>
+                                </tr>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Lowest grade</td>
+                                    <td>75% (min: 65%)</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>1.0 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Applied Mathematics 1201A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Calculus 1000A/B</strong></td>
+                                    <td>70%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Calculus 1301A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Calculus 1500A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Calculus 1501A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Mathematics 1600A/B</strong></td>
+                                    <td>71%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Numerical and Mathematical Methods 1411A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Numerical and Mathematical Methods 1412A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Numerical and Mathematical Methods 1414A/B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="box primary-alt">
                         <h3>Module requirements</h3>
-                        <div class="table requirement-table">
-                            <div class="table-row">
-                                <div class="table-data">Module average</div>
-                                <div class="table-data">74% (min: 70%)</div>
-                            </div>
-                            <div class="table-row">
-                                <div class="table-data">Lowest module grade</div>
-                                <div class="table-data">58% (min: 60%)</div>
-                            </div>
-                        </div>
-                    </div>
+                        <table class="requirement-table">
+                            <tbody>
+                                <tr>
+                                    <td class="in-progress">
+                                        <svg viewBox="0 0 500 500" width="1em">
+                                            <g fill="none" stroke="currentColor" stroke-width="60">
+                                                <circle cx="250" cy="250" r="215" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                            </g>
+                                        </svg>
+                                    </td>
+                                    <td>Module courses</td>
+                                    <td>9.0 / 9.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Module average</td>
+                                    <td>74% (min: 70%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Lowest module grade</td>
+                                    <td>62% (min: 60%)</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>5.5 courses:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 2208A/B</td>
+                                    <td>62%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 2209A/B</td>
+                                    <td>81%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 2210A/B</td>
+                                    <td>80%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 2211A/B</td>
+                                    <td>78%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 2212A/B</td>
+                                    <td>71%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3305A/B</td>
+                                    <td>80%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3307A/B</td>
+                                    <td>70%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3331A/B</td>
+                                    <td>72%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3340A/B</td>
+                                    <td>78%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3342A/B</td>
+                                    <td>71%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td>Computer Science 3350A/B</td>
+                                    <td>71%</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Computer Science 2214A/B</strong></td>
+                                    <td>74%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Mathematics 2214A/B</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Writing 2101F/G</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Writing 2111F/G</strong></td>
+                                    <td>80%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Writing 2125F/G</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Writing 2131F/G</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="in-progress">
+                                        <svg viewBox="0 0 500 500" width="1em">
+                                            <g fill="none" stroke="currentColor" stroke-width="60">
+                                                <circle cx="250" cy="250" r="215" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                            </g>
+                                        </svg>
+                                    </td>
+                                    <th>0.5 course:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="in-progress">
+                                        <svg viewBox="0 0 500 500" width="1em">
+                                            <g fill="none" stroke="currentColor" stroke-width="60">
+                                                <circle cx="250" cy="250" r="215" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                            </g>
+                                        </svg>
+                                    </td>
+                                    <td>Computer Science 4490Z</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="in-progress">
+                                        <svg viewBox="0 0 500 500" width="1em">
+                                            <g fill="none" stroke="currentColor" stroke-width="60">
+                                                <circle cx="250" cy="250" r="215" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                            </g>
+                                        </svg>
+                                    </td>
+                                    <th>1.0 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="in-progress">
+                                        <svg viewBox="0 0 500 500" width="1em">
+                                            <g fill="none" stroke="currentColor" stroke-width="60">
+                                                <circle cx="250" cy="250" r="215" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                                            </g>
+                                        </svg>
+                                    </td>
+                                    <td><strong>Computer Science courses at the 4000 level</strong></td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Data Science 3000A/B</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Computer Science courses at the 3000 level or above</strong></td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Science 3377A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Mathematics 2156A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Mathematics 3159A/B</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <th>0.5 course from:</th>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Statistical Sciences 2141A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td class="complete">✔&#xFE0E;</td>
+                                    <td><strong>Statistical Sciences 2244A/B</strong></td>
+                                    <td>68%</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Biology 2244A/B</td>
+                                </tr>
+                                <tr class="tr-indent">
+                                    <td></td>
+                                    <td>Statistical Sciences 2857A/B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
             </div>
         </main>
-        <div data-include="footer"></div>
+        <footer data-include="footer"></footer>
     </body>
 </html>

@@ -93,7 +93,7 @@ CREATE TABLE Prerequisite (
     minimum_grade INT,
     alternative_to INT,
     FOREIGN KEY (course_id) REFERENCES Course(id),
-    FOREIGN KEY (alt_to) REFERENCES Prerequisite(id)
+    FOREIGN KEY (alternative_to) REFERENCES Prerequisite(id)
 );
 
 CREATE TABLE PrerequisiteCourse (
@@ -114,7 +114,7 @@ CREATE TABLE Antirequisite (
 
 -- Views
 
-CREATE VIEW VCourseInfo AS
+CREATE VIEW VCourse AS
 SELECT Course.id, Course.subject_code, Subject.name AS subject_name, Course.number,
     Course.suffix, CourseSuffix.credit, CourseSuffix.is_essay,
     Subject.category, Subject.category_2,

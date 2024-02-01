@@ -98,10 +98,10 @@ VALUES
 
 INSERT INTO Prerequisite
 VALUES
-    (0, 20, 1.0, 50),
-    (0, 29, 0.5, 50),
-    (0, 30, 1.0, 50),
-    (0, 30, 0.5, 50);
+    (0, 20, 1.0, 50, NULL),
+    (0, 29, 0.5, 50, NULL),
+    (0, 30, 1.0, 50, NULL),
+    (0, 30, 0.5, 50, NULL);
 
 INSERT INTO PrerequisiteCourse
 VALUES

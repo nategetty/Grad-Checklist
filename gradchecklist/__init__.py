@@ -7,7 +7,7 @@ from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 from . import api, db
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 
 # Creates the Flask application for production.
@@ -22,6 +22,7 @@ def create_production_app():
 
 
 # Creates the Flask application for development.
+# The development app is configured to serve static files (HTML files, images, etc).
 def create_dev_app():
     app = Flask(__name__,
                 static_url_path="",

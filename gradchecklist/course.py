@@ -8,17 +8,17 @@ from decimal import Decimal
 
 @dataclass
 class Course:
-    id: int
-    subject_code: str
-    number: int
-    suffix: str
-    name: str
-    description: str | None
-    extra_information: str | None
+    id: int = 0
+    subject_code: str = ""
+    number: int = 0
+    suffix: str = ""
+    name: str = ""
+    description: str | None = ""
+    extra_information: str | None = ""
 
 
 @dataclass
-class VCourseInfo:
+class VCourse:
     id: int
     subject_code: str
     subject_name: str
@@ -33,22 +33,26 @@ class VCourseInfo:
     extra_information: str | None
 
 
-def get_v_course_info(db, subject_code: str, number: int) -> VCourseInfo | None:
-    c = db.cursor()
-    c.execute("SELECT * FROM VCourseInfo WHERE subject_code=%s AND number=%s",
-              (subject_code, number))
-    course = c.fetchone()
+# Finds and returns the course with the given subject code and number. Returns None if no matching course is found.
+def get_v_course(db, subject_code: str, number: int) -> VCourse | None:
+    with db.cursor() as c:
+        c.execute("SELECT * FROM VCourse WHERE subject_code=%s AND number=%s",
+                (subject_code, number))
+        course = c.fetchone()
     if course is None:
         return None
     else:
-        return VCourseInfo(*course)
+        return VCourse(*course)
 
 
+# Inserts course into the database.
+# Raises errors if the insert query fails.
 def insert_course(db, course: Course):
     try:
         with db.cursor() as c:
             c.execute("INSERT INTO Course VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                      vars(course).values())
+                      list(vars(course).values()))
         db.commit()
     except:
         db.rollback()
+        raise

@@ -5,7 +5,7 @@
 
 from flask import Blueprint, jsonify, request
 from .db import get_db
-from .course import Course, get_v_course_info, insert_course
+from .course import Course, get_v_course, insert_course
 from .module import get_module
 
 bp = Blueprint("api", __name__)

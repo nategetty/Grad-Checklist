@@ -6,7 +6,7 @@ from gradchecklist.course import *
 
 
 def test_get_course(db):
-    result = get_v_course_info(db, "COMPSCI", 1027)
+    result = get_v_course(db, "COMPSCI", 1027)
     assert result is not None
     assert result.subject_code == "COMPSCI"
     assert result.number == 1027
@@ -14,11 +14,16 @@ def test_get_course(db):
 
 
 def test_get_course_no_records(db):
-    assert get_v_course_info(db, "COMPSCI", 19999) is None
+    assert get_v_course(db, "COMPSCI", 55555) is None
 
 
 def test_insert_course(db):
-    assert get_v_course_info(db, "COMPSCI", 19999) is None
-    course = Course(0, "COMPSCI", 19999, "E", "NAME", "description", "extra info")
+    assert get_v_course(db, "COMPSCI", 9999) is None
+    course = Course(subject_code="COMPSCI",
+                    number=9999,
+                    suffix="E",
+                    name="NAME",
+                    description="description",
+                    extra_information="extra info")
     insert_course(db, course)
-    assert get_v_course_info(db, "COMPSCI", 19999) is not None
+    assert get_v_course(db, "COMPSCI", 9999) is not None

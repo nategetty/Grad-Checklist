@@ -5,9 +5,7 @@
 
 # Default config for all environments.
 class DefaultConfig:
-    ENV = "dev"
-
     DB_HOST = "localhost"
-    DB_USER = "gradchecklist_dev"
-    DB_PASSWORD = "dev"
+    DB_USER = "root"
+    DB_PASSWORD = ""
     DB_DATABASE = "gradchecklist"

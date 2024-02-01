@@ -3,6 +3,7 @@
 #
 
 from gradchecklist.module import *
+from gradchecklist.course import get_v_course
 
 
 def test_get_module(db):
@@ -24,14 +25,19 @@ def clear_module_ids(module: Module):
 
 
 def test_insert_module(db):
-    module = get_module(db, "MAJOR IN COMPUTER SCIENCE")
-    module.name = "MAJOR IN COMPUTER SCIENCE COPY"
-    clear_module_ids(module)
+    module = Module()
+    module.name = "MAJOR IN TESTING"
+
+    # Equivalent to: "0.5 course from: Computer Science 1027A/B or Computer Science 1037A/B (in either case with a mark of at least 65%)"
+    req = ModuleRequirement(total_credit=0.5, minimum_grade=65, is_admission=True)
+    req.courses = [
+        get_v_course(db, "COMPSCI", 1027),
+        get_v_course(db, "COMPSCI", 1037)
+    ]
+    module.requirements.append(req)
 
     insert_module(db, module)
 
     result = get_module(db, module.name)
-    clear_module_ids(result)
-    
-    assert result is not None
-    assert result == module
+    assert len(result.requirements) == 1
+    assert result.requirements[0].courses == req.courses

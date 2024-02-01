@@ -4,6 +4,11 @@ description = "Module checker Flask application."
 dynamic = ["version"]
 dependencies = [
     "flask",
+    "PyMySQL"
+]
+
+[project.optional-dependencies]
+production = [
     "mysqlclient"
 ]
 

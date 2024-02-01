@@ -5,28 +5,33 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .course import VCourseInfo
+from .course import VCourse
 
 
+# Set of courses required by a module.
+# Example from academic calendar:
+#   "0.5 course from: Computer Science 1027A/B or Computer Science 1037A/B (in either case with a mark of at least 65%)"
 @dataclass
 class ModuleRequirement:
-    id: int
-    module_id: int
-    total_credit: Decimal
-    minimum_grade: int
-    required_average: int
-    is_admission: bool
-    courses: list[VCourseInfo] = field(default_factory=list)
+    id: int = 0
+    module_id: int = 0
+    total_credit: Decimal = Decimal(0)
+    minimum_grade: int | None = None
+    required_average: int | None = None
+    is_admission: bool = False
+    courses: list[VCourse] = field(default_factory=list)
 
 
+# Program/module. E.g. SPECIALIZATION IN COMPUTER SCIENCE
 @dataclass
 class Module:
-    id: int
-    name: str
+    id: int = 0
+    name: str = ""
     requirements: list[ModuleRequirement] = field(default_factory=list)
 
 
-def get_module(db, name: str):
+# Finds and returns the module with the given name. Returns None if no module was found.
+def get_module(db, name: str) -> Module | None:
     with db.cursor() as c:
         c.execute("SELECT * FROM Module WHERE name=%s", (name,))
         module = c.fetchone()
@@ -39,14 +44,16 @@ def get_module(db, name: str):
         reqs = c.fetchall()
     for req in reqs:
         with db.cursor() as c:
-            c.execute("SELECT VCourseInfo.* FROM ModuleRequirementCourse JOIN VCourseInfo ON id=course_id WHERE requirement_id=%s",
+            c.execute("SELECT VCourse.* FROM ModuleRequirementCourse JOIN VCourse ON id=course_id WHERE requirement_id=%s",
                   (req[0],))
-            courses = [VCourseInfo(*course) for course in c.fetchall()]
+            courses = [VCourse(*course) for course in c.fetchall()]
         module.requirements.append(ModuleRequirement(*req, courses))
 
     return module
 
 
+# Inserts module into the database.
+# Raises errors if the insert query fails.
 def insert_module(db, module: Module):
     try:
         with db.cursor() as c:
@@ -63,3 +70,4 @@ def insert_module(db, module: Module):
         db.commit()
     except:
         db.rollback()
+        raise
