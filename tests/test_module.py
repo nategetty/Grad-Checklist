@@ -7,9 +7,9 @@ from gradchecklist.course import get_v_course
 
 
 def test_get_module(db):
-    module = get_module(db, "MAJOR IN COMPUTER SCIENCE")
+    module = get_module(db, "HONOURS SPECIALIZATION IN COMPUTER SCIENCE")
     assert module is not None
-    assert len(module.requirements) == 6
+    assert len(module.requirements) == 10
     assert module.requirements[0].courses
 
 

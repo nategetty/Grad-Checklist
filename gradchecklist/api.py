@@ -15,11 +15,6 @@ bp = Blueprint("api", __name__)
 def upload_transcript():
     return "Hello world!"
 
-@bp.route("/test-reqs")
-def reqs():
-    module = get_module(get_db(), "MAJOR IN COMPUTER SCIENCE")
-    return jsonify(module.requirements)
-
 @bp.route("/module")
 def module():
-    return jsonify(get_module(get_db(), "MAJOR IN COMPUTER SCIENCE"))
+    return jsonify(get_module(get_db(), "HONOURS SPECIALIZATION IN COMPUTER SCIENCE"))
