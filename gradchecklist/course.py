@@ -38,7 +38,7 @@ class VCourse:
 def get_v_course(db, subject_code: str, number: int) -> Optional[VCourse]:
     with db.cursor() as c:
         c.execute("SELECT * FROM VCourse WHERE subject_code=%s AND number=%s",
-                (subject_code, number))
+                  (subject_code, number))
         course = c.fetchone()
     if course is None:
         return None
