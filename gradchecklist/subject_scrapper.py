@@ -10,7 +10,6 @@ def get_subjects(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     course_breadth2 = "null"
-    course_breadth = "null"
 
     courses = soup.find("table").find_all('tr')
 
