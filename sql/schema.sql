@@ -36,7 +36,9 @@ VALUES
     ('E', 1, 1),
     ('F', 0.5, 1),
     ('G', 0.5, 1),
-    ('F/G', 0.5, 1);
+    ('F/G', 0.5, 1),
+    ('Y', 0.5, 0),
+    ('Z', 0.5, 1);
 
 CREATE TABLE Course (
     id INT PRIMARY KEY AUTO_INCREMENT,
