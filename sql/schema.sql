@@ -9,7 +9,9 @@ INSERT INTO CourseCategory
 VALUES
     ('A'),
     ('B'),
-    ('C');
+    ('C'),
+    ('Y'),
+    ('Z');
 
 CREATE TABLE Subject (
     code VARCHAR(255) PRIMARY KEY,
