@@ -42,8 +42,10 @@
                     data: new FormData($("#upload-form")[0]),
                     contentType: false,
                     processData: false,
+                    dataType: "text",
                     success: (data) => {
-                        console.log(data);
+                        sessionStorage.result = data;
+                        window.location.href = "result";
                     },
                     error: () => {
                         alert("An error occured.");

@@ -7,7 +7,8 @@ dependencies = [
     "PyPDF2",
     "PyMySQL",
     "requests",
-    "beautifulsoup4"
+    "beautifulsoup4",
+    "PyPDF2"
 ]
 
 [project.optional-dependencies]

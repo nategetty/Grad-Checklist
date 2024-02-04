@@ -343,10 +343,6 @@
                 return `<td>${resultItem.value}% (min: ${resultItem.required_value}%)`;
             }
 
-            function courseTd(resultItem) {
-                return `<td>`;
-            }
-
             function appendSummarySection(container, result) {
                 container.find(".summary-result")
                     .append(STATUS_ICON[result.status])
@@ -569,14 +565,19 @@
                         </tr>
                     </tbody>
                 `);
-                console.log(result.module_requirements);
                 $(result.module_requirements.map(requirementRow).join("\n")).appendTo(container);
             }
 
             $(() => {
                 includeHtml();
 
-                const result = TEST_RESULT[2];
+                let result = JSON.parse(sessionStorage.result);
+
+                const testIdx = new URLSearchParams(window.location.search).get("test");
+                if (testIdx != null) {
+                    result = TEST_RESULT[testIdx];
+                }
+
                 appendSummarySection($("#summary-section"), result);
                 appendFirstYear($("#first-year"), result);
                 appendSenior($("#senior"), result);
