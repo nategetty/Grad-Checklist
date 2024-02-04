@@ -78,24 +78,513 @@
                 padding-top: 1em;
             }
 
-            .complete {
-                color: #00bb00;
-            }
-
-            .pending {
-                color: #fe8a05;
+            :root {
+                --complete-color: #00bb00;
+                --pending-color: #fe8a05;
+                --incomplete-color: #ee0000;
             }
 
             .incomplete {
-                color: #ee0000
+                color: var(--incomplete-color);
+            }
+
+            .incomplete-bg {
+                background-color: var(--incomplete-color);
+            }
+
+            .complete {
+                color: var(--complete-color);
+            }
+
+            .complete-bg {
+                background-color: var(--complete-color);
+            }
+
+            .pending {
+                color: var(--pending-color);
+            }
+
+            .pending-bg {
+                background-color: var(--pending-color);
             }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="script/global.js"></script>
         <script>
+            const TEST_RESULT = [
+                {
+                    status: 0,
+                    total_courses: {status: 0, value: "15.0", required_value: "20.0"},
+                    completed_courses: "10.0",
+                    pending_courses: "5.0",
+                    first_year_courses: {status: 1, value: "5.0", required_value: "5.0"},
+                    first_year_different_subjects: {status: 1, value: null, required_value: null},
+                    first_year_one_subject_limit: {status: 1, value: null, required_value: null},
+                    senior_courses: {status: 0, value: "10.0", required_value: "13.0"},
+                    cumulative_average: {status: 1, value: 78, required_value: 65},
+                    lowest_grade: {status: 1, value: 58, required_value: 50},
+                    category_a: {status: 0, value: "0.5", required_value: "1.0"},
+                    category_b: {status: 1, value: "1.0", required_value: "1.0"},
+                    category_c: {status: 1, value: "1.0", required_value: "1.0"},
+                    total_essay_courses: {status: 1, value: "2.0", required_value: "2.0"},
+                    senior_essay_courses: {status: 2, value: "1.0", required_value: "1.0"},
+                    principal_courses: {status: 1, value: "3.0", required_value: "3.0"},
+                    principal_courses_average: {status: 1, value: 77, required_value: 70},
+                    principal_courses_lowest_grade: {status: 1, value: 70, required_value: 60},
+                    admission_requirements: [
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 75, required_value: 65}, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1025, suffix: "A/B"},
+                            {status: 1, grade: 75, subject_name: "Computer Science", number: 1026, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Data Science", number: 1200, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Engineering Science", number: 1036, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 72, required_value: 65}, required_average: null, courses: [
+                            {status: 1, grade: 72, subject_name: "Computer Science", number: 1027, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1037, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Applied Mathematics", number: 1201, suffix: "A/B"},
+                            {status: 1, grade: 70, subject_name: "Calculus", number: 1000, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1301, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1500, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1501, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Mathematics", number: 1600, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1411, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1412, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1414, suffix: "A/B"}
+                        ]}
+                    ],
+                    module_courses: {status: 2, value: "9.0", required_value: "9.0"},
+                    module_average: {status: 1, value: 74, required_value: 70},
+                    module_lowest_grade: {status: 1, value: 62, required_value: 60},
+                    module_requirements: [
+
+                    ]
+                },
+                {
+                    status: 1,
+                    total_courses: {status: 1, value: "20.0", required_value: "20.0"},
+                    completed_courses: "20.0",
+                    pending_courses: "0",
+                    first_year_courses: {status: 1, value: "5.0", required_value: "5.0"},
+                    first_year_different_subjects: {status: 1, value: null, required_value: null},
+                    first_year_one_subject_limit: {status: 1, value: null, required_value: null},
+                    senior_courses: {status: 1, value: "13.0", required_value: "13.0"},
+                    cumulative_average: {status: 1, value: 78, required_value: 65},
+                    lowest_grade: {status: 1, value: 58, required_value: 50},
+                    category_a: {status: 1, value: "1.0", required_value: "1.0"},
+                    category_b: {status: 1, value: "1.0", required_value: "1.0"},
+                    category_c: {status: 1, value: "1.0", required_value: "1.0"},
+                    total_essay_courses: {status: 1, value: "2.0", required_value: "2.0"},
+                    senior_essay_courses: {status: 1, value: "1.0", required_value: "1.0"},
+                    principal_courses: {status: 1, value: "3.0", required_value: "3.0"},
+                    principal_courses_average: {status: 1, value: 77, required_value: 70},
+                    principal_courses_lowest_grade: {status: 1, value: 70, required_value: 60},
+                    admission_requirements: [
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 75, required_value: 65}, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1025, suffix: "A/B"},
+                            {status: 1, grade: 75, subject_name: "Computer Science", number: 1026, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Data Science", number: 1200, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Engineering Science", number: 1036, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 72, required_value: 65}, required_average: null, courses: [
+                            {status: 1, grade: 72, subject_name: "Computer Science", number: 1027, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1037, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Applied Mathematics", number: 1201, suffix: "A/B"},
+                            {status: 1, grade: 70, subject_name: "Calculus", number: 1000, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1301, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1500, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1501, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Mathematics", number: 1600, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1411, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1412, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1414, suffix: "A/B"}
+                        ]}
+                    ],
+                    module_courses: {status: 2, value: "9.0", required_value: "9.0"},
+                    module_average: {status: 1, value: 74, required_value: 70},
+                    module_lowest_grade: {status: 1, value: 62, required_value: 60},
+                    module_requirements: [
+
+                    ]
+                },
+                {
+                    status: 2,
+                    total_courses: {status: 2, value: "20.0", required_value: "20.0"},
+                    completed_courses: "15.0",
+                    pending_courses: "5.0",
+                    first_year_courses: {status: 1, value: "5.0", required_value: "5.0"},
+                    first_year_different_subjects: {status: 1, value: null, required_value: null},
+                    first_year_one_subject_limit: {status: 1, value: null, required_value: null},
+                    senior_courses: {status: 1, value: "13.0", required_value: "13.0"},
+                    cumulative_average: {status: 1, value: 78, required_value: 65},
+                    lowest_grade: {status: 1, value: 58, required_value: 50},
+                    category_a: {status: 1, value: "1.0", required_value: "1.0"},
+                    category_b: {status: 1, value: "1.0", required_value: "1.0"},
+                    category_c: {status: 1, value: "1.0", required_value: "1.0"},
+                    total_essay_courses: {status: 1, value: "2.0", required_value: "2.0"},
+                    senior_essay_courses: {status: 1, value: "1.0", required_value: "1.0"},
+                    principal_courses: {status: 1, value: "3.0", required_value: "3.0"},
+                    principal_courses_average: {status: 1, value: 77, required_value: 70},
+                    principal_courses_lowest_grade: {status: 1, value: 70, required_value: 60},
+                    admission_requirements: [
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 75, required_value: 65}, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1025, suffix: "A/B"},
+                            {status: 1, grade: 75, subject_name: "Computer Science", number: 1026, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Data Science", number: 1200, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Engineering Science", number: 1036, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: {status: 1, value: 72, required_value: 65}, required_average: null, courses: [
+                            {status: 1, grade: 72, subject_name: "Computer Science", number: 1027, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Computer Science", number: 1037, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Applied Mathematics", number: 1201, suffix: "A/B"},
+                            {status: 1, grade: 70, subject_name: "Calculus", number: 1000, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1301, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1500, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Calculus", number: 1501, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Mathematics", number: 1600, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1411, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1412, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1414, suffix: "A/B"}
+                        ]}
+                    ],
+                    module_courses: {status: 2, value: "9.0", required_value: "9.0"},
+                    module_average: {status: 1, value: 74, required_value: 70},
+                    module_lowest_grade: {status: 1, value: 62, required_value: 60},
+                    module_requirements: [
+                        {status: 1, total_credit: "5.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 62, subject_name: "Computer Science", number: 2208, suffix: "A/B"},
+                            {status: 1, grade: 81, subject_name: "Computer Science", number: 2209, suffix: "A/B"},
+                            {status: 1, grade: 80, subject_name: "Computer Science", number: 2210, suffix: "A/B"},
+                            {status: 1, grade: 78, subject_name: "Computer Science", number: 2211, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 2212, suffix: "A/B"},
+                            {status: 1, grade: 80, subject_name: "Computer Science", number: 3305, suffix: "A/B"},
+                            {status: 1, grade: 70, subject_name: "Computer Science", number: 3307, suffix: "A/B"},
+                            {status: 1, grade: 72, subject_name: "Computer Science", number: 3331, suffix: "A/B"},
+                            {status: 1, grade: 78, subject_name: "Computer Science", number: 3340, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 3342, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 3350, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 74, subject_name: "Computer Science", number: 2214, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2214, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Writing", number: 2101, suffix: "F/G"},
+                            {status: 1, grade: 80, subject_name: "Writing", number: 2111, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2125, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2131, suffix: "F/G"}
+                        ]},
+                        {status: 2, total_credit: "0.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 4490, suffix: "Z"}
+                        ]},
+                        {status: 2, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Data Science", number: 3000, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Science", number: 3377, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2156, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 3159, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2141, suffix: "A/B"},
+                            {status: 1, grade: 68, subject_name: "Statistical Sciences", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Biology", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2857, suffix: "A/B"}
+                        ]},
+                    ]
+                }
+            ];
+
+            const STATUS_ICON = [
+                '<span title="Incomplete" style="cursor: default;">✖&#xFE0E;</span>',
+                '<span title="Complete" style="cursor: default;">✔&#xFE0E;</span>',
+                `
+                <svg viewBox="0 0 500 500" width="1em">
+                    <title>Final grade(s) pending</title>
+                    <g fill="none" stroke="currentColor" stroke-width="60">
+                        <circle cx="250" cy="250" r="215" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
+                    </g>
+                </svg>
+                `
+            ];
+            const STATUS_CLASS = ["incomplete", "complete", "pending"];
+            const STATUS_BG_CLASS = ["incomplete-bg", "complete-bg", "pending-bg"];
+            const STATUS_RESULT_HTML = [
+                "<strong>Not eligible to graduate</strong>",
+                "<strong>Eligible to graduate</strong>",
+                `
+                <div>
+                    <strong>Eligible to graduate</strong>
+                    <br />
+                    <span>(Final grades pending)</span>
+                </div>
+                `
+            ];
+
+            function statusTd(status) {
+                return `
+                <td class="${STATUS_CLASS[status]}">
+                    ${STATUS_ICON[status]}
+                </td>
+                `;
+            }
+
+            function coursesTotalTd(resultItem) {
+                return `<td>${resultItem.value} / ${resultItem.required_value}</td>`;
+            }
+
+            function gradeTd(resultItem) {
+                return `<td>${resultItem.value}% (min: ${resultItem.required_value}%)`;
+            }
+
+            function courseTd(resultItem) {
+                return `<td>`;
+            }
+
+            function appendSummarySection(container, result) {
+                container.find(".summary-result")
+                    .append(STATUS_ICON[result.status])
+                    .append(STATUS_RESULT_HTML[result.status])
+                    .addClass(STATUS_BG_CLASS[result.status]);
+                const table = container.find(".requirement-table");
+                table.html(`
+                    <tr>
+                        ${statusTd(result.total_courses.status)}
+                        <td>Total courses</td>
+                        ${coursesTotalTd(result.total_courses)}
+                    </tr>
+                `);
+                if (result.pending_courses != "0") {
+                    table.append(`
+                        <tr class="tr-indent">
+                            <td></td>
+                            <td>Completed</td>
+                            <td>${result.completed_courses}</td>
+                        </tr>
+                        <tr class="tr-indent">
+                            <td></td>
+                            <td>Final grade pending</td>
+                            <td>${result.pending_courses}</td>
+                        </tr>
+                    `);
+                }
+            }
+
+            function appendFirstYear(container, result) {
+                container.html(`
+                    <tr>
+                        ${statusTd(result.first_year_courses.status)}
+                        <td>First year courses</td>
+                        ${coursesTotalTd(result.first_year_courses)}
+                    </tr>
+                    <tr>
+                        ${statusTd(result.first_year_different_subjects.status)}
+                        <td>At least 4 different subjects</td>
+                    </tr>
+                    <tr>
+                        ${statusTd(result.first_year_one_subject_limit.status)}
+                        <td>No more than 2.0 in one subject</td>
+                    </tr>
+                `);
+            }
+
+            function appendSenior(container, result) {
+                container.html(`
+                    <tr>
+                        ${statusTd(result.senior_courses.status)}
+                        <td>Senior courses</td>
+                        ${coursesTotalTd(result.senior_courses)}
+                    </tr>
+                `);
+            }
+
+            function appendAverage(container, result) {
+                container.html(`
+                    <tr>
+                        ${statusTd(result.cumulative_average.status)}
+                        <td>Cumulative average</td>
+                        ${gradeTd(result.cumulative_average)}
+                    </tr>
+                    <tr>
+                        ${statusTd(result.lowest_grade.status)}
+                        <td>Lowest grade</td>
+                        ${gradeTd(result.lowest_grade)}
+                    </tr>
+                `);
+            }
+
+            function appendBreadth(container, result) {
+                container.html(`
+                    <tr>
+                        ${statusTd(result.category_a.status)}
+                        <td>Category A</td>
+                        ${coursesTotalTd(result.category_a)}
+                    </tr>
+                    <tr>
+                        ${statusTd(result.category_b.status)}
+                        <td>Category B</td>
+                        ${coursesTotalTd(result.category_b)}
+                    </tr>
+                    <tr>
+                        ${statusTd(result.category_c.status)}
+                        <td>Category C</td>
+                        ${coursesTotalTd(result.category_c)}
+                    </tr>
+                `);
+            }
+
+            function appendEssay(container, result) {
+                container.html(`
+                    <tr>
+                        ${statusTd(result.total_essay_courses.status)}
+                        <td>Total essay courses</td>
+                        ${coursesTotalTd(result.total_essay_courses)}
+                    </tr>
+                    <tr class="tr-indent">
+                        ${statusTd(result.senior_essay_courses.status)}
+                        <td>Senior essay courses</td>
+                        ${coursesTotalTd(result.senior_essay_courses)}
+                    </tr>
+                `);
+            }
+
+            function courseRow(course) {
+                return `
+                    <tr class="tr-indent">
+                        ${statusTd(course.status)}
+                        <td>${course.subject_name} ${course.number}${course.suffix}</td>
+                        <td>${course.grade == null ? "" : `${course.grade}%`}</td>
+                    </tr>
+                `;
+            }
+
+            function courseRowFrom(course) {
+                if (course.status == null) {
+                    return `
+                        <tr class="tr-indent">
+                            <td></td>
+                            <td>${course.subject_name} ${course.number}${course.suffix}</td>
+                            <td></td>
+                        </tr>
+                    `;
+                } else {
+                    return `
+                        <tr class="tr-indent">
+                            ${statusTd(course.status)}
+                            <td><strong>${course.subject_name} ${course.number}${course.suffix}</strong></td>
+                            <td>${course.grade == null ? "" : `${course.grade}%`}</td>
+                        </tr>
+                    `;
+                }
+            }
+
+            function requirementMinimumGradeRow(requirement) {
+                if (requirement.minimum_grade != null) {
+                    return `
+                        <tr>
+                            ${statusTd(requirement.minimum_grade.status)}
+                            <td>Lowest grade</td>
+                            ${gradeTd(requirement.minimum_grade)}
+                        </tr>
+                    `;
+                } else {
+                    return "";
+                }
+            }
+
+            function requirementAverageRow(requirement) {
+                if (requirement.required_average != null) {
+                    return `
+                        <tr>
+                            ${statusTd(requirement.required_average.status)}
+                            <td>Average</td>
+                            ${gradeTd(requirement.required_average)}
+                        </tr>
+                    `;
+                } else {
+                    return "";
+                }
+            }
+
+            function requirementRow(requirement) {
+                return `
+                    <tbody>
+                        <tr>
+                            ${statusTd(requirement.status)}
+                            <th>${requirement.total_credit} ${requirement.is_from ? "course from:" : "courses:"}</th>
+                            ${requirement.courses.map(requirement.is_from ? courseRowFrom : courseRow).join("\n")}
+                            ${requirementMinimumGradeRow(requirement)}
+                            ${requirementAverageRow(requirement)}
+                        </tr>
+                    </tbody>
+                `;
+            }
+
+            function appendAdmission(container, result) {
+                container.html(`
+                    <tbody>
+                        <tr>
+                            ${statusTd(result.principal_courses.status)}
+                            <td>Principal courses</td>
+                            ${coursesTotalTd(result.principal_courses)}
+                        </tr>
+                        <tr class="tr-indent">
+                            ${statusTd(result.principal_courses_average.status)}
+                            <td>Average</td>
+                            ${gradeTd(result.principal_courses_average)}
+                        </tr>
+                        <tr class="tr-indent">
+                            ${statusTd(result.principal_courses_lowest_grade.status)}
+                            <td>Lowest grade</td>
+                            ${gradeTd(result.principal_courses_lowest_grade)}
+                        </tr>
+                    </tbody>
+                `);
+                $(result.admission_requirements.map(requirementRow).join("\n")).appendTo(container);
+            }
+
+            function appendModule(container, result) {
+                container.html(`
+                    <tbody>
+                        <tr>
+                            ${statusTd(result.module_courses.status)}
+                            <td>Module courses</td>
+                            ${coursesTotalTd(result.module_courses)}
+                        </tr>
+                        <tr class="tr-indent">
+                            ${statusTd(result.module_average.status)}
+                            <td>Average</td>
+                            ${gradeTd(result.module_average)}
+                        </tr>
+                        <tr class="tr-indent">
+                            ${statusTd(result.module_lowest_grade.status)}
+                            <td>Lowest grade</td>
+                            ${gradeTd(result.module_lowest_grade)}
+                        </tr>
+                    </tbody>
+                `);
+                console.log(result.module_requirements);
+                $(result.module_requirements.map(requirementRow).join("\n")).appendTo(container);
+            }
+
             $(() => {
                 includeHtml();
 
+                const result = TEST_RESULT[2];
+                appendSummarySection($("#summary-section"), result);
+                appendFirstYear($("#first-year"), result);
+                appendSenior($("#senior"), result);
+                appendAverage($("#average"), result);
+                appendBreadth($("#breadth"), result);
+                appendEssay($("#essay"), result);
+                appendAdmission($("#admission"), result);
+                appendModule($("#module"), result);
             });
         </script>
     </head>
@@ -105,466 +594,42 @@
             <div class="results">
                 <h2>Results</h2>
                 <div class="results-column">
-                    <section class="box primary-alt">
+                    <section class="box primary-alt" id="summary-section">
                         <h3>Summary</h3>
-                        <div class="box summary-result" style="background-color: #fe8a05;">
-                            <svg viewBox="0 0 500 500" width="1em">
-                                <g fill="none" stroke="currentColor" stroke-width="60">
-                                    <circle cx="250" cy="250" r="215" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                </g>
-                            </svg>
-                            <div>
-                                <strong>Elligible to graduate</strong>
-                                <br />
-                                <span>(Final grades pending)</span>
-                            </div>
-                        </div>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="pending">
-                                    <svg viewBox="0 0 500 500" width="1em">
-                                        <g fill="none" stroke="currentColor" stroke-width="60">
-                                            <circle cx="250" cy="250" r="215" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                        </g>
-                                    </svg>
-                                </td>
-                                <td>Total courses</td>
-                                <td>20.0 / 20.0</td>
-                            </tr>
-                            <tr class="tr-indent">
-                                <td></td>
-                                <td>Completed</td>
-                                <td>15.0</td>
-                            </tr>
-                            <tr class="tr-indent">
-                                <td></td>
-                                <td>Final grade pending</td>
-                                <td>5.0</td>
-                            </tr>
-                        </table>
+                        <div class="box summary-result"></div>
+                        <table class="requirement-table"></table>
                     </section>
                     <section class="box primary-alt">
                         <h3>First year requirements</h3>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>First year courses</td>
-                                <td>5.0 / 5.0</td>
-                            </tr>
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>At least 4 different subjects</td>
-                            </tr>
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>No more than 2.0 in one subject</td>
-                            </tr>
-                        </table>
+                        <table class="requirement-table" id="first-year"></table>
                     </section>
                     <section class="box primary-alt">
                         <h3>Senior course requirements</h3>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Senior courses</td>
-                                <td>13.0 / 13.0</td>
-                            </tr>
-                        </table>
+                        <table class="requirement-table" id="senior"></table>
                     </section>
                 </div>
                 <div class="results-column">
                     <section class="box primary-alt">
                         <h3>Average requirements</h3>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Cumulative average</td>
-                                <td>78% (min: 65%)</td>
-                            </tr>
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Lowest grade</td>
-                                <td>58% (min: 50%)</td>
-                            </tr>
-                        </table>
+                        <table class="requirement-table" id="average"></table>
                     </section>
                     <section class="box primary-alt">
                         <h3>Breadth requirements</h3>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Category A</td>
-                                <td>1.0 / 1.0</td>
-                            </tr>
-                            <tr>
-                                <td class="incomplete">✖&#xFE0E;</td>
-                                <td>Category B</td>
-                                <td>0.5 / 1.0</td>
-                            </tr>
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Category C</td>
-                                <td>1.0 / 1.0</td>
-                            </tr>
-                        </table>
+                        <table class="requirement-table" id="breadth"></table>
                     </section>
                     <section class="box primary-alt">
                         <h3>Essay requirements</h3>
-                        <table class="requirement-table">
-                            <tr>
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Total essay courses</td>
-                                <td>2.0 / 2.0</td>
-                            </tr>
-                            <tr class="tr-indent">
-                                <td class="complete">✔&#xFE0E;</td>
-                                <td>Senior essay courses</td>
-                                <td>1.0 / 1.0</td>
-                            </tr>
-                        </table>
+                        <table class="requirement-table" id="essay"></table>
                     </section>
                 </div>
                 <div class="results-column results-column-wide">
                     <section class="box primary-alt">
                         <h3>Admission requirements</h3>
-                        <table class="requirement-table">
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Principal courses</td>
-                                    <td>3.0 / 3.0</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Average</td>
-                                    <td>77% (min: 70%)</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Lowest grade</td>
-                                    <td>70% (min: 60%)</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Computer Science 1025A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Computer Science 1026A/B</strong></td>
-                                    <td>75%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Data Science 1200A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Engineering Science 1036A/B</td>
-                                </tr>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Lowest grade</td>
-                                    <td>75% (min: 65%)</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Computer Science 1027A/B</strong></td>
-                                    <td>72%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Computer Science 1037A/B</td>
-                                </tr>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Lowest grade</td>
-                                    <td>75% (min: 65%)</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>1.0 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Applied Mathematics 1201A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Calculus 1000A/B</strong></td>
-                                    <td>70%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Calculus 1301A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Calculus 1500A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Calculus 1501A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Mathematics 1600A/B</strong></td>
-                                    <td>71%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Numerical and Mathematical Methods 1411A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Numerical and Mathematical Methods 1412A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Numerical and Mathematical Methods 1414A/B</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <table class="requirement-table" id="admission"></table>
                     </section>
                     <section class="box primary-alt">
                         <h3>Module requirements</h3>
-                        <table class="requirement-table">
-                            <tbody>
-                                <tr>
-                                    <td class="pending">
-                                        <svg viewBox="0 0 500 500" width="1em">
-                                            <g fill="none" stroke="currentColor" stroke-width="60">
-                                                <circle cx="250" cy="250" r="215" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                            </g>
-                                        </svg>
-                                    </td>
-                                    <td>Module courses</td>
-                                    <td>9.0 / 9.0</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Average</td>
-                                    <td>74% (min: 70%)</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Lowest grade</td>
-                                    <td>62% (min: 60%)</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>5.5 courses:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 2208A/B</td>
-                                    <td>62%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 2209A/B</td>
-                                    <td>81%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 2210A/B</td>
-                                    <td>80%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 2211A/B</td>
-                                    <td>78%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 2212A/B</td>
-                                    <td>71%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3305A/B</td>
-                                    <td>80%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3307A/B</td>
-                                    <td>70%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3331A/B</td>
-                                    <td>72%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3340A/B</td>
-                                    <td>78%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3342A/B</td>
-                                    <td>71%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td>Computer Science 3350A/B</td>
-                                    <td>71%</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Computer Science 2214A/B</strong></td>
-                                    <td>74%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Mathematics 2214A/B</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Writing 2101F/G</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Writing 2111F/G</strong></td>
-                                    <td>80%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Writing 2125F/G</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Writing 2131F/G</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="pending">
-                                        <svg viewBox="0 0 500 500" width="1em">
-                                            <g fill="none" stroke="currentColor" stroke-width="60">
-                                                <circle cx="250" cy="250" r="215" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                            </g>
-                                        </svg>
-                                    </td>
-                                    <th>0.5 course:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="pending">
-                                        <svg viewBox="0 0 500 500" width="1em">
-                                            <g fill="none" stroke="currentColor" stroke-width="60">
-                                                <circle cx="250" cy="250" r="215" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                            </g>
-                                        </svg>
-                                    </td>
-                                    <td>Computer Science 4490Z</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="pending">
-                                        <svg viewBox="0 0 500 500" width="1em">
-                                            <g fill="none" stroke="currentColor" stroke-width="60">
-                                                <circle cx="250" cy="250" r="215" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                            </g>
-                                        </svg>
-                                    </td>
-                                    <th>1.0 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="pending">
-                                        <svg viewBox="0 0 500 500" width="1em">
-                                            <g fill="none" stroke="currentColor" stroke-width="60">
-                                                <circle cx="250" cy="250" r="215" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M 250 135 L 250 250 L 324 305" />
-                                            </g>
-                                        </svg>
-                                    </td>
-                                    <td><strong>Computer Science courses at the 4000 level</strong></td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Data Science 3000A/B</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Computer Science courses at the 3000 level or above</strong></td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Science 3377A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Mathematics 2156A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Mathematics 3159A/B</td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <th>0.5 course from:</th>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Statistical Sciences 2141A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td class="complete">✔&#xFE0E;</td>
-                                    <td><strong>Statistical Sciences 2244A/B</strong></td>
-                                    <td>68%</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Biology 2244A/B</td>
-                                </tr>
-                                <tr class="tr-indent">
-                                    <td></td>
-                                    <td>Statistical Sciences 2857A/B</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <table class="requirement-table" id="module"></table>
                     </section>
                 </div>
             </div>

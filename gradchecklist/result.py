@@ -26,7 +26,9 @@ class ResultItem:
 
 # Checklist course.
 @dataclass
-class ResultCourse(ResultItem):
+class ResultCourse():
+    status: Optional[Status] = None
+    grade: Optional[str] = None
     subject_name: str
     number: int
     suffix: str
@@ -34,9 +36,12 @@ class ResultCourse(ResultItem):
 
 # Checklist (module/admission) requirement.
 @dataclass
-class ResultRequirement(ResultItem):
+class ResultRequirement():
+    status: Optional[Status] = None
     total_credit: Decimal
     is_from: bool
+    minimum_grade: Optional[ResultItem] = None
+    required_average: Optional[ResultItem] = None
     courses: list[ResultCourse] = field(default_factory=list)
 
 
@@ -46,8 +51,8 @@ class Result:
     # Summary
     status: Status = Status.INCOMPLETE
     total_courses: ResultItem = ResultItem()
-    completed_courses: ResultItem = ResultItem()
-    pending_courses: ResultItem = ResultItem()
+    completed_courses: str = ""
+    pending_courses: str = ""
 
     # First year requirements
     first_year_courses: ResultItem = ResultItem()
