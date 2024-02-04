@@ -118,7 +118,7 @@ def create_test_module(db):
 
 # Loads database schema and data from backup.
 def load_db_backup():
-    subprocess.run("mysql -u root gradchecklist < sql/dump.sql", shell=True)
+    subprocess.run('mysql -u root gradchecklist < sql/dump.sql', shell=True)
 
 
 # Deletes and recreates the database.

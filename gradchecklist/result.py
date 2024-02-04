@@ -19,7 +19,7 @@ class Status(Enum):
 # Generic checklist item.
 @dataclass
 class ResultItem:
-    status: Optional[Status] = None
+    status: Optional[int] = None
     value: Optional[str] = None           # (If applicable) courses completed OR average acheived
     required_value: Optional[str] = None  # (If applicable) courses required OR minimum average required
 
@@ -27,8 +27,8 @@ class ResultItem:
 # Checklist course.
 @dataclass
 class ResultCourse():
-    status: Optional[Status] = None
-    grade: Optional[str] = None
+    status: Optional[int]
+    grade: Optional[str]
     subject_name: str
     number: int
     suffix: str
@@ -37,7 +37,7 @@ class ResultCourse():
 # Checklist (module/admission) requirement.
 @dataclass
 class ResultRequirement():
-    status: Optional[Status] = None
+    status: Optional[int]
     total_credit: Decimal
     is_from: bool
     minimum_grade: Optional[ResultItem] = None
@@ -49,7 +49,7 @@ class ResultRequirement():
 @dataclass
 class Result:
     # Summary
-    status: Status = Status.INCOMPLETE
+    status: int = 0
     total_courses: ResultItem = ResultItem()
     completed_courses: str = ""
     pending_courses: str = ""
