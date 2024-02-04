@@ -26,6 +26,10 @@ class CourseScrapper:
         grade_match = re.search(r'(\d{3}|SPC|WDN|F)', line[::-1])
         grade = grade_match.group(1)[::-1] if grade_match and grade_match.group(1) in ('SPC', 'WDN', 'F') or 0 <= int(grade_match.group(1)[::-1]) <= 100 else "N\/A"
 
+        rnc_match = re.search(r'(RNC)', line)
+        if rnc_match and rnc_match.group(1) == 'RNC':
+            return None
+
         if line.endswith("WDN") or line.endswith("SPC") or line.endswith("PAS"):
             grade = line.split()[-1]
 

@@ -37,7 +37,7 @@ def main(file_object):
     for line in filtered_lines:
         
         courseInfo = CourseScrapper.extract_course_info(line)
-        if courseInfo:
+        if courseInfo is not None:
             student.add_course(db, courseInfo['courseCode'], courseInfo['subjectCode'], courseInfo['grade'])
             
     return student
