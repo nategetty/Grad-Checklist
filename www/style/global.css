@@ -23,6 +23,7 @@ body {
     all: unset;
     font-family: Helvetica, Arial, sans-serif;
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
 }

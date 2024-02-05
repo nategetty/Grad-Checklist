@@ -682,10 +682,11 @@
             $(() => {
                 includeHtml();
 
-                let result = JSON.parse(sessionStorage.result);
-
+                let result;
                 const testIdx = new URLSearchParams(window.location.search).get("test");
-                if (testIdx != null) {
+                if (testIdx == null) {
+                    result = JSON.parse(sessionStorage.result);
+                } else {
                     result = TEST_RESULT[testIdx];
                 }
 

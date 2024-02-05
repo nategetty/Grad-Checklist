@@ -7,7 +7,7 @@ from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 from . import api, db
 
-__version__ = "0.3"
+__version__ = "0.4"
 
 
 # Creates the Flask application for production.
