@@ -31,6 +31,20 @@
             .drag-over {
                 border-color: var(--color-primary);
             }
+
+            .loading {
+                border: 0.5em solid var(--border-color-primary);
+                border-top: 0.5em solid var(--color-primary);
+                border-radius: 50%;
+                width: 2em;
+                height: 2em;
+                animation: spin 750ms linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="script/global.js"></script>
@@ -44,13 +58,26 @@
                     processData: false,
                     dataType: "text",
                     success: (data) => {
+                        $("#drop-zone").show();
+                        $("#drop-zone-loading").hide();
                         sessionStorage.result = data;
                         window.location.href = "result";
                     },
                     error: () => {
-                        alert("An error occured.");
+                        $("#drop-zone").show();
+                        $("#drop-zone-loading").hide();
                     }
                 });
+                $("#drop-zone").hide();
+                $("#drop-zone-loading").show();
+            }
+
+            function onBodyDragOver(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                ev.originalEvent.dataTransfer.dropEffect = "none";
+                ev.originalEvent.dataTransfer.effectAllowed = "none";
             }
 
             function onDrop(ev) {
@@ -63,11 +90,13 @@
                 upload();
             }
 
-            function onDragOver(ev) {
+            function onDropZoneDragOver(ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
 
                 $("#drop-zone").addClass("drag-over");
+                ev.originalEvent.dataTransfer.dropEffect = "copy";
+                ev.originalEvent.dataTransfer.effectAllowed = "copy";
             }
 
             function onDragLeave(ev) {
@@ -77,8 +106,9 @@
             $(() => {
                 includeHtml();
                 $("#upload-input").change(upload);
+                $("body").on("dragover", onBodyDragOver);
                 $("#drop-zone").on("drop", onDrop);
-                $("#drop-zone").on("dragover", onDragOver);
+                $("#drop-zone").on("dragover", onDropZoneDragOver);
                 $("#drop-zone").on("dragleave", onDragLeave);
             });
         </script>
@@ -97,6 +127,10 @@
                         <input type="file" id="upload-input" name="file" accept=".pdf" multiple />
                         <span class="no-wrap"><strong>or</strong> drag and drop here</span>
                     </form>
+                </div>
+                <div style="display: none;" class="drop-zone primary-border" id="drop-zone-loading">
+                    <div class="loading" role="progressbar" aria-labelledby="loading-label"></div>
+                    <span id="loading-label">Processing... please wait.</span>
                 </div>
                 <a href="manual" class="box-a primary-light">Enter grades manually instead...</a>
             </div>

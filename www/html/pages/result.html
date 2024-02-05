@@ -107,6 +107,10 @@
             .pending-bg {
                 background-color: var(--pending-color);
             }
+
+            .status-icon {
+                cursor: default;
+            }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="script/global.js"></script>
@@ -154,11 +158,52 @@
                             {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1414, suffix: "A/B"}
                         ]}
                     ],
-                    module_courses: {status: 2, value: "9.0", required_value: "9.0"},
+                    module_courses: {status: 0, value: "4.5", required_value: "9.0"},
                     module_average: {status: 1, value: 74, required_value: 70},
                     module_lowest_grade: {status: 1, value: 62, required_value: 60},
                     module_requirements: [
-
+                        {status: 0, total_credit: "5.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 62, subject_name: "Computer Science", number: 2208, suffix: "A/B"},
+                            {status: 1, grade: 81, subject_name: "Computer Science", number: 2209, suffix: "A/B"},
+                            {status: 1, grade: 80, subject_name: "Computer Science", number: 2210, suffix: "A/B"},
+                            {status: 1, grade: 78, subject_name: "Computer Science", number: 2211, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 2212, suffix: "A/B"},
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 3305, suffix: "A/B"},
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 3307, suffix: "A/B"},
+                            {status: 0, grade: null, subject_name: "Computer Science", number: 3331, suffix: "A/B"},
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 3340, suffix: "A/B"},
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 3342, suffix: "A/B"},
+                            {status: 2, grade: null, subject_name: "Computer Science", number: 3350, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 74, subject_name: "Computer Science", number: 2214, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2214, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Writing", number: 2101, suffix: "F/G"},
+                            {status: 1, grade: 80, subject_name: "Writing", number: 2111, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2125, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2131, suffix: "F/G"}
+                        ]},
+                        {status: 0, total_credit: "0.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 0, grade: null, subject_name: "Computer Science", number: 4490, suffix: "Z"}
+                        ]},
+                        {status: 0, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Computer Science courses at the", number: 4000, suffix: " level"},
+                            {status: null, grade: null, subject_name: "Data Science", number: 3000, suffix: "A/B"}
+                        ]},
+                        {status: 2, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 2, grade: null, subject_name: "Computer Science courses at the", number: 3000, suffix: " level or above"},
+                            {status: null, grade: null, subject_name: "Science", number: 3377, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2156, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 3159, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2141, suffix: "A/B"},
+                            {status: 1, grade: 68, subject_name: "Statistical Sciences", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Biology", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2857, suffix: "A/B"}
+                        ]},
                     ]
                 },
                 {
@@ -203,11 +248,52 @@
                             {status: null, grade: null, subject_name: "Numerical and Mathematical Methods", number: 1414, suffix: "A/B"}
                         ]}
                     ],
-                    module_courses: {status: 2, value: "9.0", required_value: "9.0"},
+                    module_courses: {status: 1, value: "9.0", required_value: "9.0"},
                     module_average: {status: 1, value: 74, required_value: 70},
                     module_lowest_grade: {status: 1, value: 62, required_value: 60},
                     module_requirements: [
-
+                        {status: 1, total_credit: "5.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 62, subject_name: "Computer Science", number: 2208, suffix: "A/B"},
+                            {status: 1, grade: 81, subject_name: "Computer Science", number: 2209, suffix: "A/B"},
+                            {status: 1, grade: 80, subject_name: "Computer Science", number: 2210, suffix: "A/B"},
+                            {status: 1, grade: 78, subject_name: "Computer Science", number: 2211, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 2212, suffix: "A/B"},
+                            {status: 1, grade: 80, subject_name: "Computer Science", number: 3305, suffix: "A/B"},
+                            {status: 1, grade: 70, subject_name: "Computer Science", number: 3307, suffix: "A/B"},
+                            {status: 1, grade: 72, subject_name: "Computer Science", number: 3331, suffix: "A/B"},
+                            {status: 1, grade: 78, subject_name: "Computer Science", number: 3340, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 3342, suffix: "A/B"},
+                            {status: 1, grade: 71, subject_name: "Computer Science", number: 3350, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 74, subject_name: "Computer Science", number: 2214, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2214, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Writing", number: 2101, suffix: "F/G"},
+                            {status: 1, grade: 80, subject_name: "Writing", number: 2111, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2125, suffix: "F/G"},
+                            {status: null, grade: null, subject_name: "Writing", number: 2131, suffix: "F/G"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: false, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: 82, subject_name: "Computer Science", number: 4490, suffix: "Z"}
+                        ]},
+                        {status: 1, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: null, subject_name: "Computer Science courses at the", number: 4000, suffix: " level"},
+                            {status: null, grade: null, subject_name: "Data Science", number: 3000, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: null, subject_name: "Computer Science courses at the", number: 3000, suffix: " level or above"},
+                            {status: null, grade: null, subject_name: "Science", number: 3377, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 2156, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Mathematics", number: 3159, suffix: "A/B"}
+                        ]},
+                        {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2141, suffix: "A/B"},
+                            {status: 1, grade: 68, subject_name: "Statistical Sciences", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Biology", number: 2244, suffix: "A/B"},
+                            {status: null, grade: null, subject_name: "Statistical Sciences", number: 2857, suffix: "A/B"}
+                        ]},
                     ]
                 },
                 {
@@ -283,9 +369,11 @@
                             {status: 2, grade: null, subject_name: "Computer Science", number: 4490, suffix: "Z"}
                         ]},
                         {status: 2, total_credit: "1.0", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 2, grade: null, subject_name: "Computer Science courses at the", number: 4000, suffix: " level"},
                             {status: null, grade: null, subject_name: "Data Science", number: 3000, suffix: "A/B"}
                         ]},
                         {status: 1, total_credit: "0.5", is_from: true, minimum_grade: null, required_average: null, courses: [
+                            {status: 1, grade: null, subject_name: "Computer Science courses at the", number: 3000, suffix: " level or above"},
                             {status: null, grade: null, subject_name: "Science", number: 3377, suffix: "A/B"},
                             {status: null, grade: null, subject_name: "Mathematics", number: 2156, suffix: "A/B"},
                             {status: null, grade: null, subject_name: "Mathematics", number: 3159, suffix: "A/B"}
@@ -301,8 +389,15 @@
             ];
 
             const STATUS_ICON = [
-                '<span title="Incomplete" style="cursor: default;">✖&#xFE0E;</span>',
-                '<span title="Complete" style="cursor: default;">✔&#xFE0E;</span>',
+                `
+                <svg viewBox="0 0 500 500" width="1em">
+                    <title>Incomplete</title>
+                    <g fill="none" stroke="currentColor" stroke-width="90">
+                        <path stroke-linecap="round" d="M 90 90 L 410 410 M 410 90 L 90 410" />
+                    </g>
+                </svg>
+                `,
+                '<span title="Complete" class="status-icon">✔&#xFE0E;</span>',
                 `
                 <svg viewBox="0 0 500 500" width="1em">
                     <title>Final grade(s) pending</title>
@@ -327,7 +422,10 @@
                 `
             ];
 
-            function statusTd(status) {
+            function tdStatus(status) {
+                if (status == null) {
+                    return "<td></td>";
+                }
                 return `
                 <td class="${STATUS_CLASS[status]}">
                     ${STATUS_ICON[status]}
@@ -335,12 +433,25 @@
                 `;
             }
 
-            function coursesTotalTd(resultItem) {
-                return `<td>${resultItem.value} / ${resultItem.required_value}</td>`;
+            function creditStr(credit) {
+                const creditNum = parseFloat(credit);
+                if (Number.isInteger(creditNum)) {
+                    return creditNum.toFixed(1);
+                } else {
+                    return creditNum.toString();
+                }
             }
 
-            function gradeTd(resultItem) {
-                return `<td>${resultItem.value}% (min: ${resultItem.required_value}%)`;
+            function creditNumerator(item) {
+                return item.value < item.required_value ? item.value : item.required_value;
+            }
+
+            function tdCredit(item) {
+                return `<td>${creditStr(creditNumerator(item))} / ${creditStr(item.required_value)}</td>`;
+            }
+
+            function tdGrade(item) {
+                return `<td>${item.value ?? NaN}% (min: ${item.required_value ?? NaN}%)`;
             }
 
             function appendSummarySection(container, result) {
@@ -351,9 +462,9 @@
                 const table = container.find(".requirement-table");
                 table.html(`
                     <tr>
-                        ${statusTd(result.total_courses.status)}
+                        ${tdStatus(result.total_courses.status)}
                         <td>Total courses</td>
-                        ${coursesTotalTd(result.total_courses)}
+                        ${tdCredit(result.total_courses)}
                     </tr>
                 `);
                 if (result.pending_courses != "0") {
@@ -375,16 +486,16 @@
             function appendFirstYear(container, result) {
                 container.html(`
                     <tr>
-                        ${statusTd(result.first_year_courses.status)}
+                        ${tdStatus(result.first_year_courses.status)}
                         <td>First year courses</td>
-                        ${coursesTotalTd(result.first_year_courses)}
+                        ${tdCredit(result.first_year_courses)}
                     </tr>
                     <tr>
-                        ${statusTd(result.first_year_different_subjects.status)}
+                        ${tdStatus(result.first_year_different_subjects.status)}
                         <td>At least 4 different subjects</td>
                     </tr>
                     <tr>
-                        ${statusTd(result.first_year_one_subject_limit.status)}
+                        ${tdStatus(result.first_year_one_subject_limit.status)}
                         <td>No more than 2.0 in one subject</td>
                     </tr>
                 `);
@@ -393,9 +504,9 @@
             function appendSenior(container, result) {
                 container.html(`
                     <tr>
-                        ${statusTd(result.senior_courses.status)}
+                        ${tdStatus(result.senior_courses.status)}
                         <td>Senior courses</td>
-                        ${coursesTotalTd(result.senior_courses)}
+                        ${tdCredit(result.senior_courses)}
                     </tr>
                 `);
             }
@@ -403,14 +514,14 @@
             function appendAverage(container, result) {
                 container.html(`
                     <tr>
-                        ${statusTd(result.cumulative_average.status)}
+                        ${tdStatus(result.cumulative_average.status)}
                         <td>Cumulative average</td>
-                        ${gradeTd(result.cumulative_average)}
+                        ${tdGrade(result.cumulative_average)}
                     </tr>
                     <tr>
-                        ${statusTd(result.lowest_grade.status)}
+                        ${tdStatus(result.lowest_grade.status)}
                         <td>Lowest grade</td>
-                        ${gradeTd(result.lowest_grade)}
+                        ${tdGrade(result.lowest_grade)}
                     </tr>
                 `);
             }
@@ -418,19 +529,19 @@
             function appendBreadth(container, result) {
                 container.html(`
                     <tr>
-                        ${statusTd(result.category_a.status)}
+                        ${tdStatus(result.category_a.status)}
                         <td>Category A</td>
-                        ${coursesTotalTd(result.category_a)}
+                        ${tdCredit(result.category_a)}
                     </tr>
                     <tr>
-                        ${statusTd(result.category_b.status)}
+                        ${tdStatus(result.category_b.status)}
                         <td>Category B</td>
-                        ${coursesTotalTd(result.category_b)}
+                        ${tdCredit(result.category_b)}
                     </tr>
                     <tr>
-                        ${statusTd(result.category_c.status)}
+                        ${tdStatus(result.category_c.status)}
                         <td>Category C</td>
-                        ${coursesTotalTd(result.category_c)}
+                        ${tdCredit(result.category_c)}
                     </tr>
                 `);
             }
@@ -438,14 +549,14 @@
             function appendEssay(container, result) {
                 container.html(`
                     <tr>
-                        ${statusTd(result.total_essay_courses.status)}
+                        ${tdStatus(result.total_essay_courses.status)}
                         <td>Total essay courses</td>
-                        ${coursesTotalTd(result.total_essay_courses)}
+                        ${tdCredit(result.total_essay_courses)}
                     </tr>
                     <tr class="tr-indent">
-                        ${statusTd(result.senior_essay_courses.status)}
+                        ${tdStatus(result.senior_essay_courses.status)}
                         <td>Senior essay courses</td>
-                        ${coursesTotalTd(result.senior_essay_courses)}
+                        ${tdCredit(result.senior_essay_courses)}
                     </tr>
                 `);
             }
@@ -453,7 +564,7 @@
             function courseRow(course) {
                 return `
                     <tr class="tr-indent">
-                        ${statusTd(course.status)}
+                        ${tdStatus(course.status)}
                         <td>${course.subject_name} ${course.number}${course.suffix}</td>
                         <td>${course.grade == null ? "" : `${course.grade}%`}</td>
                     </tr>
@@ -472,7 +583,7 @@
                 } else {
                     return `
                         <tr class="tr-indent">
-                            ${statusTd(course.status)}
+                            ${tdStatus(course.status)}
                             <td><strong>${course.subject_name} ${course.number}${course.suffix}</strong></td>
                             <td>${course.grade == null ? "" : `${course.grade}%`}</td>
                         </tr>
@@ -484,9 +595,9 @@
                 if (requirement.minimum_grade != null) {
                     return `
                         <tr>
-                            ${statusTd(requirement.minimum_grade.status)}
+                            ${tdStatus(requirement.minimum_grade.status)}
                             <td>Lowest grade</td>
-                            ${gradeTd(requirement.minimum_grade)}
+                            ${tdGrade(requirement.minimum_grade)}
                         </tr>
                     `;
                 } else {
@@ -498,9 +609,9 @@
                 if (requirement.required_average != null) {
                     return `
                         <tr>
-                            ${statusTd(requirement.required_average.status)}
+                            ${tdStatus(requirement.required_average.status)}
                             <td>Average</td>
-                            ${gradeTd(requirement.required_average)}
+                            ${tdGrade(requirement.required_average)}
                         </tr>
                     `;
                 } else {
@@ -512,8 +623,8 @@
                 return `
                     <tbody>
                         <tr>
-                            ${statusTd(requirement.status)}
-                            <th>${requirement.total_credit} ${requirement.is_from ? "course from:" : "courses:"}</th>
+                            ${tdStatus(requirement.status)}
+                            <th>${creditStr(requirement.total_credit)} ${requirement.is_from ? "course from:" : "courses:"}</th>
                             ${requirement.courses.map(requirement.is_from ? courseRowFrom : courseRow).join("\n")}
                             ${requirementMinimumGradeRow(requirement)}
                             ${requirementAverageRow(requirement)}
@@ -526,19 +637,19 @@
                 container.html(`
                     <tbody>
                         <tr>
-                            ${statusTd(result.principal_courses.status)}
+                            ${tdStatus(result.principal_courses.status)}
                             <td>Principal courses</td>
-                            ${coursesTotalTd(result.principal_courses)}
+                            ${tdCredit(result.principal_courses)}
                         </tr>
                         <tr class="tr-indent">
-                            ${statusTd(result.principal_courses_average.status)}
+                            ${tdStatus(result.principal_courses_average.status)}
                             <td>Average</td>
-                            ${gradeTd(result.principal_courses_average)}
+                            ${tdGrade(result.principal_courses_average)}
                         </tr>
                         <tr class="tr-indent">
-                            ${statusTd(result.principal_courses_lowest_grade.status)}
+                            ${tdStatus(result.principal_courses_lowest_grade.status)}
                             <td>Lowest grade</td>
-                            ${gradeTd(result.principal_courses_lowest_grade)}
+                            ${tdGrade(result.principal_courses_lowest_grade)}
                         </tr>
                     </tbody>
                 `);
@@ -549,19 +660,19 @@
                 container.html(`
                     <tbody>
                         <tr>
-                            ${statusTd(result.module_courses.status)}
+                            ${tdStatus(result.module_courses.status)}
                             <td>Module courses</td>
-                            ${coursesTotalTd(result.module_courses)}
+                            ${tdCredit(result.module_courses)}
                         </tr>
                         <tr class="tr-indent">
-                            ${statusTd(result.module_average.status)}
+                            ${tdStatus(result.module_average.status)}
                             <td>Average</td>
-                            ${gradeTd(result.module_average)}
+                            ${tdGrade(result.module_average)}
                         </tr>
                         <tr class="tr-indent">
-                            ${statusTd(result.module_lowest_grade.status)}
+                            ${tdStatus(result.module_lowest_grade.status)}
                             <td>Lowest grade</td>
-                            ${gradeTd(result.module_lowest_grade)}
+                            ${tdGrade(result.module_lowest_grade)}
                         </tr>
                     </tbody>
                 `);
