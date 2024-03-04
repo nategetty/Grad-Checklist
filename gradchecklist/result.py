@@ -34,6 +34,15 @@ class ResultCourse():
     suffix: str
 
 
+# Checklist subject (i.e. courses at the XXXX level or above)
+@dataclass
+class ResultSubject():
+    status: Optional[int]
+    subject_name: str
+    minimum_level: int
+    courses: list[ResultCourse] = field(default_factory=list)
+
+
 # Checklist (module/admission) requirement.
 @dataclass
 class ResultRequirement():
@@ -43,6 +52,7 @@ class ResultRequirement():
     minimum_grade: Optional[ResultItem] = None
     required_average: Optional[ResultItem] = None
     courses: list[ResultCourse] = field(default_factory=list)
+    subjects: list[ResultSubject] = field(default_factory=list)
 
 
 # Results modelled as a checklist.

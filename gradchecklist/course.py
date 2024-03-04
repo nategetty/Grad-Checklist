@@ -44,6 +44,18 @@ def get_v_course(db, subject_code: str, number: int) -> Optional[VCourse]:
         return None
     else:
         return VCourse(*course)
+    
+
+# Finds and returns the course with the given subject name and number. Returns None if no matching course is found.
+def get_v_course_by_name(db, subject_name: str, number: int) -> Optional[VCourse]:
+    with db.cursor() as c:
+        c.execute("SELECT * FROM VCourse WHERE subject_name=%s AND number=%s",
+                  (subject_name, number))
+        course = c.fetchone()
+    if course is None:
+        return None
+    else:
+        return VCourse(*course)
 
 
 # Inserts course into the database.

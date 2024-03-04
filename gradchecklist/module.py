@@ -8,6 +8,12 @@ from typing import Optional
 from .course import VCourse
 
 
+@dataclass
+class ModuleRequirementSubject:
+    subject_code: str = ""
+    minimum_level: int = 0
+
+
 # Set of courses required by a module.
 # Example from academic calendar:
 #   "0.5 course from: Computer Science 1027A/B or Computer Science 1037A/B (in either case with a mark of at least 65%)"
@@ -20,6 +26,7 @@ class ModuleRequirement:
     required_average: Optional[int] = None
     is_admission: bool = False
     courses: list[VCourse] = field(default_factory=list)
+    subjects: list[ModuleRequirementSubject] = field(default_factory=list)
 
 
 # Program/module. E.g. SPECIALIZATION IN COMPUTER SCIENCE
@@ -47,7 +54,11 @@ def get_module(db, name: str) -> Optional[Module]:
             c.execute("SELECT VCourse.* FROM ModuleRequirementCourse JOIN VCourse ON id=course_id WHERE requirement_id=%s",
                   (req[0],))
             courses = [VCourse(*course) for course in c.fetchall()]
-        module.requirements.append(ModuleRequirement(*req, courses))
+        with db.cursor() as c:
+            c.execute("SELECT subject_code, minimum_level FROM ModuleRequirementSubject WHERE requirement_id=%s",
+                      (req[0],))
+            subjects = [ModuleRequirementSubject(*subject) for subject in c.fetchall()]
+        module.requirements.append(ModuleRequirement(*req, courses, subjects))
 
     return module
 
@@ -67,6 +78,9 @@ def insert_module(db, module: Module):
                 for course in req.courses:
                     c.execute("INSERT INTO ModuleRequirementCourse VALUES (%s,%s)",
                               (req_id, course.id))
+                for subject in req.subjects:
+                    c.execute("INSERT INTO ModuleRequirementSubject VALUES (%s,%s,%s,%s)",
+                              (0, req_id, subject.subject_code, subject.minimum_level))
         db.commit()
     except:
         db.rollback()

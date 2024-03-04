@@ -24,6 +24,14 @@ def get_subject(db, code: str) -> Optional[Subject]:
         return None
     else:
         return Subject(*subject)
+    
+
+# Returns list of all subject codes.
+def get_all_subject_codes(db) -> list[Subject]:
+    with db.cursor() as c:
+        c.execute("SELECT code FROM Subject")
+        subjects = c.fetchall()
+    return [subject[0] for subject in subjects]
 
 
 # Inserts subject into the database.

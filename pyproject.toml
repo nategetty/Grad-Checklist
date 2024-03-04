@@ -4,7 +4,6 @@ description = "Module checker Flask application."
 dynamic = ["version"]
 dependencies = [
     "flask",
-    "PyPDF2",
     "PyMySQL",
     "requests",
     "beautifulsoup4",

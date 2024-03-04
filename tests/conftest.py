@@ -11,7 +11,7 @@ from gradchecklist.db import create_db_connection
 # TEMPORARY - to be replaced by module parser
 # Hard-coded Honours Spec in CS module for testing.
 from decimal import Decimal
-from gradchecklist.module import Module, ModuleRequirement, insert_module
+from gradchecklist.module import Module, ModuleRequirement, ModuleRequirementSubject, insert_module
 from gradchecklist.course import get_v_course
 def create_test_module(db):
     module = Module(name="HONOURS SPECIALIZATION IN COMPUTER SCIENCE")
@@ -93,6 +93,9 @@ def create_test_module(db):
             total_credit=Decimal(1.0),
             courses=[
                 get_v_course(db, "DATASCI", 3000)
+            ],
+            subjects=[
+                ModuleRequirementSubject("COMPSCI", 4000)
             ]
         ),
         ModuleRequirement(
@@ -101,6 +104,9 @@ def create_test_module(db):
                 get_v_course(db, "SCIENCE", 3377),
                 get_v_course(db, "MATH", 2156),
                 get_v_course(db, "MATH", 3159)
+            ],
+            subjects=[
+                ModuleRequirementSubject("COMPSCI", 3000)
             ]
         ),
         ModuleRequirement(

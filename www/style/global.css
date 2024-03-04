@@ -129,6 +129,10 @@ tr.tr-indent {
     margin-left: 2em;
 }
 
+tr.tr-indent-2 {
+    margin-left: 6em;
+}
+
 td {
     all: unset;
     flex: 1;
