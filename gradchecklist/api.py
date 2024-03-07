@@ -15,7 +15,7 @@ bp = Blueprint("api", __name__)
 @bp.post("/upload-transcript")
 def upload_transcript():
     file_obj = request.files["file"]
-    student = transcript_scrapper.main(file_obj)
+    student = transcript_scrapper.processTranscript(file_obj)
     module = moduleRequirementsFromDB()
     result = courseComparison(student, module)
     return jsonify(result)

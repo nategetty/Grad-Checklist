@@ -1,46 +1,60 @@
 from .student import Student
 from .transcript_course import CourseScrapper
-from .transcript_student import StudentScrapper
 from .db import get_db
 import PyPDF2
+import re
 
-def extract_text_from_pdf(file_object):
-    pdf_reader = PyPDF2.PdfReader(file_object)
+def extractTextFromPDF(fileObject):
+    pdfReader = PyPDF2.PdfReader(fileObject)
     text = ''
-    for page_num in range(len(pdf_reader.pages)):
-        text += pdf_reader.pages[page_num].extract_text()
+    for pageNum in range(len(pdfReader.pages)):
+        text += pdfReader.pages[pageNum].extract_text()
     return text
 
-def main(file_object):
+def extractStudentInfo(text):
+    studentNumMatch = re.search(r'\b(\d{9})\b', text)
+    studentNumber = studentNumMatch.group(1) if studentNumMatch else None
 
+    nameMatch = re.search(r'Primary Name: (\w+), (\w+)', text)
+    lastName = nameMatch.group(1) if nameMatch else None
+    firstName = nameMatch.group(2) if nameMatch else None
+
+    return Student(
+                  studentNumber = studentNumber, 
+                  lastName = lastName, 
+                  firstName = firstName
+                  )
+
+def getSubjectCodes(db):
+    with db.cursor() as c:
+        c.execute("SELECT DISTINCT subject_code FROM VCourse")
+        subjectCodes = c.fetchall()
+    return subjectCodes
+
+def processTranscript(fileObject):
     db = get_db()
+    subjectCodes = getSubjectCodes(db)
+    valuesToFind = [course[0] for course in subjectCodes]
+    pdfReader = PyPDF2.PdfReader(fileObject)
+    students = []
 
-    pdf_text = extract_text_from_pdf(file_object)
-    studentInfo = StudentScrapper.extract_student_info(pdf_text)
+    for pageNum in range(len(pdfReader.pages)):
+        pageText = extractTextFromPDF(fileObject)
 
-    student = Student(
-         studentNumber=studentInfo['studentNumber'], 
-         lastName=studentInfo['lastName'], 
-         firstName=studentInfo['firstName'])
+        student = extractStudentInfo(pageText)
 
-    values_to_find = ['ACTURSCI', 'ASL', 'AMERICAN', 'ADS', 'ANATCELL', 'ANTHRO', 'APPLMATH', 'ARABIC', 'AH', 'AISE', 'ARTHUM', 'ASTRONOM', 'BIBLSTUD', 'BIOCHEM', 'BIOLOGY', 'BME', 'BIOSTATS', 'BUSINESS', 
-                      'CALCULUS', 'CGS', 'CBE', 'CHEMBIO', 'CHEM', 'CYS', 'CHINESE', 'CHURCH', 'CHURLAW', 'CHURMUSI', 'CEE', 'CLASSICS', 'COMMSCI', 'COMPLIT', 'COMPSCI', 'CA', 'DANCE', 'DATASCI', 'DIGICOMM', 
-                      'DIGIHUM', 'DISABST', 'EARTHSCI', 'ECONOMIC', 'EDUC', 'ECE', 'ELI', 'ENGSCI', 'ENGLISH', 'ENVIRSCI', 'EPID', 'EPIDEMIO', 'FIMS', 'FAMLYSTU', 'FLDEDUC', 'FILM', 'FINMOD', 'FOODNUTR', 
-                      'FRENCH', 'GSWS', 'GEOGRAPH', 'GERMAN', 'GGB', 'GLE', 'GREEK', 'GPE', 'HEALTSCI', 'HEBREW', 'HISTTHEO', 'HISTORY', 'HISTSCI', 'HOMILET', 'HUMANECO', 'HUMANRS', 'INDIGSTU', 'IE', 'INTEGSCI', 
-                      'INTERDIS', 'INTREL', 'ITALIAN', 'JAPANESE', 'JEWISH', 'KINESIOL', 'LATIN', 'LAW', 'LS', 'LINGUIST', 'LITURST', 'LITURGIC', 'MOS', 'MATH', 'MME', 'MSE', 'MIT', 'MBI', 'MEDBIO', 'MEDSCIEN', 
-                      'MEDIEVAL', 'MICROIMM', 'MORALTHE', 'MCS', 'MUSIC', 'NEURO', 'NMM', 'NURSING', 'ONEHEALT', 'PASTTHEO', 'PATHOL', 'PHARM', 'PHILST', 'PHILOSOP', 'PHYSICS', 'PHYSIOL', 'PHYSPHRM', 'POLISCI', 
-                      'PPE', 'PSYCHOL', 'REHABSCI', 'RELEDUC', 'RELSTUD', 'SACRTHEO', 'SCHOLARS', 'SCIENCE', 'SOCLJUST', 'SOCWORK', 'SOCIOLOG', 'SE', 'SPANISH', 'SPEECH', 'SPIRTHEO', 'STATS', 'SA', 'SUPPAST', 
-                      'SYSTHEO', 'THANAT', 'TNLA', 'THEATRE', 'THEOETH', 'THEOLST', 'THESIS', 'TJ', 'WRITING']
-    
-    filtered_lines = CourseScrapper.filter_lines(pdf_text, values_to_find)
-
-    for line in filtered_lines:
-        
-        courseInfo = CourseScrapper.extract_course_info(line)
-        if courseInfo is not None:
-            student.add_course(db, courseInfo['courseCode'], courseInfo['subjectCode'], courseInfo['grade'])
+        if student.studentNumber not in [stdnt.studentNumber for stdnt in students]:
+            students.append(student)
             
-    return student
+        filteredLines = CourseScrapper.filterLines(pageText, valuesToFind)
+
+        for line in filteredLines:
+            
+            courseInfo = CourseScrapper.extractCourseInfo(line)
+            if courseInfo is not None:
+                student.addCourse(db, courseInfo['courseCode'], courseInfo['subjectCode'], courseInfo['grade'])
+
+    return students
 
 if __name__ == "__main__":
-    main()
+    processTranscript()

@@ -13,90 +13,82 @@ def createResult():
     result = Result()
     return result
 
-def courseComparison(student, module):
-    
-    result = createResult()
+def courseComparison(students, module):
 
-    #(breadth requirements check before removing courses from list)
+    if not module.requirements:
+        return result
 
-    for requirement in module.requirements:
+    for student in students:
+        
+        result = createResult()
 
-        minimumGrade = 60
-        completedCount = Decimal(0)
-        pendingCount = Decimal(0)
+        for requirement in module.requirements:
 
-        if requirement.minimum_grade is not None:
-            minimumGrade = requirement.minimum_grade
+            completedCount = Decimal(0)
+            pendingCount = Decimal(0)
 
-        courseSum = 0
-        for course in requirement.courses:
-                courseSum += course.credit
+            minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
 
-        if requirement.total_credit == courseSum:
-            isFrom = False
-        else:
-            isFrom = True
+            courseSum = sum(course.credit for course in requirement.courses)
 
-        resultRequirement = ResultRequirement(1, 
-                                              requirement.total_credit,
-                                              isFrom,
-                                              requirement.minimum_grade,
-                                              requirement.required_average)
+            isFrom = not requirement.total_credit == courseSum
 
-        if requirement.is_admission:            
-            result.admission_requirements.append(resultRequirement)
-        else:
-            result.module_requirements.append(resultRequirement)
+            resultRequirement = ResultRequirement(
+                1, 
+                requirement.total_credit,
+                isFrom,
+                requirement.minimum_grade,
+                requirement.required_average
+            )
 
-        for course in requirement.courses: 
-            
-            resultCourse = ResultCourse(None,
-                                        None,
-                                        course.subject_name,
-                                        course.number,
-                                        course.suffix)
-            
-            resultRequirement.courses.append(resultCourse)
+            if requirement.is_admission:            
+                result.admission_requirements.append(resultRequirement)
+            else:
+                result.module_requirements.append(resultRequirement)
 
-            tempCourse = None
-
-            for studentCourse in student.courses:
+            for course in requirement.courses: 
                 
-                if course == studentCourse[0]:
-                    
-                    tempCourse = studentCourse
-                    if tempCourse[1].isdigit():
-                        resultCourse.grade = int(tempCourse[1])
+                resultCourse = ResultCourse(
+                    None,
+                    None,
+                    course.subject_name,
+                    course.number,
+                    course.suffix
+                )
+
+                resultRequirement.courses.append(resultCourse)
+
+                tempCourse = None
+
+                for studentCourse in student.courses:
+                    if course == studentCourse[0]:  
+                        tempCourse = studentCourse
+                        if tempCourse[1].isdigit():
+                            resultCourse.grade = int(tempCourse[1])
+                        else:
+                            resultCourse.grade = tempCourse[1]
+                        student.courses.remove(studentCourse)
+                        break
+
+                if tempCourse is not None:
+                    if tempCourse[1] is None:
+                        resultCourse.status = 2
+                        if resultRequirement.status != 0:
+                            resultRequirement.status = 2
+                            pendingCount += course.credit
+                    elif tempCourse[1] in ['F', 'WDN', 'RNC']:
+                        resultCourse.status = 0
+                        resultRequirement.status = 0
+                    elif tempCourse[1] == 'PAS' or int(tempCourse[1]) >= minimumGrade:
+                        resultCourse.status = 1
+                        completedCount += course.credit
                     else:
-                        resultCourse.grade = tempCourse[1]
-                    
-                    student.courses.remove(studentCourse)
-                    break
-
-            if tempCourse is not None:
-              
-                if tempCourse[1] is None:
-                    resultCourse.status = 2
-                    if resultRequirement.status != 0:
-                        resultRequirement.status = 2
-                        pendingCount += course.credit
-                
-                elif tempCourse[1] == 'F' or tempCourse[1] == 'WDN' or tempCourse[1] == 'RNC':
-                    resultCourse.status = 0
-                    resultRequirement.status = 0
-                
-                elif tempCourse[1] == 'PAS' or int(tempCourse[1]) >= minimumGrade:
-                    resultCourse.status = 1
-                    completedCount += course.credit
-                
-                else:
+                        resultCourse.status = 0
+                        resultRequirement.status = 0
+                elif not resultRequirement.is_from:
                     resultCourse.status = 0
                     resultRequirement.status = 0
 
-            elif not resultRequirement.is_from:
-                resultCourse.status = 0
-                resultRequirement.status = 0
-            
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
         elif completedCount + pendingCount >= requirement.total_credit:
@@ -104,4 +96,20 @@ def courseComparison(student, module):
         else:
             resultRequirement.status = 0
 
+    # Calculate averages
+    print("Admission Requirements:")
+    for req in result.admission_requirements:
+        print(f"Status: {req.status}, Total Credit: {req.total_credit}, Is From: {req.is_from}")
+        print("Courses:")
+        for course in req.courses:
+            print(f"  Subject: {course.subject_name}, Number: {course.number}, Suffix: {course.suffix}, Grade: {course.grade}")
+
+    # Printing module requirements
+    print("\nModule Requirements:")
+    for req in result.module_requirements:
+        print(f"Status: {req.status}, Total Credit: {req.total_credit}, Is From: {req.is_from}")
+        print("Courses:")
+        for course in req.courses:
+            print(f"  Subject: {course.subject_name}, Number: {course.number}, Suffix: {course.suffix}, Grade: {course.grade}")    
+        
     return result

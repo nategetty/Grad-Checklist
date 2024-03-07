@@ -3,31 +3,31 @@ from .student import Student
 
 class CourseScrapper:
 
-    def filter_lines(text, values):
+    def filterLines(text, values):
 
         lines = text.split('\n')
         pattern = re.compile(f'^({"|".join(map(re.escape, values))})')
-        filtered_lines = []
+        filteredLines = []
 
         for line in lines:
             line = re.sub(r'\.\.\..*$', '', line)
             if pattern.match(line):
-                filtered_lines.append(line)
+                filteredLines.append(line)
 
-        return filtered_lines
+        return filteredLines
 
-    def extract_course_info(line):
+    def extractCourseInfo(line):
 
         subjectCode = re.match(r'^([A-Z]+)', line).group(1)
 
-        course_code_match = re.search(r'(\d{4}[A-Z]?)', line)
-        courseCode = course_code_match.group(1) if course_code_match else None
+        courseCodeMatch = re.search(r'(\d{4}[A-Z]?)', line)
+        courseCode = courseCodeMatch.group(1) if courseCodeMatch else None
 
-        grade_match = re.search(r'(\d{3}|SPC|WDN|F)', line[::-1])
-        grade = grade_match.group(1)[::-1] if grade_match and grade_match.group(1) in ('SPC', 'WDN', 'F') or 0 <= int(grade_match.group(1)[::-1]) <= 100 else "N\/A"
+        gradeMatch = re.search(r'(\d{3}|SPC|WDN|F)', line[::-1])
+        grade = gradeMatch.group(1)[::-1] if gradeMatch and gradeMatch.group(1) in ('SPC', 'WDN', 'F') or 0 <= int(gradeMatch.group(1)[::-1]) <= 100 else "N\/A"
 
-        rnc_match = re.search(r'(RNC)', line)
-        if rnc_match and rnc_match.group(1) == 'RNC':
+        rncMatch = re.search(r'(RNC)', line)
+        if rncMatch and rncMatch.group(1) == 'RNC':
             return None
 
         if line.endswith("WDN") or line.endswith("SPC") or line.endswith("PAS"):

@@ -7,7 +7,7 @@ class Student:
         self.firstName = firstName
         self.courses = []
 
-    def add_course(self, db, courseCode, subjectCode, grade):
+    def addCourse(self, db, courseCode, subjectCode, grade):
         self.courses.append((get_v_course(db, subjectCode, courseCode), grade))
         
 

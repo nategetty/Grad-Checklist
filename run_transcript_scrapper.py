@@ -1,4 +1,4 @@
 import gradchecklist.transcript_scrapper
 
 if __name__ == "__main__":
-    gradchecklist.transcript_scrapper.main()
+    gradchecklist.transcript_scrapper.processTranscript()
