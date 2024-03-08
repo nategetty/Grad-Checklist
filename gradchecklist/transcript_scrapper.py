@@ -1,11 +1,11 @@
 from .student import Student
 from .transcript_course import CourseScrapper
 from .db import get_db
-import PyPDF2
+import pypdf
 import re
 
 def extractTextFromPDF(fileObject):
-    pdfReader = PyPDF2.PdfReader(fileObject)
+    pdfReader = pypdf.PdfReader(fileObject)
     text = ''
     for pageNum in range(len(pdfReader.pages)):
         text += pdfReader.pages[pageNum].extract_text()
@@ -35,7 +35,7 @@ def processTranscript(fileObject):
     db = get_db()
     subjectCodes = getSubjectCodes(db)
     valuesToFind = [course[0] for course in subjectCodes]
-    pdfReader = PyPDF2.PdfReader(fileObject)
+    pdfReader = pypdf.PdfReader(fileObject)
     students = []
 
     for pageNum in range(len(pdfReader.pages)):

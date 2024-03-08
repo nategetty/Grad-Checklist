@@ -27,7 +27,7 @@ def get_subject(db, code: str) -> Optional[Subject]:
     
 
 # Returns list of all subject codes.
-def get_all_subject_codes(db) -> list[Subject]:
+def get_all_subject_codes(db) -> list[str]:
     with db.cursor() as c:
         c.execute("SELECT code FROM Subject")
         subjects = c.fetchall()
