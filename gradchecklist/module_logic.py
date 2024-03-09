@@ -14,13 +14,12 @@ def createResult():
     return result
 
 def courseComparison(students, module):
+    result = createResult()
 
     if not module.requirements:
         return result
 
     for student in students:
-        
-        result = createResult()
 
         for requirement in module.requirements:
 
@@ -34,12 +33,21 @@ def courseComparison(students, module):
 
             isFrom = not requirement.total_credit == courseSum
 
+            if requirement.minimum_grade is not None:
+                resultItemMin = ResultItem(required_value=requirement.minimum_grade)
+            else: 
+                resultItemMin = None
+            if requirement.required_average is not None:
+                resultItemAvg = ResultItem(required_value=requirement.required_average)
+            else:
+                resultItemAvg = None
+            
             resultRequirement = ResultRequirement(
                 1, 
                 requirement.total_credit,
                 isFrom,
-                requirement.minimum_grade,
-                requirement.required_average
+                resultItemMin,
+                resultItemAvg
             )
 
             setResultsRequiredAVGandLowestGrade(module, result)
@@ -90,7 +98,7 @@ def courseComparison(students, module):
                         resultRequirement.status = 0
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
-                    resultRequirement.status = 0        
+                    resultRequirement.status = 0         
 
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
