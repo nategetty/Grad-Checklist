@@ -27,6 +27,7 @@ def courseComparison(students, module):
             completedCount = Decimal(0)
             pendingCount = Decimal(0)
 
+            # Account for Non-Honours
             minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
 
             courseSum = sum(course.credit for course in requirement.courses)
@@ -40,6 +41,8 @@ def courseComparison(students, module):
                 requirement.minimum_grade,
                 requirement.required_average
             )
+
+            setResultsRequiredAVGandLowestGrade(module, result)
 
             if requirement.is_admission:            
                 result.admission_requirements.append(resultRequirement)
@@ -87,7 +90,7 @@ def courseComparison(students, module):
                         resultRequirement.status = 0
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
-                    resultRequirement.status = 0
+                    resultRequirement.status = 0        
 
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
@@ -96,20 +99,28 @@ def courseComparison(students, module):
         else:
             resultRequirement.status = 0
 
-    # Calculate averages
-    print("Admission Requirements:")
-    for req in result.admission_requirements:
-        print(f"Status: {req.status}, Total Credit: {req.total_credit}, Is From: {req.is_from}")
-        print("Courses:")
-        for course in req.courses:
-            print(f"  Subject: {course.subject_name}, Number: {course.number}, Suffix: {course.suffix}, Grade: {course.grade}")
-
-    # Printing module requirements
-    print("\nModule Requirements:")
-    for req in result.module_requirements:
-        print(f"Status: {req.status}, Total Credit: {req.total_credit}, Is From: {req.is_from}")
-        print("Courses:")
-        for course in req.courses:
-            print(f"  Subject: {course.subject_name}, Number: {course.number}, Suffix: {course.suffix}, Grade: {course.grade}")    
+    result.calculate_min_grade()
+    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
+    module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
+    result.calculate_overall_avg(admission_course_grades,module_course_grades)
+    result.setModuleStatus()
         
     return result
+
+def setResultsRequiredAVGandLowestGrade(module, result):
+    is_honours = "HONOURS" in module.name
+
+    if is_honours:
+        result.principal_courses_lowest_grade.required_value = 60
+        result.principal_courses_average.required_value = 70
+        result.module_average.required_value = 70
+        result.module_lowest_grade.required_value = 60
+        result.cumulative_average.required_value = 70
+        result.lowest_grade.required_value = 60
+    else:
+        result.principal_courses_lowest_grade.required_value = 60
+        result.principal_courses_average.required_value = None
+        result.module_average.required_value = None
+        result.module_lowest_grade.required_value = 50
+        result.cumulative_average.required_value = None
+        result.lowest_grade.required_value = 50

@@ -1,14 +1,14 @@
 from .student import Student
 from .transcript_course import CourseScrapper
 from .db import get_db
-import pypdf
+import PyPDF2 as pypdf
 import re
 
-def extractTextFromPDF(fileObject):
-    pdfReader = pypdf.PdfReader(fileObject)
+def extractTextFromPDF(pdfReader):
     text = ''
     for pageNum in range(len(pdfReader.pages)):
-        text += pdfReader.pages[pageNum].extract_text()
+        page = pdfReader.pages[pageNum]
+        text += page.extract_text()
     return text
 
 def extractStudentInfo(text):
@@ -20,9 +20,9 @@ def extractStudentInfo(text):
     firstName = nameMatch.group(2) if nameMatch else None
 
     return Student(
-                  studentNumber = studentNumber, 
-                  lastName = lastName, 
-                  firstName = firstName
+                  studentNumber=studentNumber, 
+                  lastName=lastName, 
+                  firstName=firstName
                   )
 
 def getSubjectCodes(db):
@@ -38,18 +38,17 @@ def processTranscript(fileObject):
     pdfReader = pypdf.PdfReader(fileObject)
     students = []
 
-    for pageNum in range(len(pdfReader.pages)):
-        pageText = extractTextFromPDF(fileObject)
+    for _ in range(len(pdfReader.pages)):
+        pageText = extractTextFromPDF(pdfReader)
 
         student = extractStudentInfo(pageText)
 
         if student.studentNumber not in [stdnt.studentNumber for stdnt in students]:
             students.append(student)
-            
+
         filteredLines = CourseScrapper.filterLines(pageText, valuesToFind)
 
         for line in filteredLines:
-            
             courseInfo = CourseScrapper.extractCourseInfo(line)
             if courseInfo is not None:
                 student.addCourse(db, courseInfo['courseCode'], courseInfo['subjectCode'], courseInfo['grade'])
