@@ -59,7 +59,7 @@ class ResultRequirement():
         if not self.courses:
             return None
 
-        grades = [course.grade for course in self.courses if course.grade is not None]
+        grades = [course.grade for course in self.courses if isinstance(course.grade, (int, float))]
         return min(grades, default=None)
 
 
