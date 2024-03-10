@@ -2,9 +2,10 @@
 # course.py
 #
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
+from .prerequisite import Prerequisite
 
 
 @dataclass
@@ -16,6 +17,8 @@ class Course:
     name: str = ""
     description: Optional[str] = ""
     extra_information: Optional[str] = ""
+    prerequisites: list[Prerequisite] = field(default_factory=list)
+    antirequisites: list["Course"] = field(default_factory=list)
 
 
 @dataclass
