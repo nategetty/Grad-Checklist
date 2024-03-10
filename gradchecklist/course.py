@@ -67,7 +67,8 @@ def insert_course(db, course: Course):
     try:
         with db.cursor() as c:
             c.execute("INSERT INTO Course VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                      list(vars(course).values()))
+                      (course.id, course.subject_code, course.number, course.suffix, course.name, course.description,
+                       course.extra_information))
         db.commit()
     except:
         db.rollback()

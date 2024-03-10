@@ -5,7 +5,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .course import VCourse
 
 @dataclass
 class Prerequisite:
@@ -14,4 +13,4 @@ class Prerequisite:
     total_credit: Decimal = Decimal(0)
     minimum_grade: Optional[int] = None
     alternative_to: Optional["Prerequisite"] = None
-    courses: list[VCourse] = field(default_factory=list)
+    courses: list["VCourse"] = field(default_factory=list)

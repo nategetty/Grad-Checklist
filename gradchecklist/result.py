@@ -68,41 +68,41 @@ class ResultRequirement():
 class Result:
     # Summary
     status: int = 0
-    total_courses: ResultItem = ResultItem()
+    total_courses: ResultItem = field(default_factory=ResultItem)
     completed_courses: str = ""
     pending_courses: str = ""
 
     # First year requirements
-    first_year_courses: ResultItem = ResultItem()
-    first_year_different_subjects: ResultItem = ResultItem()
-    first_year_one_subject_limit: ResultItem = ResultItem()
+    first_year_courses: ResultItem = field(default_factory=ResultItem)
+    first_year_different_subjects: ResultItem = field(default_factory=ResultItem)
+    first_year_one_subject_limit: ResultItem = field(default_factory=ResultItem)
 
     # Senior course requirements
-    senior_courses: ResultItem = ResultItem()
+    senior_courses: ResultItem = field(default_factory=ResultItem)
 
     # Average requirements
-    cumulative_average: ResultItem = ResultItem()
-    lowest_grade: ResultItem = ResultItem()
+    cumulative_average: ResultItem = field(default_factory=ResultItem)
+    lowest_grade: ResultItem = field(default_factory=ResultItem)
 
     # Breadth requirements
-    category_a: ResultItem = ResultItem()
-    category_b: ResultItem = ResultItem()
-    category_c: ResultItem = ResultItem()
+    category_a: ResultItem = field(default_factory=ResultItem)
+    category_b: ResultItem = field(default_factory=ResultItem)
+    category_c: ResultItem = field(default_factory=ResultItem)
 
     # Essay requirements
-    total_essay_courses: ResultItem = ResultItem()
-    senior_essay_courses: ResultItem = ResultItem()
+    total_essay_courses: ResultItem = field(default_factory=ResultItem)
+    senior_essay_courses: ResultItem = field(default_factory=ResultItem)
 
     # Admission requirements
-    principal_courses: ResultItem = ResultItem()
-    principal_courses_average: ResultItem = ResultItem()
-    principal_courses_lowest_grade: ResultItem = ResultItem()
+    principal_courses: ResultItem = field(default_factory=ResultItem)
+    principal_courses_average: ResultItem = field(default_factory=ResultItem)
+    principal_courses_lowest_grade: ResultItem = field(default_factory=ResultItem)
     admission_requirements: list[ResultRequirement] = field(default_factory=list)
 
     # Module requirements
-    module_courses: ResultItem = ResultItem()
-    module_average: ResultItem = ResultItem()
-    module_lowest_grade: ResultItem = ResultItem()
+    module_courses: ResultItem = field(default_factory=ResultItem)
+    module_average: ResultItem = field(default_factory=ResultItem)
+    module_lowest_grade: ResultItem = field(default_factory=ResultItem)
     module_requirements: list[ResultRequirement] = field(default_factory=list)
     
     def calculate_min_grade(self):
