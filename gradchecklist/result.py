@@ -13,15 +13,15 @@ from .module import ModuleRequirement
 # Requirement status.
 class Status(Enum):
     INCOMPLETE = 0  # Not complete / not on transcript.
-    COMPLETE = 1    # Complete, all grades received.
-    PENDING = 2     # Complete, grades not received yet.
+    COMPLETE = 1  # Complete, all grades received.
+    PENDING = 2  # Complete, grades not received yet.
 
 
 # Generic checklist item.
 @dataclass
 class ResultItem:
     status: Optional[int] = None
-    value: Optional[str] = None           # (If applicable) courses completed OR average acheived
+    value: Optional[str] = None  # (If applicable) courses completed OR average acheived
     required_value: Optional[str] = None  # (If applicable) courses required OR minimum average required
 
 
@@ -104,10 +104,12 @@ class Result:
     module_average: ResultItem = field(default_factory=ResultItem)
     module_lowest_grade: ResultItem = field(default_factory=ResultItem)
     module_requirements: list[ResultRequirement] = field(default_factory=list)
-    
+
     def calculate_min_grade(self):
-        admission_min_grade_vals = [grade for grade in [req.calc_min_grade() for req in self.admission_requirements] if grade is not None]
-        module_min_grade_vals = [grade for grade in [req.calc_min_grade() for req in self.module_requirements] if grade is not None]
+        admission_min_grade_vals = [grade for grade in [req.calc_min_grade() for req in self.admission_requirements] if
+                                    grade is not None]
+        module_min_grade_vals = [grade for grade in [req.calc_min_grade() for req in self.module_requirements] if
+                                 grade is not None]
 
         temp_admission_min = min(admission_min_grade_vals) if admission_min_grade_vals else None
         temp_module_min = min(module_min_grade_vals) if module_min_grade_vals else None
@@ -117,19 +119,20 @@ class Result:
 
         self.lowest_grade.value = min(temp_admission_min, temp_module_min)
 
-
     def calculate_requirement_avg(self, req_list, result_item_average):
         all_course_grades = []
 
         for req in req_list:
             if req.courses:
-                course_avg_vals = [float(course.grade) if isinstance(course.grade, (int, float)) else float(course.grade[:-1]) if course.grade is not None and course.grade[:-1].isdigit() else None for course in req.courses]
+                course_avg_vals = [float(course.grade) if isinstance(course.grade, (int, float)) else float(
+                    course.grade[:-1]) if course.grade is not None and course.grade[:-1].isdigit() else None for course
+                                   in req.courses]
                 valid_course_grades = [grade for grade in course_avg_vals if grade is not None]
                 all_course_grades.extend(valid_course_grades)
 
         result_item_average.value = round(mean(all_course_grades) if all_course_grades else 0)
         return all_course_grades
-    
+
     def calculate_overall_avg(self, admission_grade_list, module_grade_list):
         combined_list = admission_grade_list + module_grade_list
 
@@ -161,8 +164,65 @@ class Result:
             self.cumulative_average.status = 0
         else:
             self.cumulative_average.status = 1 if self.cumulative_average.required_value <= self.cumulative_average.value else 0
-        
+
         if self.lowest_grade.required_value is None or self.lowest_grade.value is None:
             self.lowest_grade.status = 0
         else:
             self.lowest_grade.status = 1 if self.lowest_grade.required_value <= self.lowest_grade.value else 0
+
+    def setFirstYearReqStatus(self):
+        if (self.first_year_courses.value is None or self.first_year_courses.required_value is None or
+                self.first_year_courses.value < self.first_year_courses.required_value):
+            self.first_year_courses.status = 0
+        else:
+            self.first_year_courses.status = 1
+
+        if (self.first_year_different_subjects.value is None or self.first_year_different_subjects.value <
+                self.first_year_different_subjects.required_value):
+            self.first_year_different_subjects.status = 0
+        else:
+            self.first_year_different_subjects.status = 1
+
+        if (self.first_year_one_subject_limit.value is None or self.first_year_one_subject_limit.value >
+                self.first_year_one_subject_limit.required_value):
+            self.first_year_one_subject_limit.status = 0
+        else:
+            self.first_year_one_subject_limit.status = 1
+
+    def setSeniorYearReqStatus(self):
+        if (self.senior_courses.value is None or self.senior_courses.required_value is None or self.senior_courses.value
+                < self.senior_courses.required_value):
+            self.senior_courses.status = 0
+        else:
+            self.senior_courses.status = 1
+
+    def setEssayReqStatus(self):
+        if (self.senior_essay_courses.value is None or self.senior_essay_courses.required_value is None or
+                self.senior_essay_courses.value < self.senior_essay_courses.required_value):
+            self.senior_essay_courses.status = 0
+        else:
+            self.senior_essay_courses.status = 1
+        if (self.total_essay_courses.value is None or self.total_essay_courses.required_value is None or
+                self.total_essay_courses.value < self.total_essay_courses.required_value):
+            self.total_essay_courses.status = 0
+        else:
+            self.total_essay_courses.status = 1
+
+    def setBreadthReqStatus(self):
+        if (self.category_a.value is None or self.category_a.required_value is None or
+                self.category_a.value < self.category_a.required_value):
+            self.category_a.status = 0
+        else:
+            self.category_a.status = 1
+
+        if (self.category_b.value is None or self.category_b.required_value is None or
+                self.category_b.value < self.category_b.required_value):
+            self.category_b.status = 0
+        else:
+            self.category_b.status = 1
+
+        if (self.category_c.value is None or self.category_c.required_value is None or
+                self.category_c.value < self.category_c.required_value):
+            self.category_c.status = 0
+        else:
+            self.category_c.status = 1
