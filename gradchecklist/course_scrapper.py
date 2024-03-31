@@ -46,8 +46,9 @@ def fetch_info(html):
     desciption = "Null"
     extraInformation = "Null"
     courseCode = "Null"
-    suffix = "Null"
+    suffix = ""
     found = 0;
+    match = False
     soup = BeautifulSoup(html, 'html.parser')
     courseNames = soup.find("div", class_="col-md-12") #to find anti/pre/corequistes and extra information
     results  = soup.find_all("div", class_="col-xs-12") #to find the names of the courses
@@ -55,7 +56,10 @@ def fetch_info(html):
 
     if courseNames:
         nameAndNumber = courseNames.find("h2").get_text(strip=True)
-        match = pattern.search(nameAndNumber)
+        if not nameAndNumber[-1].isdigit():
+            match = pattern.search(nameAndNumber)
+        else:
+            courseCode = nameAndNumber[-4:]
 
         if match:
             courseCode = match.group(1)
@@ -90,16 +94,26 @@ def fetch_info(html):
 
 
 
-    #print the findings (will store it in a database soon)
     try:
-        course = Course(0, stripped_subject, int(courseCode), suffix, properName, desciption, extraInformation)
+        course = Course(0, stripped_subject, int(courseCode), suffix, properName, desciption, extraInformation, prerequisites, antirequisites)
         insert_course(db, course)
     except Exception as e:
         print (e)
+        print(nameAndNumber)
+        print(courseCode)
+        print(suffix)
+        print(properName)
+        print (desciption)
+        print(prerequisites)
+        print(antirequisites)
+        print(stripped_course_weight)
+        print(stripped_breadth)
+        print(stripped_subject)
+        print(extraInformation)
         pass
 
-    '''print(nameAndNumber)
-    print(courseCode)
+    print(nameAndNumber)
+    '''print(courseCode)
     print(suffix)
     print(properName)
     print (desciption)
@@ -113,17 +127,38 @@ def fetch_info(html):
 
 # Main function to initiate the scraping process
 def main():
-    # Replace 'your_url_here' with the actual URL you want to scrape
-    url = 'https://www.westerncalendar.uwo.ca/Modules.cfm?ModuleID=21123&SelectedCalendar=Live&ArchiveID='
-    html_content = fetch_html(url)
+    base_url = "https://www.westerncalendar.uwo.ca/"
+    url = 'https://www.westerncalendar.uwo.ca/Courses.cfm?SelectedCalendar=Live&ArchiveID='
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-    if html_content: #if fetching is successful
-        links = get_links(url)
+    table = soup.find('table')
+    #print(table)
 
-        for link in links: #parse all the links found
-            print(link)
-            link_html_content = fetch_html(link)
-            fetch_info(link_html_content)
+    if table:
+        links = table.find_all('a')
+
+        for link_info in links:
+            link = link_info['href']
+            subject_link = urljoin(base_url, link)
+
+            subject_response = requests.get(subject_link)
+            subject_soup = BeautifulSoup(subject_response.text, 'html.parser')
+
+            elements = subject_soup.find_all(class_="col-md-12")
+            elements = elements[1:]
+
+            for element in elements:
+                subject_link_info = element.find('a', class_='btn btn-sm btn-info hidden-print')
+
+                subject_link = subject_link_info['href']
+                if subject_link:
+                    absolute_url = urljoin(base_url, subject_link)
+                    print(absolute_url)
+
+                    course_content = fetch_html(absolute_url)
+                    fetch_info(course_content)
+
 
 
 if __name__ == "__main__":
