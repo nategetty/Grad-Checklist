@@ -1,3 +1,6 @@
+from collections import defaultdict
+from .course import get_v_course
+
 from .module import get_module
 from .db import get_db
 from .student import Student
@@ -15,6 +18,14 @@ def createResult():
 
 def courseComparison(students, module):
     result = createResult()
+
+    first_year_courses = Decimal(0)
+    first_year_courses_subjects = defaultdict(Decimal)
+    first_year_A, first_year_B, first_year_C = Decimal(0), Decimal(0), Decimal(0)
+    total_year_A, total_year_B, total_year_C = Decimal(0), Decimal(0), Decimal(0)
+    senior_courses = Decimal(0)
+    senior_essay_courses = Decimal(0)
+    essay_courses = Decimal(0)
 
     if not module.requirements:
         return result
@@ -35,15 +46,15 @@ def courseComparison(students, module):
 
             if requirement.minimum_grade is not None:
                 resultItemMin = ResultItem(required_value=requirement.minimum_grade)
-            else: 
+            else:
                 resultItemMin = None
             if requirement.required_average is not None:
                 resultItemAvg = ResultItem(required_value=requirement.required_average)
             else:
                 resultItemAvg = None
-            
+
             resultRequirement = ResultRequirement(
-                1, 
+                1,
                 requirement.total_credit,
                 isFrom,
                 resultItemMin,
@@ -52,13 +63,15 @@ def courseComparison(students, module):
 
             setResultsRequiredAVGandLowestGrade(module, result)
 
-            if requirement.is_admission:            
+            if requirement.is_admission:
                 result.admission_requirements.append(resultRequirement)
             else:
                 result.module_requirements.append(resultRequirement)
 
-            for course in requirement.courses: 
-                
+            for course in requirement.courses:
+
+                vcourse = get_v_course(get_db(), course.subject_code, course.number)
+
                 resultCourse = ResultCourse(
                     None,
                     None,
@@ -72,7 +85,7 @@ def courseComparison(students, module):
                 tempCourse = None
 
                 for studentCourse in student.courses:
-                    if course == studentCourse[0]:  
+                    if course == studentCourse[0]:
                         tempCourse = studentCourse
                         if tempCourse[1].isdigit():
                             resultCourse.grade = int(tempCourse[1])
@@ -93,12 +106,39 @@ def courseComparison(students, module):
                     elif tempCourse[1] == 'PAS' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
                         completedCount += course.credit
+                        if course.number >= 2000:
+                            senior_courses += course.credit
+                            if course.suffix in ['E', 'F', 'G', 'F/G']:
+                                senior_essay_courses += course.credit
+                                essay_courses += course.credit
+                            # fix later, currently operate under single category assumption
+                            if vcourse.category == 'A':
+                                total_year_A += course.credit
+                            elif vcourse.category == 'B':
+                                total_year_B += course.credit
+                            else:
+                                total_year_C += course.credit
+                        else:
+                            first_year_courses += course.credit
+                            first_year_courses_subjects[course.subject_code] += course.credit
+                            if course.suffix in ['E', 'F', 'G', 'F/G']:
+                                essay_courses += course.credit
+                            # fix later, currently operate under single category assumption
+                            if vcourse.category == 'A':
+                                first_year_A += course.credit
+                                total_year_A += course.credit
+                            elif vcourse.category == 'B':
+                                first_year_B += course.credit
+                                total_year_B += course.credit
+                            else:
+                                first_year_C += course.credit
+                                total_year_C += course.credit
                     else:
                         resultCourse.status = 0
                         resultRequirement.status = 0
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
-                    resultRequirement.status = 0         
+                    resultRequirement.status = 0
 
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
@@ -106,13 +146,40 @@ def courseComparison(students, module):
             resultRequirement.status = 2
         else:
             resultRequirement.status = 0
+    # Bad results for course count and subject count due to lacking course data, set to string and normalize
+    result.first_year_courses.value = first_year_courses
+    result.first_year_courses.required_value = Decimal(5.0)
+    result.first_year_different_subjects.value = len(first_year_courses_subjects)
+    result.first_year_different_subjects.required_value = 4
+    result.first_year_one_subject_limit.value = max(first_year_courses_subjects.values())
+    result.first_year_one_subject_limit.required_value = Decimal(2.0)
+    result.setFirstYearReqStatus()
+
+    result.senior_courses.value = senior_courses
+    result.senior_courses.required_value = Decimal(13.0)
+    result.setSeniorYearReqStatus()
+
+    result.senior_essay_courses.value = senior_essay_courses
+    result.senior_essay_courses.required_value = Decimal(1.0)
+    result.total_essay_courses.value = essay_courses
+    result.total_essay_courses.required_value = Decimal(2.0)
+    result.setEssayReqStatus()
+
+    result.category_a.value = total_year_A
+    result.category_a.required_value = Decimal(1.0)
+    result.category_b.value = total_year_B
+    result.category_b.required_value = Decimal(1.0)
+    result.category_c.value = total_year_C
+    result.category_c.required_value = Decimal(1.0)
+    result.setBreadthReqStatus()
 
     result.calculate_min_grade()
-    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
+    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements,
+                                                               result.principal_courses_average)
     module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
-    result.calculate_overall_avg(admission_course_grades,module_course_grades)
+    result.calculate_overall_avg(admission_course_grades, module_course_grades)
     result.setModuleStatus()
-        
+
     return result
 
 def setResultsRequiredAVGandLowestGrade(module, result):
