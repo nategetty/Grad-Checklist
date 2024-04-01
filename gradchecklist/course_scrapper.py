@@ -37,7 +37,7 @@ def fetch_html(url):
 #Function to fetch the information from html
 def fetch_info(html):
     stripped_course_weight = "Null"
-    stripped_breadth = "Null"
+    stripped_breadth = ""
     stripped_subject = "Null"
     nameAndNumber = "Null"
     properName = "Null"
@@ -74,7 +74,8 @@ def fetch_info(html):
                 course_weight = courseInfo[0].get_text(strip=True)
                 stripped_course_weight = course_weight.split(":")[1].strip(' "==$')
                 breadth = courseInfo[1].get_text(strip=True)
-                stripped_breadth = breadth.split("CATEGORY ", 1)[1].strip('i')
+                if not breadth == "Breadth:":
+                    stripped_breadth = breadth.split("CATEGORY ", 1)[1].strip('i')
                 subject = courseInfo[2].get_text(strip=True)
                 stripped_subject = subject.split(":",1)[1]
 
@@ -99,7 +100,7 @@ def fetch_info(html):
         insert_course(db, course)
     except Exception as e:
         print (e)
-        print(nameAndNumber)
+        '''print(nameAndNumber)
         print(courseCode)
         print(suffix)
         print(properName)
@@ -109,21 +110,10 @@ def fetch_info(html):
         print(stripped_course_weight)
         print(stripped_breadth)
         print(stripped_subject)
-        print(extraInformation)
+        print(extraInformation)'''
         pass
 
     print(nameAndNumber)
-    '''print(courseCode)
-    print(suffix)
-    print(properName)
-    print (desciption)
-    print(prerequisites)
-    print(antirequisites)
-    print(stripped_course_weight)
-    print(stripped_breadth)
-    print(stripped_subject)
-    print(extraInformation)'''
-
 
 # Main function to initiate the scraping process
 def main():
