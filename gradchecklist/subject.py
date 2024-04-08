@@ -26,6 +26,18 @@ def get_subject(db, code: str) -> Optional[Subject]:
         return Subject(*subject)
     
 
+# Finds and returns the subject with the given name. Returns None if no matching subject is found.
+def get_subject_by_name(db, name: str) -> Optional[Subject]:
+    with db.cursor() as c:
+        c.execute("SELECT * FROM Subject WHERE name=%s",
+                  (name))
+        subject = c.fetchone()
+    if subject is None:
+        return None
+    else:
+        return Subject(*subject)
+    
+
 # Returns list of all subject codes.
 def get_all_subject_codes(db) -> list[str]:
     with db.cursor() as c:

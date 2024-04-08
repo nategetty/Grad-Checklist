@@ -57,7 +57,10 @@ CREATE TABLE Course (
 
 CREATE TABLE Module (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    admission_courses DECIMAL(5, 2),
+    admission_minimum_grade INT,
+    admission_required_average INT
     -- maybe add date for grandfathering rules
 );
 

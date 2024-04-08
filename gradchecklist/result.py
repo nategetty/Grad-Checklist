@@ -67,6 +67,7 @@ class ResultRequirement():
 @dataclass
 class Result:
     # Summary
+    modules: list[str] = field(default_factory=list)
     status: int = 0
     total_courses: ResultItem = field(default_factory=ResultItem)
     completed_courses: str = ""

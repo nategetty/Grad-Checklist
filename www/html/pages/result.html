@@ -117,6 +117,7 @@
         <script>
             const TEST_RESULT = [
                 {
+                    modules: ["Honours Specialization in Computer Science"],
                     status: 0,
                     total_courses: {status: 0, value: "15.0", required_value: "20.0"},
                     completed_courses: "10.0",
@@ -211,6 +212,7 @@
                     ]
                 },
                 {
+                    modules: ["Honours Specialization in Computer Science"],
                     status: 1,
                     total_courses: {status: 1, value: "20.0", required_value: "20.0"},
                     completed_courses: "20.0",
@@ -308,6 +310,7 @@
                     ]
                 },
                 {
+                    modules: ["Honours Specialization in Computer Science"],
                     status: 2,
                     total_courses: {status: 2, value: "20.0", required_value: "20.0"},
                     completed_courses: "15.0",
@@ -469,6 +472,35 @@
                 return `<td>${item.value ?? NaN}% (min: ${item.required_value ?? NaN}%)`;
             }
 
+            function trSummaryPending(result) {
+                if (result.pending_courses != "0") {
+                    return `
+                        <tr class="tr-indent">
+                            <td></td>
+                            <td>Completed</td>
+                            <td>${result.completed_courses}</td>
+                        </tr>
+                        <tr class="tr-indent">
+                            <td></td>
+                            <td>Final grade pending</td>
+                            <td>${result.pending_courses}</td>
+                        </tr>
+                    `;
+                } else {
+                    return "";
+                }
+            }
+
+            function trSummaryModule(module) {
+                return `
+                    <tr class="tr-indent">
+                        <td></td>
+                        <td>${module}</td>
+                        <td></td>
+                    </tr>
+                `;
+            }
+
             function appendSummarySection(container, result) {
                 container.find(".summary-result")
                     .append(STATUS_ICON[result.status])
@@ -481,21 +513,14 @@
                         <td>Total courses</td>
                         ${tdCredit(result.total_courses)}
                     </tr>
+                    ${trSummaryPending(result)}
+                    <tr>
+                        <td></td>
+                        <td>Modules</td>
+                        <td></td>
+                    </tr>
+                    ${result.modules.map(trSummaryModule).join("\n")}
                 `);
-                if (result.pending_courses != "0") {
-                    table.append(`
-                        <tr class="tr-indent">
-                            <td></td>
-                            <td>Completed</td>
-                            <td>${result.completed_courses}</td>
-                        </tr>
-                        <tr class="tr-indent">
-                            <td></td>
-                            <td>Final grade pending</td>
-                            <td>${result.pending_courses}</td>
-                        </tr>
-                    `);
-                }
             }
 
             function appendFirstYear(container, result) {

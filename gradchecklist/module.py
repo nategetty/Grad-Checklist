@@ -34,6 +34,9 @@ class ModuleRequirement:
 class Module:
     id: int = 0
     name: str = ""
+    admission_courses: Optional[Decimal] = None
+    admission_minimum_grade: Optional[int] = None
+    admission_required_average: Optional[int] = None
     requirements: list[ModuleRequirement] = field(default_factory=list)
 
 
@@ -68,8 +71,9 @@ def get_module(db, name: str) -> Optional[Module]:
 def insert_module(db, module: Module):
     try:
         with db.cursor() as c:
-            c.execute("INSERT INTO Module VALUES (%s,%s)",
-                      (module.id, module.name))
+            c.execute("INSERT INTO Module VALUES (%s,%s,%s,%s,%s)",
+                      (module.id, module.name, module.admission_courses, module.admission_minimum_grade,
+                       module.admission_required_average))
             module_id = c.lastrowid
             for req in module.requirements:
                 c.execute("INSERT INTO ModuleRequirement VALUES (%s,%s,%s,%s,%s,%s)",

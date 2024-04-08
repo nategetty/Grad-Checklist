@@ -14,6 +14,12 @@ def test_get_subject(db):
     assert result.category_2 is None
 
 
+def test_get_subject_by_name(db):
+    result = get_subject_by_name(db, "Computer Science")
+    assert result is not None
+    assert result.code == "COMPSCI"
+
+
 def test_get_course_no_records(db):
     assert get_subject(db, "NOTACOURSE") is None
 
