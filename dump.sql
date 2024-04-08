@@ -137,7 +137,7 @@ CREATE TABLE `Module` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IdxModuleName` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +146,7 @@ CREATE TABLE `Module` (
 
 LOCK TABLES `Module` WRITE;
 /*!40000 ALTER TABLE `Module` DISABLE KEYS */;
-INSERT INTO `Module` VALUES (1,'HONOURS SPECIALIZATION IN COMPUTER SCIENCE');
+INSERT INTO `Module` VALUES (2,'HONOURS SPECIALIZATION IN BIOINFORMATICS'),(1,'HONOURS SPECIALIZATION IN COMPUTER SCIENCE'),(4,'HONOURS SPECIALIZATION IN INFORMATION SYSTEMS'),(5,'MAJOR IN COMPUTER SCIENCE'),(7,'MINOR IN COMPUTER SCIENCE'),(8,'MINOR IN GAME DEVELOPMENT'),(9,'MINOR IN SOFTWARE ENGINEERING'),(6,'SPECIALIZATION IN COMPUTER SCIENCE');
 /*!40000 ALTER TABLE `Module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +167,7 @@ CREATE TABLE `ModuleRequirement` (
   PRIMARY KEY (`id`),
   KEY `module_id` (`module_id`),
   CONSTRAINT `modulerequirement_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `Module` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,7 +176,7 @@ CREATE TABLE `ModuleRequirement` (
 
 LOCK TABLES `ModuleRequirement` WRITE;
 /*!40000 ALTER TABLE `ModuleRequirement` DISABLE KEYS */;
-INSERT INTO `ModuleRequirement` VALUES (1,1,0.50,65,NULL,_binary ''),(2,1,0.50,65,NULL,_binary ''),(3,1,1.00,NULL,NULL,_binary ''),(4,1,5.50,NULL,NULL,_binary '\0'),(5,1,0.50,NULL,NULL,_binary '\0'),(6,1,0.50,NULL,NULL,_binary '\0'),(7,1,0.50,NULL,NULL,_binary '\0'),(8,1,1.00,NULL,NULL,_binary '\0'),(9,1,0.50,NULL,NULL,_binary '\0'),(10,1,0.50,NULL,NULL,_binary '\0');
+INSERT INTO `ModuleRequirement` VALUES (1,1,0.50,65,NULL,_binary ''),(2,1,0.50,65,NULL,_binary ''),(3,1,1.00,NULL,NULL,_binary ''),(4,1,5.50,NULL,NULL,_binary '\0'),(5,1,0.50,NULL,NULL,_binary '\0'),(6,1,0.50,NULL,NULL,_binary '\0'),(7,1,0.50,NULL,NULL,_binary '\0'),(8,1,1.00,NULL,NULL,_binary '\0'),(9,1,0.50,NULL,NULL,_binary '\0'),(10,1,0.50,NULL,NULL,_binary '\0'),(11,2,2.00,NULL,NULL,_binary ''),(12,2,0.50,65,NULL,_binary ''),(13,2,1.00,NULL,NULL,_binary ''),(14,2,1.00,NULL,NULL,_binary '\0'),(15,2,0.50,NULL,NULL,_binary '\0'),(16,2,6.00,NULL,NULL,_binary '\0'),(17,2,0.50,NULL,NULL,_binary '\0'),(18,2,0.50,NULL,NULL,_binary '\0'),(19,2,0.50,NULL,NULL,_binary '\0'),(20,2,0.50,NULL,NULL,_binary '\0'),(21,2,0.50,NULL,NULL,_binary '\0'),(22,2,1.00,NULL,NULL,_binary '\0'),(23,2,0.50,NULL,NULL,_binary '\0'),(24,2,0.50,NULL,NULL,_binary '\0'),(25,4,0.50,65,NULL,_binary ''),(26,4,0.50,65,NULL,_binary ''),(27,4,1.00,NULL,NULL,_binary ''),(28,4,6.00,NULL,NULL,_binary '\0'),(29,4,0.50,NULL,NULL,_binary '\0'),(30,4,0.50,NULL,NULL,_binary '\0'),(31,4,1.00,NULL,NULL,_binary '\0'),(32,4,0.50,NULL,NULL,_binary '\0'),(33,5,0.50,65,NULL,_binary ''),(34,5,0.50,65,NULL,_binary ''),(35,5,1.00,NULL,NULL,_binary ''),(36,5,3.50,NULL,NULL,_binary '\0'),(37,5,0.50,NULL,NULL,_binary '\0'),(38,5,2.00,NULL,NULL,_binary '\0'),(39,6,0.50,65,NULL,_binary ''),(40,6,0.50,65,NULL,_binary ''),(41,6,1.00,NULL,NULL,_binary ''),(42,6,5.00,NULL,NULL,_binary '\0'),(43,6,0.50,NULL,NULL,_binary '\0'),(44,6,0.50,NULL,NULL,_binary '\0'),(45,6,1.50,NULL,NULL,_binary '\0'),(46,6,1.00,NULL,NULL,_binary '\0'),(47,6,0.50,NULL,NULL,_binary '\0'),(48,7,0.50,65,NULL,_binary ''),(49,7,0.50,65,NULL,_binary ''),(50,7,1.00,NULL,NULL,_binary ''),(51,7,1.50,NULL,NULL,_binary '\0'),(52,7,0.50,NULL,NULL,_binary '\0'),(53,7,2.00,NULL,NULL,_binary '\0'),(54,8,1.00,NULL,NULL,_binary ''),(55,8,3.00,NULL,NULL,_binary '\0'),(56,8,0.50,NULL,NULL,_binary '\0'),(57,8,0.50,NULL,NULL,_binary '\0'),(58,9,0.50,NULL,NULL,_binary '\0'),(59,9,1.50,NULL,NULL,_binary '\0'),(60,9,1.00,NULL,NULL,_binary '\0'),(61,9,1.00,NULL,NULL,_binary '\0');
 /*!40000 ALTER TABLE `ModuleRequirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +203,7 @@ CREATE TABLE `ModuleRequirementCourse` (
 
 LOCK TABLES `ModuleRequirementCourse` WRITE;
 /*!40000 ALTER TABLE `ModuleRequirementCourse` DISABLE KEYS */;
-INSERT INTO `ModuleRequirementCourse` VALUES (1,1),(1,2),(1,3),(1,4),(2,5),(2,6),(3,7),(3,8),(3,9),(3,10),(3,11),(3,12),(3,13),(3,14),(3,15),(4,39),(4,40),(4,41),(4,42),(4,43),(4,44),(4,45),(4,46),(4,47),(4,48),(4,49),(5,50),(5,51),(6,52),(6,53),(6,54),(6,55),(7,56),(8,57),(9,58),(9,59),(9,60),(10,61),(10,62),(10,63),(10,64);
+INSERT INTO `ModuleRequirementCourse` VALUES (1,1),(12,1),(25,1),(33,1),(39,1),(48,1),(1,2),(12,2),(25,2),(33,2),(39,2),(48,2),(1,3),(12,3),(25,3),(33,3),(39,3),(48,3),(1,4),(12,4),(25,4),(33,4),(39,4),(48,4),(2,5),(12,5),(26,5),(34,5),(40,5),(49,5),(2,6),(12,6),(26,6),(34,6),(40,6),(49,6),(3,7),(13,7),(27,7),(35,7),(41,7),(50,7),(3,8),(13,8),(27,8),(35,8),(41,8),(50,8),(3,9),(13,9),(27,9),(35,9),(41,9),(50,9),(3,10),(13,10),(27,10),(35,10),(41,10),(50,10),(3,11),(13,11),(27,11),(35,11),(41,11),(50,11),(3,12),(13,12),(27,12),(35,12),(41,12),(50,12),(54,12),(3,13),(13,13),(27,13),(35,13),(41,13),(50,13),(3,14),(13,14),(27,14),(35,14),(41,14),(50,14),(3,15),(13,15),(27,15),(35,15),(41,15),(50,15),(55,16),(56,17),(55,18),(4,39),(16,39),(28,39),(36,39),(42,39),(51,39),(4,40),(16,40),(28,40),(36,40),(42,40),(53,40),(4,41),(16,41),(28,41),(36,41),(42,41),(51,41),(4,42),(16,42),(28,42),(36,42),(42,42),(51,42),(4,43),(16,43),(28,43),(36,43),(42,43),(53,43),(4,44),(16,44),(28,44),(36,44),(42,44),(4,45),(18,45),(28,45),(36,45),(42,45),(4,46),(16,46),(28,46),(42,46),(4,47),(16,47),(28,47),(57,47),(4,48),(42,48),(4,49),(42,49),(5,50),(17,50),(37,50),(43,50),(52,50),(5,51),(17,51),(37,51),(43,51),(52,51),(6,52),(29,52),(44,52),(6,53),(29,53),(44,53),(6,54),(29,54),(44,54),(6,55),(29,55),(44,55),(7,56),(28,56),(8,57),(23,57),(31,57),(38,57),(45,57),(53,57),(57,57),(60,57),(9,58),(38,58),(46,58),(53,58),(56,58),(59,58),(9,59),(23,59),(32,59),(38,59),(46,59),(53,59),(9,60),(31,60),(38,60),(46,60),(53,60),(10,61),(24,61),(30,61),(47,61),(10,62),(24,62),(30,62),(47,62),(10,63),(24,63),(30,63),(47,63),(10,64),(24,64),(30,64),(47,64),(58,65),(14,425),(21,428),(11,448),(11,449),(20,457),(14,462),(21,489),(21,490),(11,1461),(11,1462),(15,1466),(20,1468),(16,1854),(28,1854),(18,1861),(55,1861),(28,1863),(56,1863),(56,1864),(59,1864),(31,1867),(56,1867),(22,1868),(31,1868),(31,1869),(22,1870),(31,1870),(56,1870),(22,1871),(31,1871),(56,1871),(22,1872),(31,1872),(56,1872),(22,1880),(31,1883),(56,1883),(16,1886),(19,1887),(16,1888),(31,1890),(56,1890),(59,1890),(56,1891),(59,1891),(31,1892),(56,1892),(59,1892),(55,1893),(59,1893),(59,1894),(59,1895),(59,1896),(55,1897),(56,1898),(55,1900),(61,10541);
 /*!40000 ALTER TABLE `ModuleRequirementCourse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +224,7 @@ CREATE TABLE `ModuleRequirementSubject` (
   KEY `subject_code` (`subject_code`),
   CONSTRAINT `modulerequirementsubject_ibfk_1` FOREIGN KEY (`requirement_id`) REFERENCES `ModuleRequirement` (`id`),
   CONSTRAINT `modulerequirementsubject_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `Subject` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +233,7 @@ CREATE TABLE `ModuleRequirementSubject` (
 
 LOCK TABLES `ModuleRequirementSubject` WRITE;
 /*!40000 ALTER TABLE `ModuleRequirementSubject` DISABLE KEYS */;
-INSERT INTO `ModuleRequirementSubject` VALUES (1,8,'COMPSCI',4000),(2,9,'COMPSCI',3000);
+INSERT INTO `ModuleRequirementSubject` VALUES (1,8,'COMPSCI',4000),(2,9,'COMPSCI',3000),(3,23,'COMPSCI',3000),(4,32,'COMPSCI',3000),(5,33,'COMPSCI',3000),(6,34,'COMPSCI',3000),(7,35,'COMPSCI',3000),(8,38,'COMPSCI',3000),(9,39,'COMPSCI',3000),(10,40,'COMPSCI',3000),(11,41,'COMPSCI',3000),(12,45,'COMPSCI',4000),(13,46,'COMPSCI',3000),(14,53,'COMPSCI',3000),(15,54,'COMPSCI',3000),(16,57,'COMPSCI',3000),(17,57,'APPLMATH',2100),(18,57,'CALCULUS',2100),(19,57,'MATH',2100),(20,57,'MUSIC',2100),(21,57,'PHYSICS',2100),(22,57,'STATS',2100),(23,57,'WRITING',2200),(24,60,'COMPSCI',3000),(25,61,'COMPSCI',3000),(26,61,'APPLMATH',2100),(27,61,'CALCULUS',2100),(28,61,'MATH',2100),(29,61,'STATS',2100),(30,61,'WRITING',2200);
 /*!40000 ALTER TABLE `ModuleRequirementSubject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,4 +374,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-01  0:01:51
+-- Dump completed on 2024-04-08  0:18:08
