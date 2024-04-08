@@ -36,7 +36,7 @@ def get_subject_by_name(db, name: str) -> Optional[Subject]:
         return None
     else:
         return Subject(*subject)
-    
+
 
 # Returns list of all subject codes.
 def get_all_subject_codes(db) -> list[str]:

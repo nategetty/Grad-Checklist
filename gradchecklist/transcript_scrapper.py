@@ -1,5 +1,6 @@
 from .student import Student
 from .transcript_course import CourseScrapper
+from .module import get_module
 from .db import get_db
 import PyPDF2 as pypdf
 import re
@@ -25,6 +26,28 @@ def extractStudentInfo(text):
                   firstName=firstName
                   )
 
+def extractITR(db, pageText, student):
+    
+    lines = pageText.split('\n')
+    for line in lines:
+        plan_match = re.search(r'Plan: (.+)', line)
+        if plan_match:
+            plan = plan_match.group(1)
+            module = None
+            if any(tag in plan for tag in ["HSP", "SP", "MAJ"]):
+                if any(tag in plan for tag in ["HSP"]):
+                    module = get_module(db, "HONOURS SPECIALIZATION IN COMPUTER SCIENCE")
+                elif any(tag in plan for tag in ["SP"]):
+                    module = get_module(db, "SPECIALIZATION IN COMPUTER SCIENCE")
+                elif any(tag in plan for tag in ["MAJ"]):
+                    module = get_module(db, "MAJOR IN COMPUTER SCIENCE")
+                
+                if module:
+                    student.itr[0] = module
+            elif "MIN" in plan:
+                module = get_module(db, "MINOR IN COMPUTER SCIENCE")
+                student.itr.append(module)
+
 def getSubjectCodes(db):
     with db.cursor() as c:
         c.execute("SELECT DISTINCT subject_code FROM VCourse")
@@ -45,6 +68,8 @@ def processTranscript(fileObject):
 
         if student.studentNumber not in [stdnt.studentNumber for stdnt in students]:
             students.append(student)
+
+        extractITR(db, pageText, student)
 
         filteredLines = CourseScrapper.filterLines(pageText, valuesToFind)
 

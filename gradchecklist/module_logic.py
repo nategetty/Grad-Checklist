@@ -1,22 +1,16 @@
 from collections import defaultdict
 from .course import get_v_course
 
-from .module import get_module
+# from .module import get_module
 from .db import get_db
 from .student import Student
 from .result import *
-
-def moduleRequirementsFromDB():
-    db = get_db()
-    name = 'HONOURS SPECIALIZATION IN COMPUTER SCIENCE'
-    module = get_module(db, name)
-    return module
 
 def createResult():
     result = Result()
     return result
 
-def courseComparison(students, module):
+def courseComparison(students):
     result = createResult()
 
     first_year_courses = Decimal(0)
@@ -27,18 +21,17 @@ def courseComparison(students, module):
     senior_essay_courses = Decimal(0)
     essay_courses = Decimal(0)
 
-    if not module.requirements:
-        return result
-
     for student in students:
+
+        module = student.itr[0]
+
+        if not module.requirements:
+            return result
 
         for requirement in module.requirements:
 
             completedCount = Decimal(0)
             pendingCount = Decimal(0)
-
-            # Account for Non-Honours
-            minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
 
             courseSum = sum(course.credit for course in requirement.courses)
 
@@ -60,8 +53,13 @@ def courseComparison(students, module):
                 resultItemMin,
                 resultItemAvg
             )
+            
+            honoursFlag = setResultsRequiredAVGandLowestGrade(module, result)
 
-            setResultsRequiredAVGandLowestGrade(module, result)
+            if honoursFlag: 
+                minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
+            else:
+                minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 50
 
             if requirement.is_admission:
                 result.admission_requirements.append(resultRequirement)
@@ -146,6 +144,7 @@ def courseComparison(students, module):
             resultRequirement.status = 2
         else:
             resultRequirement.status = 0
+
     # Bad results for course count and subject count due to lacking course data, set to string and normalize
     result.first_year_courses.value = first_year_courses
     result.first_year_courses.required_value = Decimal(5.0)
@@ -192,10 +191,12 @@ def setResultsRequiredAVGandLowestGrade(module, result):
         result.module_lowest_grade.required_value = 60
         result.cumulative_average.required_value = 70
         result.lowest_grade.required_value = 60
+        return True
     else:
         result.principal_courses_lowest_grade.required_value = 60
-        result.principal_courses_average.required_value = None
-        result.module_average.required_value = None
+        result.principal_courses_average.required_value = 50
+        result.module_average.required_value = 50
         result.module_lowest_grade.required_value = 50
-        result.cumulative_average.required_value = None
+        result.cumulative_average.required_value = 50
         result.lowest_grade.required_value = 50
+        return False

@@ -8,3 +8,5 @@ venv
 
 # MacOS
 **/.DS_Store
+tests/test_transcript_course
+tests/test_module_logic.py
