@@ -1,9 +1,6 @@
 from collections import defaultdict
 from .course import get_v_course
-
-# from .module import get_module
 from .db import get_db
-from .student import Student
 from .result import *
 
 def createResult():
@@ -24,9 +21,11 @@ def courseComparison(students):
     for student in students:
 
         module = student.itr[0]
-
+        
         if not module.requirements:
             return result
+        
+        result.add_module(module.name)
 
         for requirement in module.requirements:
 
@@ -173,9 +172,10 @@ def courseComparison(students):
     result.setBreadthReqStatus()
 
     result.calculate_min_grade()
-    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements,
-                                                               result.principal_courses_average)
+    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
     module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
+    result.principal_courses.value = len(admission_course_grades)
+    result.module_courses.value = len(module_course_grades)
     result.calculate_overall_avg(admission_course_grades, module_course_grades)
     result.setModuleStatus()
 

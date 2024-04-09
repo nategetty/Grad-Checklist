@@ -73,6 +73,9 @@ class Result:
     completed_courses: str = ""
     pending_courses: str = ""
 
+    def add_module(self, module_name: str):
+        self.modules.append(module_name)
+
     # First year requirements
     first_year_courses: ResultItem = field(default_factory=ResultItem)
     first_year_different_subjects: ResultItem = field(default_factory=ResultItem)
@@ -139,6 +142,8 @@ class Result:
 
         total_average = sum(combined_list) / len(combined_list)
         self.cumulative_average.value = round(total_average)
+        self.total_courses.required_value = len(combined_list)
+        self.total_courses.value = len(combined_list)
 
     def setModuleStatus(self):
         if self.module_average.required_value is None or self.module_average.value is None:
