@@ -65,8 +65,11 @@ def courseComparison(students):
             else:
                 result.module_requirements.append(resultRequirement)
 
-            for course in requirement.courses:
+            courseCount = 0
 
+            for course in requirement.courses:
+                
+                courseCount += 1
                 vcourse = get_v_course(get_db(), course.subject_code, course.number)
 
                 resultCourse = ResultCourse(
@@ -136,6 +139,8 @@ def courseComparison(students):
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
                     resultRequirement.status = 0
+                
+                
 
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
@@ -175,7 +180,9 @@ def courseComparison(students):
     admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
     module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
     result.principal_courses.value = len(admission_course_grades)
+    result.principal_courses.required_value = len(admission_course_grades)
     result.module_courses.value = len(module_course_grades)
+    result.module_courses.required_value = len(module_course_grades)
     result.calculate_overall_avg(admission_course_grades, module_course_grades)
     result.setModuleStatus()
 
