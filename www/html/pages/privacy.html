@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Privacy</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style/global.css" />
+        <style>
+            .box {
+                flex: 0 1 45em;
+            }
+
+            p {
+                margin: 0em;
+            }
+
+            ul {
+                margin: 0em;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="script/global.js"></script>
+        <script>
+            $(() => {
+                includeHtml();
+            })
+        </script>
+    </head>
+    <body class="primary">
+        <header data-include="header"></header>
+        <main class="body center-content">
+            <div class="box primary-alt">
+                <h2>Privacy</h2>
+                <p>
+                    The Western Science Module Checker collects data from student transcripts only as needed for
+                    checking graduation requirements.
+                </p>
+                <ul>
+                    <li>All data collected from a transcript is discarded after the results are generated.</li>
+                    <li>Your results are saved in the memory of your web browser, and only you can view them.</li>
+                    <li>The results are deleted when you close your web browser.</li>
+                </ul>
+            </div>
+        </main>
+        <footer data-include="footer"></footer>
+    </body>
+</html>

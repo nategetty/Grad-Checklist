@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>About us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style/global.css" />
+        <style>
+            .box {
+                flex: 0 1 45em;
+            }
+
+            p {
+                margin: 0em;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="script/global.js"></script>
+        <script>
+            $(() => {
+                includeHtml();
+            })
+        </script>
+    </head>
+    <body class="primary">
+        <header data-include="header"></header>
+        <main class="body center-content">
+            <div class="box primary-alt">
+                <h2>About us</h2>
+                <p>
+                    The Western Science Module Checker is a tool that can automatically scan a student transcript to
+                    check graduation requirements and determine whether or not the student is eligible to graduate.
+                </p>
+            </div>
+        </main>
+        <footer data-include="footer"></footer>
+    </body>
+</html>
