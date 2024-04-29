@@ -3,6 +3,25 @@ from .course import get_v_course
 from .db import get_db
 from .result import *
 
+
+def calculate_lowest_grade(completed_courses, total_credit: Decimal, result_item: ResultItem):
+    completed_courses.sort(key=lambda c: c[1], reverse=True)
+    lowest_grade = None
+    credits = Decimal(0)
+    for course, grade in completed_courses:
+        grade = int(grade)
+        if lowest_grade is None or grade < lowest_grade:
+            lowest_grade = grade
+        credits += course.credit
+        if credits >= total_credit:
+            break
+    result_item.value = lowest_grade
+    if lowest_grade is not None:
+        if lowest_grade >= result_item.required_value:
+            result_item.status = 1
+        else:
+            result_item.status = 0
+
 def createResult():
     result = Result()
     return result
@@ -29,9 +48,13 @@ def courseComparison(students):
         result.principal_courses.value = 0
         result.module_courses.value = 0
 
+        all_completed_courses = list(filter(lambda c: c[1] is not None and c[1].isnumeric(), student.courses))
+        admission_completed_courses = []
+        module_completed_courses = []
+
         for requirement in module.requirements:
 
-            completed_courses = []
+            req_completed_courses = []
 
             completedCount = Decimal(0)
             pendingCount = Decimal(0)
@@ -67,18 +90,24 @@ def courseComparison(students):
                         if resultRequirement.status != 0:
                             resultRequirement.status = 2
                             result.status = 2
-                            pendingCount += course.credit
-                        incrementRequirementCount(result, isAdmission, tempCourse[0].credit)
+                        if completedCount + pendingCount < requirement.total_credit:
+                            incrementRequirementCount(result, isAdmission, tempCourse[0].credit)
+                        pendingCount += course.credit
 
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
                         result.status = 0
                     elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
+                        if completedCount + pendingCount < requirement.total_credit:
+                            incrementRequirementCount(result, isAdmission, tempCourse[0].credit)
                         completedCount += course.credit
                         if tempCourse[1].isnumeric():
-                            completed_courses.append(tempCourse)
-                        incrementRequirementCount(result, isAdmission, tempCourse[0].credit)
+                            req_completed_courses.append(tempCourse)
+                            if requirement.is_admission:
+                                admission_completed_courses.append(tempCourse)
+                            else:
+                                module_completed_courses.append(tempCourse)
 
                         if course.number >= 2000:
                             senior_courses += course.credit
@@ -110,6 +139,12 @@ def courseComparison(students):
                                 total_year_C += course.credit
                     else:
                         resultCourse.status = 0
+                        if tempCourse[1].isnumeric():
+                            req_completed_courses.append(tempCourse)
+                            if requirement.is_admission:
+                                admission_completed_courses.append(tempCourse)
+                            else:
+                                module_completed_courses.append(tempCourse)
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
                     resultRequirement.status = 0
@@ -130,14 +165,22 @@ def courseComparison(students):
 
                         if grade is None:
                             result_course.status = 2
+                            if completedCount + pendingCount < requirement.total_credit:
+                                incrementRequirementCount(result, isAdmission, course.credit)
                             pendingCount += course.credit
                         elif grade in ['F', 'WDN', 'RNC']:
                             result_course.status = 0
                         elif grade == 'PAS' or grade == 'CR' or int(grade) >= minimumGrade:
                             result_course.status = 1
+                            if completedCount + pendingCount < requirement.total_credit:
+                                incrementRequirementCount(result, isAdmission, course.credit)
                             completedCount += course.credit
                             if grade.isnumeric():
-                                completed_courses.append((course, grade))
+                                req_completed_courses.append((course, grade))
+                            if requirement.is_admission:
+                                admission_completed_courses.append((course, grade))
+                            else:
+                                module_completed_courses.append((course, grade))
                         else:
                             result_course.status = 0
 
@@ -149,22 +192,8 @@ def courseComparison(students):
                 resultRequirement.status = 0
 
             if requirement.minimum_grade is not None:
-                completed_courses.sort(key=lambda c: c[1], reverse=True)
-                lowest_grade = None
-                credits = Decimal(0)
-                for course, grade in completed_courses:
-                    grade = int(grade)
-                    if lowest_grade is None or grade < lowest_grade:
-                        lowest_grade = grade
-                    credits += course.credit
-                    if credits >= requirement.total_credit:
-                        break
-                resultRequirement.minimum_grade.value = lowest_grade
-                if lowest_grade is not None:
-                    if lowest_grade >= resultRequirement.minimum_grade.required_value:
-                        resultRequirement.minimum_grade.status = 1
-                    else:
-                        resultRequirement.minimum_grade.status = 0
+                calculate_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
+            
 
     # Bad results for course count and subject count due to lacking course data, set to string and normalize
     result.first_year_courses.value = first_year_courses
@@ -173,17 +202,14 @@ def courseComparison(students):
     result.first_year_different_subjects.required_value = 4
     result.first_year_one_subject_limit.value = max(first_year_courses_subjects.values())
     result.first_year_one_subject_limit.required_value = Decimal(2.0)
-    result.setFirstYearReqStatus()
 
     result.senior_courses.value = senior_courses
     result.senior_courses.required_value = Decimal(13.0)
-    result.setSeniorYearReqStatus()
 
     result.senior_essay_courses.value = senior_essay_courses
     result.senior_essay_courses.required_value = Decimal(1.0)
     result.total_essay_courses.value = essay_courses
     result.total_essay_courses.required_value = Decimal(2.0)
-    result.setEssayReqStatus()
 
     result.category_a.value = total_year_A
     result.category_a.required_value = Decimal(1.0)
@@ -191,9 +217,7 @@ def courseComparison(students):
     result.category_b.required_value = Decimal(1.0)
     result.category_c.value = total_year_C
     result.category_c.required_value = Decimal(1.0)
-    result.setBreadthReqStatus()
 
-    result.calculate_min_grade()
     admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
     module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
     result.principal_courses.required_value = sum((req.total_credit for req in filter(lambda req: req.is_admission, module.requirements)))
@@ -203,6 +227,10 @@ def courseComparison(students):
     result.setAdmissionRequirementStatus()
     result.setModuleRequirementStatus()
     result.setAvgRequirementsStatus()
+
+    calculate_lowest_grade(all_completed_courses, Decimal(20.0), result.lowest_grade)
+    calculate_lowest_grade(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_lowest_grade)
+    calculate_lowest_grade(module_completed_courses, result.module_courses.required_value, result.module_lowest_grade)
 
     return result
 
