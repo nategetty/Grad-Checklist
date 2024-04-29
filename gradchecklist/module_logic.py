@@ -70,7 +70,6 @@ def courseComparison(students):
 
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
-                        resultRequirement.status = 0
                         result.status = 0
                     elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
@@ -107,17 +106,41 @@ def courseComparison(students):
                                 total_year_C += course.credit
                     else:
                         resultCourse.status = 0
-                        resultRequirement.status = 0
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
                     resultRequirement.status = 0
-                
-        if completedCount >= requirement.total_credit:
-            resultRequirement.status = 1
-        elif completedCount + pendingCount >= requirement.total_credit:
-            resultRequirement.status = 2
-        else:
-            resultRequirement.status = 0
+
+            for subject in requirement.subjects:
+                result_subject = ResultSubject(subject_name=subject.subject_name, minimum_level=subject.minimum_level)
+                resultRequirement.subjects.append(result_subject)
+                for course, grade in student.courses:
+                    if course.subject_code == subject.subject_code and course.number >= subject.minimum_level:
+                        result_course = ResultCourse(
+                            None,
+                            int(grade) if grade is not None and grade.isnumeric() else grade,
+                            course.subject_name,
+                            course.number,
+                            course.suffix
+                        )
+                        result_subject.courses.append(result_course)
+
+                        if grade is None:
+                            result_course.status = 2
+                            pendingCount += course.credit
+                        elif grade in ['F', 'WDN', 'RNC']:
+                            result_course.status = 0
+                        elif grade == 'PAS' or grade == 'CR' or int(grade) >= minimumGrade:
+                            result_course.status = 1
+                            completedCount += course.credit
+                        else:
+                            result_course.status = 0
+
+            if completedCount >= requirement.total_credit:
+                resultRequirement.status = 1
+            elif completedCount + pendingCount >= requirement.total_credit:
+                resultRequirement.status = 2
+            else:
+                resultRequirement.status = 0
 
     # Bad results for course count and subject count due to lacking course data, set to string and normalize
     result.first_year_courses.value = first_year_courses
