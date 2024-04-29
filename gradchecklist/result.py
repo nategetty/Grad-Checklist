@@ -125,11 +125,13 @@ class Result:
     def setAdmissionRequirementStatus(self):
         if self.principal_courses.value < self.principal_courses.required_value:
             self.principal_courses.status = 0
+            self.status = 0
         else:
             self.principal_courses.status = 1
 
         if self.principal_courses_average.value < self.principal_courses_average.required_value:
             self.principal_courses_average.status = 0
+            self.status = 0
         else:
             self.principal_courses_average.status = 1
 
@@ -142,11 +144,13 @@ class Result:
     def setModuleRequirementStatus(self):
         if self.module_courses.value < self.module_courses.required_value:
             self.module_courses.status = 0
+            self.status = 0
         else:
             self.module_courses.status = 1
 
         if self.module_average.value < self.module_average.required_value:
             self.module_average.status = 0
+            self.status = 0
         else:
             self.module_average.status = 1
 
@@ -163,6 +167,12 @@ class Result:
         else:
             self.cumulative_average.status = 1
 
+        if self.lowest_grade.value is not None:
+            if self.lowest_grade.value < self.lowest_grade.required_value:
+                self.lowest_grade.status = 0
+                self.status = 0
+            else:
+                self.lowest_grade.status = 1
         if self.lowest_grade.value is not None:
             if self.lowest_grade.value < self.lowest_grade.required_value:
                 self.lowest_grade.status = 0

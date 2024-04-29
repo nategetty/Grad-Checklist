@@ -6,7 +6,7 @@ class Student:
         self.lastName = lastName
         self.firstName = firstName
         self.courses = []
-        self.itr = ["Major", "Minor"]
+        self.itr = []
 
     def addCourse(self, db, courseCode, subjectCode, grade):
         self.courses.append((get_v_course(db, subjectCode, courseCode), grade))

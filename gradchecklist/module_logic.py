@@ -236,6 +236,25 @@ def courseComparison(students):
 
     return result
 
+def setRequirementLowestGrade(requirement, completed_courses, resultRequirement):
+    if requirement.minimum_grade is not None:
+        completed_courses.sort(key=lambda c: c[1], reverse=True)
+        lowest_grade = None
+        credits = Decimal(0)
+        for course, grade in completed_courses:
+            grade = int(grade)
+            if lowest_grade is None or grade < lowest_grade:
+                lowest_grade = grade
+            credits += course.credit
+            if credits >= requirement.total_credit:
+                break
+        resultRequirement.minimum_grade.value = lowest_grade
+        if lowest_grade is not None:
+            if lowest_grade >= resultRequirement.minimum_grade.required_value:
+                resultRequirement.minimum_grade.status = 1
+            else:
+                resultRequirement.minimum_grade.status = 0
+
 def incrementRequirementCount(result, isAdmission, credit: Decimal):
     if isAdmission:
         result.principal_courses.value += credit

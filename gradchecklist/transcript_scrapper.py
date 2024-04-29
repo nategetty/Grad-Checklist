@@ -27,25 +27,28 @@ def extractStudentInfo(text):
                   )
 
 def extractITR(db, pageText, student):
-    
     lines = pageText.split('\n')
     for line in lines:
         plan_match = re.search(r'Plan: (.+)', line)
         if plan_match:
             plan = plan_match.group(1)
             module = None
-            if any(tag in plan for tag in ["HSP", "SP", "MAJ"]):
-                if any(tag in plan for tag in ["HSP"]):
+            if any(tag in plan for tag in ["HSP", "SP", "MAJ", "MIN"]):
+                if "HSP" in plan:
                     module = get_module(db, "HONOURS SPECIALIZATION IN COMPUTER SCIENCE")
-                elif any(tag in plan for tag in ["SP"]):
+                elif "SP" in plan:
                     module = get_module(db, "SPECIALIZATION IN COMPUTER SCIENCE")
-                elif any(tag in plan for tag in ["MAJ"]):
+                elif "MAJ" in plan:
                     module = get_module(db, "MAJOR IN COMPUTER SCIENCE")
+                elif "MIN" in plan:
+                    if "Software Engineering" in plan:
+                        module = get_module(db, "MINOR IN SOFTWARE ENGINEERING")
+                    elif "Game Development" in plan:
+                        module = get_module(db, "MINOR IN GAME DEVELOPMENT")
+                    else:
+                        module = get_module(db, "MINOR IN COMPUTER SCIENCE")
                 if module:
-                    student.itr[0] = module
-            elif "MIN" in plan:
-                module = get_module(db, "MINOR IN COMPUTER SCIENCE")
-                student.itr.append(module)
+                    student.itr.append(module)
 
 def getSubjectCodes(db):
     with db.cursor() as c:
