@@ -68,7 +68,7 @@ class ResultRequirement():
 class Result:
     # Summary
     modules: list[str] = field(default_factory=list)
-    status: int = 0
+    status: int = 1
     total_courses: ResultItem = field(default_factory=ResultItem)
     completed_courses: str = ""
     pending_courses: str = ""

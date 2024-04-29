@@ -30,7 +30,7 @@ HONOURS_MODULE_MINIMUM_GRADE = 60
 HONOURS_MODULE_REQUIRED_AVERAGE = 70
 
 def is_credited(grade: str) -> bool:
-    return grade not in ["F", "FAI", "PAS", "WDN", "SPC"]
+    return grade not in ["F", "FAI", "WDN", "SPC"]
 
 
 def is_first_year(course: VCourse) -> bool:
@@ -51,14 +51,17 @@ class CreditCount:
         if grade is None:
             self.pending += course.credit
 
-    def create_item(self, required_courses) -> ResultItem:
+    def create_item(self, required_courses: Decimal, result: Result) -> ResultItem:
         item = ResultItem(value=f"{self.total:.1f}", required_value=f"{required_courses:.1f}")
         if self.total - self.pending >= required_courses:
             item.status = 1
         elif self.total >= required_courses:
             item.status = 2
+            if result.status == 1:
+                result.status = 2
         else:
             item.status = 0
+            result.status = 0
         return item
     
 
@@ -111,12 +114,12 @@ def credit_count(result: Result, student: Student):
                 senior_essay_courses.add(course, grade)
 
     # Summary
-    result.total_courses = all_courses.create_item(TOTAL_COURSES_REQUIRED)
+    result.total_courses = all_courses.create_item(TOTAL_COURSES_REQUIRED, result)
     result.completed_courses = f"{all_courses.total - all_courses.pending:.1f}"
     result.pending_courses = f"{all_courses.pending:.1f}"
 
     # First year requirements
-    result.first_year_courses = first_year_courses.create_item(FIRST_YEAR_COURSES_REQUIRED)
+    result.first_year_courses = first_year_courses.create_item(FIRST_YEAR_COURSES_REQUIRED, result)
     if len(first_year_subjects) >= FIRST_YEAR_DIFFERENT_SUBJECTS_REQUIRED:
         result.first_year_different_subjects.status = 1
     else:
@@ -127,13 +130,13 @@ def credit_count(result: Result, student: Student):
         result.first_year_one_subject_limit.status = 0
 
     # Senior course requirements
-    result.senior_courses = senior_courses.create_item(SENIOR_COURSES_REQUIRED)
+    result.senior_courses = senior_courses.create_item(SENIOR_COURSES_REQUIRED, result)
 
     # Breadth requirements
-    result.category_a = category_a.create_item(CATEGORY_A_REQUIRED)
-    result.category_b = category_b.create_item(CATEGORY_B_REQUIRED)
-    result.category_c = category_c.create_item(CATEGORY_C_REQUIRED)
+    result.category_a = category_a.create_item(CATEGORY_A_REQUIRED, result)
+    result.category_b = category_b.create_item(CATEGORY_B_REQUIRED, result)
+    result.category_c = category_c.create_item(CATEGORY_C_REQUIRED, result)
 
     # Essay requirements
-    result.total_essay_courses = total_essay_courses.create_item(TOTAL_ESSAY_COURSES_REQUIRED)
-    result.senior_essay_courses = senior_essay_courses.create_item(SENIOR_ESSAY_COURSES_REQUIRED)
+    result.total_essay_courses = total_essay_courses.create_item(TOTAL_ESSAY_COURSES_REQUIRED, result)
+    result.senior_essay_courses = senior_essay_courses.create_item(SENIOR_ESSAY_COURSES_REQUIRED, result)
