@@ -29,7 +29,7 @@ def extractStudentInfo(text):
 def extractITR(db, pageText, student):
     lines = pageText.split('\n')
     for line in lines:
-        plan_match = re.search(r'Plan: (.+)', line)
+        plan_match = re.search(r'Plan:(.+)', line)
         if plan_match:
             plan = plan_match.group(1)
             module = None
@@ -48,7 +48,12 @@ def extractITR(db, pageText, student):
                     else:
                         module = get_module(db, "MINOR IN COMPUTER SCIENCE")
                 if module:
-                    student.itr.append(module)
+                    if len(student.itr) < 2:
+                        student.itr.append(module)
+                    elif any(tag in module.name for tag in ["HSP", "SP", "MAJ"]):
+                        student.itr[0] = module
+                    elif "MIN" in module.name:
+                        student.itr[1] = module
 
 def getSubjectCodes(db):
     with db.cursor() as c:
