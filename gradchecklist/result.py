@@ -65,9 +65,6 @@ class Result:
     completed_courses: str = ""
     pending_courses: str = ""
 
-    def add_module(self, module_name: str):
-        self.modules.append(module_name)
-
     # First year requirements
     first_year_courses: ResultItem = field(default_factory=ResultItem)
     first_year_different_subjects: ResultItem = field(default_factory=ResultItem)

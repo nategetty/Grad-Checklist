@@ -1,6 +1,7 @@
 from .student import Student
 from .transcript_course import CourseScrapper
 from .module import get_module
+from .subject import get_all_subject_codes
 from .db import get_db
 import PyPDF2 as pypdf
 import re
@@ -55,16 +56,9 @@ def extractITR(db, pageText, student):
                     elif "MINOR" in module.name:
                         student.itr[1] = module
 
-def getSubjectCodes(db):
-    with db.cursor() as c:
-        c.execute("SELECT DISTINCT subject_code FROM VCourse")
-        subjectCodes = c.fetchall()
-    return subjectCodes
-
 def processTranscript(fileObject):
     db = get_db()
-    subjectCodes = getSubjectCodes(db)
-    valuesToFind = [course[0] for course in subjectCodes]
+    subjectCodes = get_all_subject_codes(db)
     pdfReader = pypdf.PdfReader(fileObject)
     students = []
 
@@ -78,7 +72,7 @@ def processTranscript(fileObject):
 
         extractITR(db, pageText, student)
 
-        filteredLines = CourseScrapper.filterLines(pageText, valuesToFind)
+        filteredLines = CourseScrapper.filterLines(pageText, subjectCodes)
 
         for line in filteredLines:
             courseInfo = CourseScrapper.extractCourseInfo(line)

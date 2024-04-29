@@ -1,10 +1,23 @@
 from collections import defaultdict
-from .course import get_v_course
+from .course import VCourse, get_v_course
 from .db import get_db
+from .module import Module
 from .result import *
 
 
-def calculate_lowest_grade(completed_courses, total_credit: Decimal, result_item: ResultItem):
+def remove_req(module: Module, subject_code: str, course_number: int):
+    req_to_remove = None
+    for req in module.requirements:
+        for course in req.courses:
+            if course.subject_code == subject_code and course.number == course_number:
+                req_to_remove = req
+                break
+        if req_to_remove is not None:
+            break
+    module.requirements.remove(req_to_remove)
+
+
+def find_lowest_grade(completed_courses, total_credit: Decimal, result_item: ResultItem):
     completed_courses.sort(key=lambda c: c[1], reverse=True)
     lowest_grade = None
     credits = Decimal(0)
@@ -38,13 +51,19 @@ def courseComparison(students):
     essay_courses = Decimal(0)
 
     for student in students:
+        result.modules = [module.name.title().replace("In", "in") for module in student.itr]
 
         module = student.itr[0]
+
+        if module.name == "HONOURS SPECIALIZATION IN COMPUTER SCIENCE":
+            if "MINOR IN SOFTWARE ENGINEERING" in (m.name for m in student.itr):
+                remove_req(module, "COMPSCI", 4490)
+            elif "MINOR IN GAME DEVELOPMENT" in (m.name for m in student.itr):
+                remove_req(module, "COMPSCI", 4490)
         
         if not module.requirements:
             return result
         
-        result.add_module(module.name)
         result.principal_courses.value = 0
         result.module_courses.value = 0
 
@@ -194,7 +213,7 @@ def courseComparison(students):
                 result.status = 0
 
             if requirement.minimum_grade is not None:
-                calculate_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
+                find_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
             
     result.first_year_courses.value = first_year_courses
     result.first_year_courses.required_value = Decimal(5.0)
@@ -228,9 +247,9 @@ def courseComparison(students):
     result.setModuleRequirementStatus()
     result.setAvgRequirementsStatus()
 
-    calculate_lowest_grade(all_completed_courses, Decimal(20.0), result.lowest_grade)
-    calculate_lowest_grade(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_lowest_grade)
-    calculate_lowest_grade(module_completed_courses, result.module_courses.required_value, result.module_lowest_grade)
+    find_lowest_grade(all_completed_courses, Decimal(20.0), result.lowest_grade)
+    find_lowest_grade(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_lowest_grade)
+    find_lowest_grade(module_completed_courses, result.module_courses.required_value, result.module_lowest_grade)
 
     return result
 
