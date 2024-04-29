@@ -142,33 +142,18 @@ class Result:
 
         total_average = sum(combined_list) / len(combined_list)
         self.cumulative_average.value = round(total_average)
-        self.total_courses.required_value = len(combined_list)
-
-    def setModuleStatus(self):
-        self.status = 1
-        if self.first_year_courses.status == 0 or self.senior_courses.status == 0 or self.cumulative_average.status == 0 or self.lowest_grade.status == 0 or self.category_a.status == 0 or self.category_b.status == 0 or  self.category_c.status == 0 or self.total_essay_courses.status == 0 or self.senior_essay_courses.status == 0:
-            self.status = 0
-            
-    def setModuleReqStatus(self):
-        if self.module_courses.value < self.module_courses.required_value:
-           self.module_courses.status = 0
-        else:
-            self.module_courses.status = 1
-    
-    def setAdmissionReqStatus(self):
-        if self.principal_courses.value < self.principal_courses.required_value:
-           self.principal_courses.status = 0
-        else:
-            self.principal_courses.status = 1
+        self.total_courses.required_value = len(combined_list)  
 
     def setAvgRequirementsStatus(self):
-        if self.cumulative_average.value < self.cumulative_average.value:
+        if self.cumulative_average.value < self.cumulative_average.required_value:
             self.cumulative_average.status = 0
+            self.status = 0
         else:
             self.cumulative_average.status = 1
 
         if self.lowest_grade.value < self.lowest_grade.required_value:
             self.lowest_grade.status = 0
+            self.status = 0
         else:
             self.lowest_grade.status = 1
 

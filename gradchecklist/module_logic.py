@@ -103,6 +103,7 @@ def courseComparison(students):
                         resultCourse.status = 2
                         if resultRequirement.status != 0:
                             resultRequirement.status = 2
+                            result.status = 2
                             pendingCount += course.credit
                             
                         if isAdmission:
@@ -113,6 +114,7 @@ def courseComparison(students):
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
                         resultRequirement.status = 0
+                        result.status = 0
                     elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
                         completedCount += course.credit
@@ -199,10 +201,7 @@ def courseComparison(students):
     result.calculate_overall_avg(admission_course_grades, module_course_grades)
     result.total_courses.value = result.principal_courses.value + result.module_courses.value
     result.setAvgRequirementsStatus()
-    result.setModuleReqStatus()
-    result.setAdmissionReqStatus()
 
-    result.setModuleStatus()
     return result
 
 def setResultsRequiredAVGandLowestGrade(module, result):
@@ -213,14 +212,14 @@ def setResultsRequiredAVGandLowestGrade(module, result):
         result.principal_courses_average.required_value = 70
         result.module_average.required_value = 70
         result.module_lowest_grade.required_value = 60
-        result.cumulative_average.required_value = 70
-        result.lowest_grade.required_value = 60
+        result.cumulative_average.required_value = 65
+        result.lowest_grade.required_value = 50
         return True
     else:
         result.principal_courses_lowest_grade.required_value = 60
         result.principal_courses_average.required_value = 50
         result.module_average.required_value = 50
         result.module_lowest_grade.required_value = 50
-        result.cumulative_average.required_value = 50
+        result.cumulative_average.required_value = 60
         result.lowest_grade.required_value = 50
         return False
