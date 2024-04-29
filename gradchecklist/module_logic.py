@@ -36,55 +36,16 @@ def courseComparison(students):
 
             courseSum = sum(course.credit for course in requirement.courses)
 
-            isFrom = not requirement.total_credit == courseSum
-
-            if requirement.minimum_grade is not None:
-                resultItemMin = ResultItem(required_value=requirement.minimum_grade)
-            else:
-                resultItemMin = None
-            if requirement.required_average is not None:
-                resultItemAvg = ResultItem(required_value=requirement.required_average)
-            else:
-                resultItemAvg = None
-
-            resultRequirement = ResultRequirement(
-                1,
-                requirement.total_credit,
-                isFrom,
-                resultItemMin,
-                resultItemAvg
-            )
-            
+            resultRequirement = createResultRequirement(requirement, courseSum)
             honoursFlag = setResultsRequiredAVGandLowestGrade(module, result)
-
-            if honoursFlag: 
-                minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
-            else:
-                minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 50
-
-            if requirement.is_admission:
-                result.admission_requirements.append(resultRequirement)
-                isAdmission = True
-            else:
-                result.module_requirements.append(resultRequirement)
-                isAdmission = False
-
+            minimumGrade = setRequirementMinGrade(requirement, honoursFlag)
+            isAdmission = appendResultRequirementToResult(result, requirement, resultRequirement)
             courseCount = 0
 
             for course in requirement.courses:
                 
                 courseCount += 1
-                vcourse = get_v_course(get_db(), course.subject_code, course.number)
-
-                resultCourse = ResultCourse(
-                    None,
-                    None,
-                    course.subject_name,
-                    course.number,
-                    course.suffix
-                )
-
-                resultRequirement.courses.append(resultCourse)
+                vcourse, resultCourse = createResultCourse(resultRequirement, course)
 
                 tempCourse = None
 
@@ -105,11 +66,7 @@ def courseComparison(students):
                             resultRequirement.status = 2
                             result.status = 2
                             pendingCount += course.credit
-                            
-                        if isAdmission:
-                                result.principal_courses.value += 1
-                        else:
-                            result.module_courses.value += 1
+                        incrementRequirementCount(result, isAdmission)
 
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
@@ -118,11 +75,7 @@ def courseComparison(students):
                     elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
                         completedCount += course.credit
-
-                        if isAdmission:
-                            result.principal_courses.value += 1
-                        else:
-                            result.module_courses.value += 1
+                        incrementRequirementCount(result, isAdmission)
 
                         if course.number >= 2000:
                             senior_courses += course.credit
@@ -200,9 +153,69 @@ def courseComparison(students):
     result.module_courses.required_value = len(module_course_grades)
     result.calculate_overall_avg(admission_course_grades, module_course_grades)
     result.total_courses.value = result.principal_courses.value + result.module_courses.value
+    result.setAdmissionRequirementStatus()
+    result.setModuleRequirementStatus()
     result.setAvgRequirementsStatus()
 
     return result
+
+def incrementRequirementCount(result, isAdmission):
+    if isAdmission:
+            result.principal_courses.value += 1
+    else:
+        result.module_courses.value += 1
+
+def createResultCourse(resultRequirement, course):
+    vcourse = get_v_course(get_db(), course.subject_code, course.number)
+
+    resultCourse = ResultCourse(
+                    None,
+                    None,
+                    vcourse.subject_name,
+                    vcourse.number,
+                    vcourse.suffix
+                )
+
+    resultRequirement.courses.append(resultCourse)
+    return vcourse,resultCourse
+
+def createResultRequirement(requirement, courseSum):
+    isFrom = not requirement.total_credit == courseSum
+
+    if requirement.minimum_grade is not None:
+        resultItemMin = ResultItem(required_value=requirement.minimum_grade)
+    else:
+        resultItemMin = None
+    if requirement.required_average is not None:
+        resultItemAvg = ResultItem(required_value=requirement.required_average)
+    else:
+        resultItemAvg = None
+
+    resultRequirement = ResultRequirement(
+                1,
+                requirement.total_credit,
+                isFrom,
+                resultItemMin,
+                resultItemAvg
+            )
+    
+    return resultRequirement
+
+def appendResultRequirementToResult(result, requirement, resultRequirement):
+    if requirement.is_admission:
+        result.admission_requirements.append(resultRequirement)
+        isAdmission = True
+    else:
+        result.module_requirements.append(resultRequirement)
+        isAdmission = False
+    return isAdmission
+
+def setRequirementMinGrade(requirement, honoursFlag):
+    if honoursFlag: 
+        minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
+    else:
+        minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 50
+    return minimumGrade
 
 def setResultsRequiredAVGandLowestGrade(module, result):
     is_honours = "HONOURS" in module.name
