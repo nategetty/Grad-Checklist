@@ -50,9 +50,9 @@ def extractITR(db, pageText, student):
                 if module:
                     if len(student.itr) < 2:
                         student.itr.append(module)
-                    elif any(tag in module.name for tag in ["HSP", "SP", "MAJ"]):
+                    elif any(tag in module.name for tag in ["SPECIALIZATION", "MAJOR"]):
                         student.itr[0] = module
-                    elif "MIN" in module.name:
+                    elif "MINOR" in module.name:
                         student.itr[1] = module
 
 def getSubjectCodes(db):

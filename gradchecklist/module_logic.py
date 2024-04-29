@@ -196,8 +196,6 @@ def courseComparison(students):
             if requirement.minimum_grade is not None:
                 calculate_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
             
-
-    # Bad results for course count and subject count due to lacking course data, set to string and normalize
     result.first_year_courses.value = first_year_courses
     result.first_year_courses.required_value = Decimal(5.0)
     result.first_year_different_subjects.value = len(first_year_courses_subjects)
