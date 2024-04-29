@@ -87,16 +87,14 @@ def courseComparison(students):
                 if tempCourse is not None:
                     if tempCourse[1] is None:
                         resultCourse.status = 2
-                        if resultRequirement.status != 0:
+                        if resultRequirement.status == 1:
                             resultRequirement.status = 2
-                            result.status = 2
                         if completedCount + pendingCount < requirement.total_credit:
                             incrementRequirementCount(result, isAdmission, tempCourse[0].credit)
                         pendingCount += course.credit
 
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
-                        result.status = 0
                     elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
                         if completedCount + pendingCount < requirement.total_credit:
@@ -148,6 +146,7 @@ def courseComparison(students):
                 elif not resultRequirement.is_from:
                     resultCourse.status = 0
                     resultRequirement.status = 0
+                    result.status = 0
 
             for subject in requirement.subjects:
                 result_subject = ResultSubject(subject_name=subject.subject_name, minimum_level=subject.minimum_level)
@@ -188,8 +187,11 @@ def courseComparison(students):
                 resultRequirement.status = 1
             elif completedCount + pendingCount >= requirement.total_credit:
                 resultRequirement.status = 2
+                if result.status == 1:
+                    result.status = 2
             else:
                 resultRequirement.status = 0
+                result.status = 0
 
             if requirement.minimum_grade is not None:
                 calculate_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
