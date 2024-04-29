@@ -12,6 +12,7 @@ from .course import VCourse
 class ModuleRequirementSubject:
     subject_code: str = ""
     minimum_level: int = 0
+    subject_name: str = ""
 
 
 # Set of courses required by a module.
@@ -58,7 +59,7 @@ def get_module(db, name: str) -> Optional[Module]:
                   (req[0],))
             courses = [VCourse(*course) for course in c.fetchall()]
         with db.cursor() as c:
-            c.execute("SELECT subject_code, minimum_level FROM ModuleRequirementSubject WHERE requirement_id=%s",
+            c.execute("SELECT subject_code, minimum_level, name FROM ModuleRequirementSubject JOIN Subject ON subject_code=code WHERE requirement_id=%s",
                       (req[0],))
             subjects = [ModuleRequirementSubject(*subject) for subject in c.fetchall()]
         module.requirements.append(ModuleRequirement(*req, courses, subjects))

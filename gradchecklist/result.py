@@ -38,7 +38,6 @@ class ResultCourse():
 # Checklist subject (i.e. courses at the XXXX level or above)
 @dataclass
 class ResultSubject():
-    status: Optional[int]
     subject_name: str
     minimum_level: int
     courses: list[ResultCourse] = field(default_factory=list)
