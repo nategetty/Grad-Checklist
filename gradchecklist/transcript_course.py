@@ -25,7 +25,7 @@ class CourseScrapper:
 
         # gradeMatch = re.search(r'(\d{3}|SPC|WDN|F)', line[::-1])
         # grade = gradeMatch.group(1)[::-1] if gradeMatch and gradeMatch.group(1) in ('SPC', 'WDN', 'F') or 0 <= int(gradeMatch.group(1)[::-1]) <= 100 else "N\/A"
-        gradeMatch = re.search(r'(\d{3}|SPC|WDN|F)', line.rsplit(" ", 1)[-1])
+        gradeMatch = re.search(r'(\d{3}|SPC|WDN|F|PAS|CR)', line.rsplit(" ", 1)[-1])
         if gradeMatch is not None:
             grade = gradeMatch.group(1)
         else:

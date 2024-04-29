@@ -26,6 +26,8 @@ def courseComparison(students):
             return result
         
         result.add_module(module.name)
+        result.principal_courses.value = 0
+        result.module_courses.value = 0
 
         for requirement in module.requirements:
 
@@ -62,8 +64,10 @@ def courseComparison(students):
 
             if requirement.is_admission:
                 result.admission_requirements.append(resultRequirement)
+                isAdmission = True
             else:
                 result.module_requirements.append(resultRequirement)
+                isAdmission = False
 
             courseCount = 0
 
@@ -87,7 +91,7 @@ def courseComparison(students):
                 for studentCourse in student.courses:
                     if course == studentCourse[0]:
                         tempCourse = studentCourse
-                        if tempCourse[1].isdigit():
+                        if tempCourse[1] is not None and tempCourse[1].isdigit():
                             resultCourse.grade = int(tempCourse[1])
                         else:
                             resultCourse.grade = tempCourse[1]
@@ -100,12 +104,24 @@ def courseComparison(students):
                         if resultRequirement.status != 0:
                             resultRequirement.status = 2
                             pendingCount += course.credit
+                            
+                        if isAdmission:
+                                result.principal_courses.value += 1
+                        else:
+                            result.module_courses.value += 1
+
                     elif tempCourse[1] in ['F', 'WDN', 'RNC']:
                         resultCourse.status = 0
                         resultRequirement.status = 0
-                    elif tempCourse[1] == 'PAS' or int(tempCourse[1]) >= minimumGrade:
+                    elif tempCourse[1] == 'PAS' or tempCourse[1] == 'CR' or int(tempCourse[1]) >= minimumGrade:
                         resultCourse.status = 1
                         completedCount += course.credit
+
+                        if isAdmission:
+                            result.principal_courses.value += 1
+                        else:
+                            result.module_courses.value += 1
+
                         if course.number >= 2000:
                             senior_courses += course.credit
                             if course.suffix in ['E', 'F', 'G', 'F/G']:
@@ -124,6 +140,7 @@ def courseComparison(students):
                             if course.suffix in ['E', 'F', 'G', 'F/G']:
                                 essay_courses += course.credit
                             # fix later, currently operate under single category assumption
+                            # Ex: women's studies (A & B)
                             if vcourse.category == 'A':
                                 first_year_A += course.credit
                                 total_year_A += course.credit
@@ -140,8 +157,6 @@ def courseComparison(students):
                     resultCourse.status = 0
                     resultRequirement.status = 0
                 
-                
-
         if completedCount >= requirement.total_credit:
             resultRequirement.status = 1
         elif completedCount + pendingCount >= requirement.total_credit:
@@ -179,13 +194,15 @@ def courseComparison(students):
     result.calculate_min_grade()
     admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
     module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
-    result.principal_courses.value = len(admission_course_grades)
     result.principal_courses.required_value = len(admission_course_grades)
-    result.module_courses.value = len(module_course_grades)
     result.module_courses.required_value = len(module_course_grades)
     result.calculate_overall_avg(admission_course_grades, module_course_grades)
-    result.setModuleStatus()
+    result.total_courses.value = result.principal_courses.value + result.module_courses.value
+    result.setAvgRequirementsStatus()
+    result.setModuleReqStatus()
+    result.setAdmissionReqStatus()
 
+    result.setModuleStatus()
     return result
 
 def setResultsRequiredAVGandLowestGrade(module, result):

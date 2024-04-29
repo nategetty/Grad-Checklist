@@ -41,7 +41,6 @@ def extractITR(db, pageText, student):
                     module = get_module(db, "SPECIALIZATION IN COMPUTER SCIENCE")
                 elif any(tag in plan for tag in ["MAJ"]):
                     module = get_module(db, "MAJOR IN COMPUTER SCIENCE")
-                
                 if module:
                     student.itr[0] = module
             elif "MIN" in plan:
