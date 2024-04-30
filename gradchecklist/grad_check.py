@@ -7,6 +7,7 @@ from decimal import Decimal
 from .course import VCourse
 from .result import *
 from .transcript_scrapper import Student
+from .module_logic import courseComparison
 
 TOTAL_COURSES_REQUIRED = Decimal(20.0)
 FIRST_YEAR_COURSES_REQUIRED = Decimal(5.0)
@@ -124,7 +125,7 @@ def credit_count(result: Result, student: Student):
         result.first_year_different_subjects.status = 1
     else:
         result.first_year_different_subjects.status = 0
-    if max(first_year_subjects.values()) <= FIRST_YEAR_ONE_SUBJECT_LIMIT:
+    if not first_year_subjects or max(first_year_subjects.values()) <= FIRST_YEAR_ONE_SUBJECT_LIMIT:
         result.first_year_one_subject_limit.status = 1
     else:
         result.first_year_one_subject_limit.status = 0
@@ -140,3 +141,10 @@ def credit_count(result: Result, student: Student):
     # Essay requirements
     result.total_essay_courses = total_essay_courses.create_item(TOTAL_ESSAY_COURSES_REQUIRED, result)
     result.senior_essay_courses = senior_essay_courses.create_item(SENIOR_ESSAY_COURSES_REQUIRED, result)
+
+
+def grad_check(students):
+    result = Result()
+    credit_count(result, students[0])
+    courseComparison(result, students)
+    return result

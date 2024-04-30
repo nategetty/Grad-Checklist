@@ -1,33 +1,42 @@
 from collections import defaultdict
-from .course import VCourse, get_v_course
-from .db import get_db
+from .course import VCourse
 from .module import Module
 from .result import *
+from .transcript_scrapper import Student
 
 
-def remove_req(module: Module, subject_code: str, course_number: int):
-    req_to_remove = None
+# Removes a course from the module requirements.
+def remove_req_course(module: Module, subject_code: str, course_number: int):
+    course_to_remove = None
     for req in module.requirements:
         for course in req.courses:
             if course.subject_code == subject_code and course.number == course_number:
-                req_to_remove = req
+                course_to_remove = course
                 break
-        if req_to_remove is not None:
+        
+        if course_to_remove is not None:
+            req.courses.remove(course_to_remove)
+            if not req.courses:
+                module.requirements.remove(req)
             break
-    module.requirements.remove(req_to_remove)
 
 
-def find_lowest_grade(completed_courses, total_credit: Decimal, result_item: ResultItem):
-    completed_courses.sort(key=lambda c: c[1], reverse=True)
+# Finds the lowest grade in the top total_credit courses.
+def find_lowest_grade(courses, total_credit: Decimal, result_item: ResultItem):
+    if not courses:
+        return
+    
+    courses.sort(key=lambda c: c[1], reverse=True)
     lowest_grade = None
     credits = Decimal(0)
-    for course, grade in completed_courses:
+    for course, grade in courses:
         grade = int(grade)
         if lowest_grade is None or grade < lowest_grade:
             lowest_grade = grade
         credits += course.credit
         if credits >= total_credit:
             break
+
     result_item.value = lowest_grade
     if lowest_grade is not None:
         if lowest_grade >= result_item.required_value:
@@ -35,13 +44,33 @@ def find_lowest_grade(completed_courses, total_credit: Decimal, result_item: Res
         else:
             result_item.status = 0
 
-def createResult():
-    result = Result()
-    return result
 
-def courseComparison(students):
-    result = createResult()
+# Computes the average of the top total_credit courses.
+def compute_average(courses, total_credit: Decimal, result_item: ResultItem):
+    if not courses or total_credit == 0:
+        return
+    
+    courses.sort(key=lambda c: c[1], reverse=True)
+    s = Decimal(0)
+    n = 0
+    credits = Decimal(0)
+    for course, grade in courses:
+        s += Decimal(grade)
+        n += 1
+        credits += course.credit
+        if credits >= total_credit:
+            break
+    average = s / n
 
+    result_item.value = f"{average:.2f}"
+    if average >= Decimal(result_item.required_value):
+        result_item.status = 1
+    else:
+        result_item.status = 0
+
+
+# Checks module and admission requirements.
+def courseComparison(result: Result, students: list[Student]):
     first_year_courses = Decimal(0)
     first_year_courses_subjects = defaultdict(Decimal)
     first_year_A, first_year_B, first_year_C = Decimal(0), Decimal(0), Decimal(0)
@@ -50,29 +79,34 @@ def courseComparison(students):
     senior_essay_courses = Decimal(0)
     essay_courses = Decimal(0)
 
+    module = None
     for student in students:
-        result.modules = [module.name.title().replace("In", "in") for module in student.itr]
+        all_completed_courses = list(filter(lambda c: c[1] is not None and c[1].isnumeric(), student.courses))
+
+        if not student.itr:
+            continue
 
         module = student.itr[0]
-
         if module.name == "HONOURS SPECIALIZATION IN COMPUTER SCIENCE":
             if "MINOR IN SOFTWARE ENGINEERING" in (m.name for m in student.itr):
-                remove_req(module, "COMPSCI", 4490)
+                remove_req_course(module, "COMPSCI", 4490)
             elif "MINOR IN GAME DEVELOPMENT" in (m.name for m in student.itr):
-                remove_req(module, "COMPSCI", 4490)
-        
-        if not module.requirements:
-            return result
+                remove_req_course(module, "COMPSCI", 4490)
+
+        result.modules = [module.name.title().replace("In", "in") for module in student.itr]
         
         result.principal_courses.value = 0
         result.module_courses.value = 0
 
-        all_completed_courses = list(filter(lambda c: c[1] is not None and c[1].isnumeric(), student.courses))
         admission_completed_courses = []
         module_completed_courses = []
 
-        for requirement in module.requirements:
+        # Combine other module requirements with the main module.
+        # TODO It's probably better to keep them separate. Needs UI work.
+        for other_module in student.itr[1:]:
+            module.requirements += other_module.requirements
 
+        for requirement in module.requirements:
             req_completed_courses = []
 
             completedCount = Decimal(0)
@@ -84,12 +118,9 @@ def courseComparison(students):
             honoursFlag = setResultsRequiredAVGandLowestGrade(module, result)
             minimumGrade = setRequirementMinGrade(requirement, honoursFlag)
             isAdmission = appendResultRequirementToResult(result, requirement, resultRequirement)
-            courseCount = 0
 
             for course in requirement.courses:
-                
-                courseCount += 1
-                vcourse, resultCourse = createResultCourse(resultRequirement, course)
+                resultCourse = createResultCourse(resultRequirement, course)
 
                 tempCourse = None
 
@@ -132,9 +163,9 @@ def courseComparison(students):
                                 senior_essay_courses += course.credit
                                 essay_courses += course.credit
                             # fix later, currently operate under single category assumption
-                            if vcourse.category == 'A':
+                            if course.category == 'A':
                                 total_year_A += course.credit
-                            elif vcourse.category == 'B':
+                            elif course.category == 'B':
                                 total_year_B += course.credit
                             else:
                                 total_year_C += course.credit
@@ -145,10 +176,10 @@ def courseComparison(students):
                                 essay_courses += course.credit
                             # fix later, currently operate under single category assumption
                             # Ex: women's studies (A & B)
-                            if vcourse.category == 'A':
+                            if course.category == 'A':
                                 first_year_A += course.credit
                                 total_year_A += course.credit
-                            elif vcourse.category == 'B':
+                            elif course.category == 'B':
                                 first_year_B += course.credit
                                 total_year_B += course.credit
                             else:
@@ -214,63 +245,22 @@ def courseComparison(students):
 
             if requirement.minimum_grade is not None:
                 find_lowest_grade(req_completed_courses, requirement.total_credit, resultRequirement.minimum_grade)
-            
-    result.first_year_courses.value = first_year_courses
-    result.first_year_courses.required_value = Decimal(5.0)
-    result.first_year_different_subjects.value = len(first_year_courses_subjects)
-    result.first_year_different_subjects.required_value = 4
-    result.first_year_one_subject_limit.value = max(first_year_courses_subjects.values())
-    result.first_year_one_subject_limit.required_value = Decimal(2.0)
 
-    result.senior_courses.value = senior_courses
-    result.senior_courses.required_value = Decimal(13.0)
-
-    result.senior_essay_courses.value = senior_essay_courses
-    result.senior_essay_courses.required_value = Decimal(1.0)
-    result.total_essay_courses.value = essay_courses
-    result.total_essay_courses.required_value = Decimal(2.0)
-
-    result.category_a.value = total_year_A
-    result.category_a.required_value = Decimal(1.0)
-    result.category_b.value = total_year_B
-    result.category_b.required_value = Decimal(1.0)
-    result.category_c.value = total_year_C
-    result.category_c.required_value = Decimal(1.0)
-
-    admission_course_grades = result.calculate_requirement_avg(result.admission_requirements, result.principal_courses_average)
-    module_course_grades = result.calculate_requirement_avg(result.module_requirements, result.module_average)
-    result.principal_courses.required_value = sum((req.total_credit for req in filter(lambda req: req.is_admission, module.requirements)))
-    result.module_courses.required_value = sum((req.total_credit for req in filter(lambda req: not req.is_admission, module.requirements)))
-    result.calculate_overall_avg(admission_course_grades, module_course_grades)
-    result.total_courses.value = result.principal_courses.value + result.module_courses.value
-    result.setAdmissionRequirementStatus()
-    result.setModuleRequirementStatus()
-    result.setAvgRequirementsStatus()
-
+    compute_average(all_completed_courses, Decimal(20.0), result.cumulative_average)
     find_lowest_grade(all_completed_courses, Decimal(20.0), result.lowest_grade)
-    find_lowest_grade(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_lowest_grade)
-    find_lowest_grade(module_completed_courses, result.module_courses.required_value, result.module_lowest_grade)
+
+    if module is not None:
+        result.principal_courses.required_value = sum((req.total_credit for req in filter(lambda req: req.is_admission, module.requirements)))
+        result.module_courses.required_value = sum((req.total_credit for req in filter(lambda req: not req.is_admission, module.requirements)))
+
+        compute_average(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_average)
+        compute_average(module_completed_courses, result.module_courses.required_value, result.module_average)
+
+        find_lowest_grade(admission_completed_courses, result.principal_courses.required_value, result.principal_courses_lowest_grade)
+        find_lowest_grade(module_completed_courses, result.module_courses.required_value, result.module_lowest_grade)
 
     return result
 
-def setRequirementLowestGrade(requirement, completed_courses, resultRequirement):
-    if requirement.minimum_grade is not None:
-        completed_courses.sort(key=lambda c: c[1], reverse=True)
-        lowest_grade = None
-        credits = Decimal(0)
-        for course, grade in completed_courses:
-            grade = int(grade)
-            if lowest_grade is None or grade < lowest_grade:
-                lowest_grade = grade
-            credits += course.credit
-            if credits >= requirement.total_credit:
-                break
-        resultRequirement.minimum_grade.value = lowest_grade
-        if lowest_grade is not None:
-            if lowest_grade >= resultRequirement.minimum_grade.required_value:
-                resultRequirement.minimum_grade.status = 1
-            else:
-                resultRequirement.minimum_grade.status = 0
 
 def incrementRequirementCount(result, isAdmission, credit: Decimal):
     if isAdmission:
@@ -278,19 +268,18 @@ def incrementRequirementCount(result, isAdmission, credit: Decimal):
     else:
         result.module_courses.value += credit
 
+
 def createResultCourse(resultRequirement, course):
-    vcourse = get_v_course(get_db(), course.subject_code, course.number)
-
     resultCourse = ResultCourse(
-                    None,
-                    None,
-                    vcourse.subject_name,
-                    vcourse.number,
-                    vcourse.suffix
-                )
-
+        None,
+        None,
+        course.subject_name,
+        course.number,
+        course.suffix
+    )
     resultRequirement.courses.append(resultCourse)
-    return vcourse,resultCourse
+    return resultCourse
+
 
 def createResultRequirement(requirement, courseSum):
     isFrom = not requirement.total_credit == courseSum
@@ -305,14 +294,15 @@ def createResultRequirement(requirement, courseSum):
         resultItemAvg = None
 
     resultRequirement = ResultRequirement(
-                1,
-                requirement.total_credit,
-                isFrom,
-                resultItemMin,
-                resultItemAvg
-            )
+        1,
+        requirement.total_credit,
+        isFrom,
+        resultItemMin,
+        resultItemAvg
+    )
     
     return resultRequirement
+
 
 def appendResultRequirementToResult(result, requirement, resultRequirement):
     if requirement.is_admission:
@@ -323,12 +313,14 @@ def appendResultRequirementToResult(result, requirement, resultRequirement):
         isAdmission = False
     return isAdmission
 
+
 def setRequirementMinGrade(requirement, honoursFlag):
     if honoursFlag: 
         minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 60
     else:
         minimumGrade = requirement.minimum_grade if requirement.minimum_grade is not None else 50
     return minimumGrade
+
 
 def setResultsRequiredAVGandLowestGrade(module, result):
     is_honours = "HONOURS" in module.name

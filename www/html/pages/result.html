@@ -457,7 +457,9 @@
 
             function creditStr(credit) {
                 const creditNum = parseFloat(credit);
-                if (Number.isInteger(creditNum)) {
+                if (isNaN(creditNum)) {
+                    return "N/A"
+                } else if (Number.isInteger(creditNum)) {
                     return creditNum.toFixed(1);
                 } else {
                     return creditNum.toString();
@@ -469,7 +471,7 @@
             }
 
             function tdGrade(item) {
-                return `<td>${item.value ?? NaN}% (min: ${item.required_value ?? NaN}%)`;
+                return `<td>${item.value ?? "N/A"}% (min: ${item.required_value ?? "N/A"}%)`;
             }
 
             function trSummaryPending(result) {
